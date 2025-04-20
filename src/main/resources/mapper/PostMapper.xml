@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="post">
+	
+	<sql id="column">
+		num, writer, title, content, viewCount, updatedAt, createdAt
+	</sql>
+	
+	<sql id="search">
+		<choose>
+			<when test="condition == 'writer'">
+				WHERE writer LIKE '%' || #{keyword} || '%'
+			</when>
+			<when test="condition == 'title'">
+				WHERE title LIKE '%' || #{keyword} || '%'
+			</when>
+			<when test="condition == 'title_content'">
+				WHERE title LIKE '%' || #{keyword} || '%' OR content LIKE '%' || #{keyword} || '%'
+			</when>
+		</choose>
+	</sql>
+	
+	<delete id="deleteReaded" parameterType="long">
+		DELETE FROM readed_data
+		WHERE num=#{num}
+	</delete>
+	
+	<insert id="insertReaded" parameterType="map">
+		INSERT INTO readed_data
+		(num, session_id)
+		VALUES(#{num}, #{sessionId})	
+	</insert>
+	
+	<select id="isReaded" parameterType="map" resultType="map">
+		SELECT *
+		FROM readed_data
+		WHERE num=#{num} AND session_id=#{sessionId}
+	</select>
+	
+	<update id="addViewCount" parameterType="long">
+		UPDATE posts
+		SET viewCount=viewCount+1
+		WHERE num=#{num}
+	</update>
+	
+	<!-- 
+		parameter 로 전달되는 PostDto 에는 검색 keyword 가 있을수 있다. 
+		keyword 가 있다면 keword 에 해당하는 글 목록중에서 이전글의 글번호와 다음글의 글번호를 select 해야한다. 
+	 -->
+	<select id="getDetail" parameterType="postDto" resultType="postDto">
+		SELECT *
+		FROM
+			(SELECT <include refid="column"/>, 
+				LAG(num, 1, 0) OVER (ORDER BY num DESC) AS prevNum,
+				LEAD(num, 1, 0) OVER (ORDER BY num DESC) AS nextNum
+			FROM posts
+			<include refid="search"/> ) result1
+		WHERE num=#{num}
+	</select>
+	
+	<select id="getData" parameterType="long" resultType="postDto">
+		SELECT <include refid="column" />
+		FROM posts
+		WHERE num=#{num}
+	</select>
+	
+	<select id="getSequence" resultType="long">
+		SELECT posts_seq.NEXTVAL
+		FROM DUAL
+	</select>
+	
+	<select id="getCount" parameterType="postDto" resultType="int">
+		SELECT NVL(MAX(ROWNUM), 0)
+		FROM posts
+		<include refid="search"/>
+	</select>
+	
+	<insert id="insert" parameterType="postDto">
+		INSERT INTO posts
+		(num, writer, title, content)
+		VALUES(#{num}, #{writer}, #{title}, #{content})
+	</insert>
+	
+	<update id="update" parameterType="postDto">
+		UPDATE posts
+		SET title=#{title}, content=#{content}, updatedAt=SYSDATE
+		WHERE num=#{num}
+	</update>
+	
+	<delete id="delete" parameterType="long">
+		DELETE FROM posts
+		WHERE num=#{num}
+	</delete>
+
+	<select id="getList" parameterType="postDto" resultType="postDto">
+		SELECT *
+		FROM
+			(SELECT result1.*, ROWNUM AS rnum
+			FROM
+				(SELECT <include refid="column"/>
+				FROM  posts
+				<include refid="search"/>
+				ORDER BY num DESC) result1)
+		WHERE rnum BETWEEN #{startRowNum} AND #{endRowNum}		
+	</select>
+	
+		
+</mapper>
