@@ -76,6 +76,39 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- Json Web Token 관련 라이브러리 -->
+		<dependency>
+		    <groupId>io.jsonwebtoken</groupId>
+		    <artifactId>jjwt-api</artifactId>
+		    <version>0.11.5</version>
+		</dependency>
+		<dependency>
+		    <groupId>io.jsonwebtoken</groupId>
+		    <artifactId>jjwt-impl</artifactId>
+		    <version>0.11.5</version>
+		    <scope>runtime</scope>
+		</dependency>
+		<dependency>
+		    <groupId>io.jsonwebtoken</groupId>
+		    <artifactId>jjwt-jackson</artifactId>
+		    <version>0.11.5</version>
+		    <scope>runtime</scope>
+		</dependency>
+		<!-- WebFlux 추가-->
+	  	<dependency>
+	    	<groupId>org.springframework.boot</groupId>
+	   		<artifactId>spring-boot-starter-webflux</artifactId>
+	   	</dependency>      
+	   	<!-- HTTP 요청을 위한 Apache HttpClient -->
+	   	<dependency>
+	    	<groupId>org.apache.httpcomponents.client5</groupId>
+	    	<artifactId>httpclient5</artifactId>
+	   	</dependency>
+	   	<!-- JSON 파싱 (Jackson) -->
+	  	<dependency>
+	  		<groupId>com.google.code.gson</groupId>
+	  		<artifactId>gson</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
