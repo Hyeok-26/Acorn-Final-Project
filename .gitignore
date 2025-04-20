@@ -1,6 +1,5 @@
 /.metadata/
 
-META-INF/
 .classpath
 .project
 
@@ -155,5 +154,20 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Maven Wrapper 관련 파일들
+maven-wrapper.properties
+mvnw
+mvnw.cmd
+
+.gitattributes
+HELP.md
+# application.properties (로컬 환경 설정 파일)
+application.properties
+
+custom.properties
+
+# .gitattributes와 HELP.md는 필요에 따라 제외하거나 포함시킬 수 있습니다
+# .gitattributes
+# HELP.md
+
 # End of https://www.toptal.com/developers/gitignore/api/java,eclipse,windows,web,maven
-/build/
