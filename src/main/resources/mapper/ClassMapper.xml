@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.FinalProject.mapper.ClassMapper">
+
+	<update id="updateClassStatus" parameterType="com.example.FinalProject.dto.HjClassDto">
+		UPDATE tb_class SET
+		start_date = TO_DATE(#{startDate}, 'YYYY-MM-DD'), end_date = TO_DATE(#{endDate}, 'YYYY-MM-DD'), 
+		apply_start_date = TO_DATE(#{applyStartDate}, 'YYYY-MM-DD'), apply_end_date = TO_DATE(#{applyEndDate}, 'YYYY-MM-DD'), 
+		max_student = #{maxStudent},
+		cd_status = #{cdStatus} 
+		WHERE class_id = #{classId}
+	</update>
+
+	<update id="updateClass" parameterType="com.example.FinalProject.dto.HjClassDto">
+		UPDATE tb_class SET 
+		cd_lecture = #{cdLecture}, class_name = #{className}, 
+		start_date = TO_DATE(#{startDate}, 'YYYY-MM-DD'), end_date = TO_DATE(#{endDate}, 'YYYY-MM-DD'), 
+		start_time = #{startTime}, end_time = #{endTime}, weekday = #{weekday}, teacher_id = #{teacherId}, 
+		apply_start_date = TO_DATE(#{applyStartDate}, 'YYYY-MM-DD'), apply_end_date = TO_DATE(#{applyEndDate}, 'YYYY-MM-DD'), 
+		max_student = #{maxStudent}, price = #{price}, description = #{description} 
+		WHERE class_id = #{classId}
+	</update>
+
+	<insert id="addClass" parameterType="com.example.FinalProject.dto.HjClassDto">
+		INSERT INTO tb_class 
+		(class_id, class_name, cd_lecture, user_id,description, teacher_id, apply_start_date, apply_end_date, start_date, end_date, start_time, end_time, max_student, cd_status, weekday, price)
+		VALUES 
+		(seq_class_id.NEXTVAL, #{className}, #{cdLecture}, #{userId}, #{description}, #{teacherId}, TO_DATE(#{applyStartDate}, 'YYYY-MM-DD'), TO_DATE(#{applyEndDate}, 'YYYY-MM-DD'), TO_DATE(#{startDate}, 'YYYY-MM-DD'), TO_DATE(#{endDate}, 'YYYY-MM-DD'), #{startTime}, #{endTime}, #{maxStudent}, 'BEFORE', #{weekday}, #{price})
+	</insert>
+
+
+	<select id="getClassDescription" resultType="com.example.FinalProject.dto.HjClassDto" parameterType="int">
+		SELECT CLASS_ID, CLASS_NAME, description FROM tb_class WHERE class_id = #{classId}
+	</select>
+
+	<select id="getClassByStore" resultType="com.example.FinalProject.dto.HjClassDto" parameterType="com.example.FinalProject.dto.HjClassListDto">
+	    SELECT *
+	    FROM (
+	        SELECT result1.*, ROWNUM AS rnum
+	        FROM (
+	            SELECT 
+	                c.class_id,
+	                c.class_name,
+	                c.cd_lecture,
+	                t.name AS teacher_name,
+	                TO_CHAR(c.start_date, 'YYYY-MM-DD') AS start_date,
+	                TO_CHAR(c.end_date, 'YYYY-MM-DD') AS end_date,
+	                c.start_time,
+	                c.end_time,
+	                c.weekday,
+	                COUNT(sc.student_id) AS current_student, 
+	                c.max_student,
+	                c.price,
+	                TO_CHAR(c.apply_start_date, 'YYYY-MM-DD') AS apply_start_date,
+	                TO_CHAR(c.apply_end_date, 'YYYY-MM-DD') AS apply_end_date,
+	                c.cd_status
+	            FROM tb_class c
+	            JOIN tb_teacher t ON c.teacher_id = t.teacher_id 
+	            LEFT JOIN tb_student_class sc ON c.class_id = sc.class_id 
+	            WHERE c.user_id = #{userId}
+	            <if test="cdStatus != null">
+	                AND c.cd_status = #{cdStatus}
+	            </if>
+	            <if test="condition != null and condition == 'teacherName'">
+	                AND LOWER(t.name) LIKE '%' || LOWER(#{keyword}) || '%'
+	            </if>
+	            <if test="condition != null and condition == 'className'">
+	                AND LOWER(c.class_name) LIKE '%' || LOWER(#{keyword}) || '%'
+	            </if>
+				GROUP BY 
+					c.class_id,
+					c.class_name,
+					c.cd_lecture,
+					t.name,
+					c.start_date,
+					c.end_date,
+					c.start_time,
+					c.end_time,
+					c.weekday,
+					c.max_student,
+					c.price,
+					c.apply_start_date,
+					c.apply_end_date,
+					c.cd_status
+	            ORDER BY c.class_id ASC
+	        ) result1
+	    )
+	    WHERE rnum BETWEEN #{startRowNum} AND #{endRowNum}
+	</select>
+	
+	
+	<select id="getCount" parameterType="com.example.FinalProject.dto.HjClassListDto" resultType="int">
+		SELECT COUNT(*)
+		FROM tb_class c
+		JOIN tb_teacher t ON c.teacher_id = t.teacher_id 
+        WHERE c.user_id = #{userId}
+        <if test="cdStatus != null">
+            AND c.cd_status = #{cdStatus}
+        </if>
+        <if test="condition != null and condition == 'teacherName'">
+            AND t.name LIKE '%' || #{keyword} || '%'
+        </if>
+        <if test="condition != null and condition == 'className'">
+            AND c.class_name LIKE '%' || #{keyword} || '%'
+        </if>
+	</select>	
+	
+	<select id="getClassLecture" resultType="com.example.FinalProject.dto.HjLectureDto">
+		select * FROM tb_bcode WHERE ACODE = 'LECTURE'
+	</select>	
+
+</mapper>
