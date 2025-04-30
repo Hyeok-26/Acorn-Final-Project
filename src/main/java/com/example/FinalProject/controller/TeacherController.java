@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.FinalProject.dto.HjTeacherDto;
 import com.example.FinalProject.dto.TeacherClassHistoryDto;
 import com.example.FinalProject.dto.TeacherDto;
 import com.example.FinalProject.dto.TeacherListDto;
@@ -68,4 +69,14 @@ public class TeacherController {
 		dto.setSearch(search);
 		return teacherService.getResult(pageNum, dto);
 	}
+	
+	
+	// 수업가능한 강사 불러오기
+	// class/teacher?userId=${userId}
+	// class/teacher?userId=1
+	@GetMapping("/class/teacher")
+	public List<HjTeacherDto> getClassteacher(int userId) {
+		return teacherService.getClassteacher(userId);
+	};	
+	
 }

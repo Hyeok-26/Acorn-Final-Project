@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.FinalProject.mapper.ClassMapper">
 
+	<!-- 수업 상태값 수정 -->
 	<update id="updateClassStatus" parameterType="com.example.FinalProject.dto.HjClassDto">
 		UPDATE tb_class SET
 		start_date = TO_DATE(#{startDate}, 'YYYY-MM-DD'), end_date = TO_DATE(#{endDate}, 'YYYY-MM-DD'), 
@@ -11,6 +12,7 @@
 		WHERE class_id = #{classId}
 	</update>
 
+	<!-- 수업수정 -->
 	<update id="updateClass" parameterType="com.example.FinalProject.dto.HjClassDto">
 		UPDATE tb_class SET 
 		cd_lecture = #{cdLecture}, class_name = #{className}, 
@@ -21,6 +23,7 @@
 		WHERE class_id = #{classId}
 	</update>
 
+	<!-- 수업개설 -->
 	<insert id="addClass" parameterType="com.example.FinalProject.dto.HjClassDto">
 		INSERT INTO tb_class 
 		(class_id, class_name, cd_lecture, user_id,description, teacher_id, apply_start_date, apply_end_date, start_date, end_date, start_time, end_time, max_student, cd_status, weekday, price)
@@ -28,11 +31,12 @@
 		(seq_class_id.NEXTVAL, #{className}, #{cdLecture}, #{userId}, #{description}, #{teacherId}, TO_DATE(#{applyStartDate}, 'YYYY-MM-DD'), TO_DATE(#{applyEndDate}, 'YYYY-MM-DD'), TO_DATE(#{startDate}, 'YYYY-MM-DD'), TO_DATE(#{endDate}, 'YYYY-MM-DD'), #{startTime}, #{endTime}, #{maxStudent}, 'BEFORE', #{weekday}, #{price})
 	</insert>
 
-
+	<!-- 수업설명 불러오기 -->
 	<select id="getClassDescription" resultType="com.example.FinalProject.dto.HjClassDto" parameterType="int">
 		SELECT CLASS_ID, CLASS_NAME, description FROM tb_class WHERE class_id = #{classId}
 	</select>
 
+	<!-- 해당지점에서 개설한 수업리스트 -->
 	<select id="getClassByStore" resultType="com.example.FinalProject.dto.HjClassDto" parameterType="com.example.FinalProject.dto.HjClassListDto">
 	    SELECT *
 	    FROM (
@@ -88,7 +92,7 @@
 	    WHERE rnum BETWEEN #{startRowNum} AND #{endRowNum}
 	</select>
 	
-	
+	<!-- 조건에 맞는 수업 수 count -->
 	<select id="getCount" parameterType="com.example.FinalProject.dto.HjClassListDto" resultType="int">
 		SELECT COUNT(*)
 		FROM tb_class c
@@ -105,6 +109,7 @@
         </if>
 	</select>	
 	
+	<!-- 개설가능한 강의분류 불러오기 -->
 	<select id="getClassLecture" resultType="com.example.FinalProject.dto.HjLectureDto">
 		select * FROM tb_bcode WHERE ACODE = 'LECTURE'
 	</select>	

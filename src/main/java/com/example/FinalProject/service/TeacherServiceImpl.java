@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.FinalProject.dto.HjTeacherDto;
 import com.example.FinalProject.dto.TeacherClassHistoryDto;
 import com.example.FinalProject.dto.TeacherDto;
 import com.example.FinalProject.dto.TeacherListDto;
@@ -89,6 +90,11 @@ public class TeacherServiceImpl implements TeacherService{
 		
 		return resultDto;
 	}
-	
+
+	@Override
+	public List<HjTeacherDto> getClassteacher(int userId) {
+		return teacherMapper.getClassteacher(userId);
+	}
+
 
 }

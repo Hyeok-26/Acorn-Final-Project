@@ -116,4 +116,10 @@
 				</when>
 			</choose>   
 	</select>
+	
+	<select id="getClassteacher" parameterType="int">
+		select * from tb_teacher WHERE USER_ID=#{userId} AND CD_STATUS ='WORK'
+	</select>
+	
+	
 </mapper>

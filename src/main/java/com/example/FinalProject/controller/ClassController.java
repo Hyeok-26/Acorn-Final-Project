@@ -1,7 +1,6 @@
 package com.example.FinalProject.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.FinalProject.dto.HjClassDto;
 import com.example.FinalProject.dto.HjClassListDto;
 import com.example.FinalProject.dto.HjLectureDto;
-import com.example.FinalProject.dto.PostDto;
+import com.example.FinalProject.dto.HjTeacherDto;
 import com.example.FinalProject.service.ClassService;
 
 @RestController
@@ -119,5 +118,6 @@ public class ClassController {
 		return service.getClassLecture();
 	};	
 	
+
 	
 }
