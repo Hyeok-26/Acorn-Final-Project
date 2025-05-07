@@ -7,14 +7,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Alias("CodeDto")
+@Alias("ProductDto")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class HCCodeDto {
-	private String acode;
-	private String aname;
-	private String bcode;
-	private String bname;
+public class HCProductDto {
+	private int productId;
+	private String productName;
+	private String cdCategory;
+	private int price;
+	
+	private int startRowNum;
+	private int endRowNum;
+	private String keyword; 
 }

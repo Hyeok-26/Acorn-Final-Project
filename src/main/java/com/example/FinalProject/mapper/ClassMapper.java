@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.example.FinalProject.dto.HjClassDto;
 import com.example.FinalProject.dto.HjClassListDto;
 import com.example.FinalProject.dto.HjLectureDto;
-import com.example.FinalProject.dto.PostDto;
+import com.example.FinalProject.dto.HCPostDto;
 
 @Mapper
 public interface ClassMapper {
