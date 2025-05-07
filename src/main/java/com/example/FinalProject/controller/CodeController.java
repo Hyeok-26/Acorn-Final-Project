@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.FinalProject.dto.HCCodeDto;
 import com.example.FinalProject.service.CodeService;
 
-@RestController
+@RestController 
 public class CodeController {
 
 	@Autowired private CodeService service;
