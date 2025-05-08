@@ -51,6 +51,6 @@ public interface AdminSalesMapper {
 	int insertOrderApprovedCostToAdmin(JsOrderToCostDto dto);
 	int insertOrderApprovedCostToCeo(JsOrderToCostDto dto);
 	JsOrderToCostDto getApprovedOrderInfoByOrderId(int orderId);
-	List<JsOrderToCostDto> getOrderDetailInfoByOrderId(int orderid);
+	List<JsOrderToCostDto> getOrderDetailInfoByOrderId(Map<String, Object> search);
 
 }

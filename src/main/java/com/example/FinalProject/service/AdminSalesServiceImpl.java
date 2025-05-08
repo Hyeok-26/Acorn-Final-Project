@@ -12,6 +12,7 @@ import com.example.FinalProject.dto.HjClassDto;
 import com.example.FinalProject.dto.JsAdminSalesDto;
 import com.example.FinalProject.dto.JsAdminSalesStatDto;
 import com.example.FinalProject.dto.JsClsToProfitDto;
+import com.example.FinalProject.dto.JsOrderToCostDto;
 import com.example.FinalProject.mapper.AdminSalesMapper;
 
 @Service
@@ -240,11 +241,34 @@ public class AdminSalesServiceImpl implements AdminSalesService {
 	}
 
 	//발주에서 실행할 메소드 : 발주 승인 시 매출 테이블에 자동 등록
-	@Override
+	@Override @Transactional
 	public int insertOrderApprovedCost(int orderId) {
+		JsOrderToCostDto costDto=salesmapper.getApprovedOrderInfoByOrderId(orderId);
+		int userId= costDto.getUserId();
+
+		Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("userId", userId);
+        paramMap.put("orderId", orderId);
+
+		List<JsOrderToCostDto> list= salesmapper.getOrderDetailInfoByOrderId(paramMap);
+	    int totalInserted = 0;
+	
+		for (JsOrderToCostDto dto : list) {
+			try {
+				int a = salesmapper.insertOrderApprovedCostToAdmin(dto);
+		        int b = salesmapper.insertOrderApprovedCostToCeo(dto);
+	
+		        // 필요하면 총합 계산
+		        totalInserted += a + b;
+	
+				} catch (Exception e) {
+		            // 어떤 하나라도 실패하면 전체 트랜잭션 롤백
+		            throw new RuntimeException("발주 승인 매출 등록 중 오류 발생. 전체 작업이 취소됩니다.", e);
+		        }
+		    }
+	
+		return totalInserted;
 		
-		
-		return 0;
 	}
 
 }
