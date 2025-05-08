@@ -6,10 +6,12 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.FinalProject.dto.HjClassDto;
 import com.example.FinalProject.dto.JsAdminSalesDto;
 import com.example.FinalProject.dto.JsAdminSalesStatDto;
+import com.example.FinalProject.dto.JsClsToProfitDto;
 import com.example.FinalProject.mapper.AdminSalesMapper;
 
 @Service
@@ -213,18 +215,36 @@ public class AdminSalesServiceImpl implements AdminSalesService {
 	    return salesmapper.getAdminSalesStatByLectMonthly(paramMap);
 	}
 
+	//수업에서 실행할 메소드 : 수업 상태가 개강으로 바뀔 시 매출 테이블에 자동 등록
+	@Override    @Transactional
+	public int insertClassStartProfit(HjClassDto dto) {
+        try {
+            int classId = dto.getClassId();
+            int userId = dto.getUserId();
 
-	@Override
-	public void insertClassStartProfit(HjClassDto dto) {
-		// TODO Auto-generated method stub
-		
+            Map<String, Object> paramMap = new HashMap<>();
+            paramMap.put("userId", userId);
+            paramMap.put("classId", classId);
+
+            JsClsToProfitDto profitDto = salesmapper.getProfitInfoByClassId(paramMap);
+            profitDto.setSaleName("수업 수익");
+
+            int a = salesmapper.insertClsIngProfitToAdmin(profitDto);
+            int b = salesmapper.insertClsIngProfitToCeo(profitDto);
+
+            return a + b;
+        } catch (Exception e) {
+            // 예외를 커스터마이징해서 던짐 (롤백은 자동 처리됨)
+            throw new RuntimeException("수업이 개강했는데도 매출에 등록되지 않았습니다.", e);
+        }
 	}
 
-
+	//발주에서 실행할 메소드 : 발주 승인 시 매출 테이블에 자동 등록
 	@Override
-	public void insertOrderApprovedCost(JsAdminSalesDto dto) {
-		// TODO Auto-generated method stub
+	public int insertOrderApprovedCost(int orderId) {
 		
+		
+		return 0;
 	}
 
 }

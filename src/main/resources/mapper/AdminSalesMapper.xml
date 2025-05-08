@@ -156,4 +156,64 @@
 	        TO_CHAR(c.start_date, 'YYYY'), TO_CHAR(c.start_date, 'MM'), c.cd_lecture, b.bname, c.price, b.bcode
 	    ORDER BY sMonth, c.cd_lecture
 	</select>
+	
+	<insert id="insertClsIngProfitToAdmin" parameterType="JsClsToProfitDTo">
+		insert into tb_admin_sale
+		(admin_sale_id, user_id,cre_date,edit_date, sale_name,price, cd_acode, cd_bcode,auto)
+		values 
+		(seq_admin_sale_id.nextval,#{userId}, sysdate, sysdate, #{saleName}, #{price}, 'PROFIT', 'LECTURE', 'YES') 
+	</insert>
+	<insert id="insertClsIngProfitToCeo" parameterType="JsClsToProfitDTo">
+		insert into tb_ceo_sale
+		(ceo_sale_id, user_id,cre_date,edit_date, sale_name,price, cd_acode, cd_bcode,auto)
+		values 
+		(seq_ceo_sale_id.nextval,#{userId}, sysdate, sysdate, #{saleName}, #{price}, 'PROFIT', 'LECTURE', 'YES') 
+	</insert>
+	<select id="getProfitInfoByClassId" parameterType="map" resultType="JsClsToProfitDto">
+	    SELECT 
+	        c.user_id userId,
+	        c.cd_lecture cdLecture,
+	        c.class_name className,
+	        COUNT(sc.student_id) AS studentCount, 
+	        c.price price,
+	        COUNT(sc.student_id) * c.price AS profit
+	    FROM tb_class c
+	    LEFT JOIN tb_student_class sc ON c.class_id = sc.class_id 
+	    LEFT JOIN tb_bcode b ON c.cd_lecture = b.bcode              
+	    WHERE c.user_id = #{userId} and class_id=#{classId}
+	    GROUP BY 
+	        TO_CHAR(c.start_date, 'YYYY'), c.cd_lecture, c.price
+	</select>
+
+
+	<insert id="insertOrderApprovedCostToAdmin" parameterType="JsOrderToCostDto">
+		insert into tb_admin_sale
+		(admin_sale_id, user_id,cre_date,edit_date, sale_name,price, cd_acode, cd_bcode,auto)
+		values 
+		(seq_admin_sale_id.nextval, #{userId}, sysdate, sysdate, #{saleName}, #{price}, 'COST', 'ITEM', 'YES') 
+	</insert>
+	<insert id="insertOrderApprovedCostToCeo" parameterType="JsOrderToCostDto">
+		insert into tb_ceo_sale
+		(ceo_sale_id, user_id,cre_date,edit_date, sale_name,price, cd_acode, cd_bcode,auto)
+		values 
+		(seq_ceo_sale_id.nextval, #{userId}, sysdate, sysdate, #{saleName}, #{price}, 'PROFIT', 'ITEM', 'YES') 
+	</insert>
+	<select id="getApprovedOrderInfoByOrderId" parameterType="String" resultType="int">
+	  SELECT order_id, user_id, ord_date, cd_status, order_name
+	  FROM tb_order 
+	  WHERE user_id=#{userId} and order_id=#{orderId}
+	</select>
+	<select id="getOrderDetailInfoByOrderId" resultType="map">
+	  SELECT 
+	    od.order_detail_id, 
+	    od.product_id,
+	    p.product_name, 
+	    p.cd_category, 
+	    od.quantity, 
+	    od.price,
+	    (od.quantity * od.price) AS total
+	  FROM tb_order_detail od
+	  JOIN tb_product p ON od.product_id = p.product_id
+	  WHERE od.order_id = #{orderId}
+	</select>
 </mapper>

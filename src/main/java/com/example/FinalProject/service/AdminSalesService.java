@@ -24,8 +24,8 @@ public interface AdminSalesService {
 	public List<JsAdminSalesStatDto> getAdminSalesStatByLectMonthly(String sYear, String sMonth, Integer userId);
 	
 	//수업에서 실행할 메소드
-	public void insertClassStartProfit(HjClassDto dto); 
+	public int insertClassStartProfit(HjClassDto dto); 
 	//발주에서 실행할 메소드
-	public void insertOrderApprovedCost(JsAdminSalesDto dto);
+	public int insertOrderApprovedCost(int orderId);
 
 }
