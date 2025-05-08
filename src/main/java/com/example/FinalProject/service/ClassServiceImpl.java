@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import com.example.FinalProject.dto.HjClassDto;
 import com.example.FinalProject.dto.HjClassListDto;
 import com.example.FinalProject.dto.HjLectureDto;
-import com.example.FinalProject.dto.PostDto;
-import com.example.FinalProject.dto.PostListDto;
+import com.example.FinalProject.dto.HCPostDto;
+import com.example.FinalProject.dto.HCPostListDto;
 import com.example.FinalProject.mapper.ClassMapper;
 
 @Service

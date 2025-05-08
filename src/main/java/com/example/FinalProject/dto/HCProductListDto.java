@@ -11,14 +11,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class PostListDto {
-	private List<PostDto> list;
+public class HCProductListDto {
+	private List<HCProductDto> list;
 	private int startPageNum;
 	private int endPageNum;
 	private int totalPageCount;
 	private int pageNum;
 	private int totalRow;
 	private String findQuery;
-	private String condition;
 	private String keyword;
+	private String cdCategory;
 }
