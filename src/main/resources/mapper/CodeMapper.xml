@@ -7,13 +7,13 @@
 		from tb_acode
 		where deleted = 'NO';
 	</select>
-	<!-- acode insert -->
+	<!-- acode 등록 -->
 	<insert id="insertAcode" parameterType="CodeDto">
 		INSERT INTO TB_ACODE(
 		ACODE, ANAME)
 		values(#{acode},#{aname})
 	</insert>
-	<!-- acode 삭제 -->
+	<!-- acode 숨기기 -->
 	<update id="hideAcode" parameterType="String">
 		UPDATE tb_acode
 		SET deleted = 'YES'
@@ -26,13 +26,13 @@
 		JOIN TB_ACODE a ON b.ACODE = a.ACODE
 		WHERE a.acode=#{acode} AND b.deleted = 'NO'
 	</select>
-	<!-- bcode insert -->
+	<!-- bcode 등록 -->
 	<insert id="insertBcode" parameterType="CodeDto">
 		INSERT INTO TB_BCODE(
 		acode, bcode, bname) 
 		VALUES (#{acode}, #{bcode}, #{bname})
 	</insert>
-	<!-- bcode update -->
+	<!-- bcode 숨기기 -->
 	<update id="hideBcode" parameterType="String">
 		UPDATE TB_BCODE
 		SET DELETED ='YES'
