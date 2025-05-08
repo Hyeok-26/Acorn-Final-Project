@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../api';
 import { v4 as uuid } from 'uuid';
-import { Button, Modal, Form, Table, Container } from 'react-bootstrap';
+import { Button, Modal, Form, Table, Container, Row, Col } from 'react-bootstrap';
+import CeoNavbar from '@/components/CeoNavBar';
 
 interface Code {
   acode: string;
@@ -28,9 +29,7 @@ function AcodeModal({ show, onHide, onSubmit }: {
 
   return (
     <Modal show={show} onHide={onHide} centered>
-      <Modal.Header closeButton>
-        <Modal.Title>코드 등록</Modal.Title>
-      </Modal.Header>
+      <Modal.Header closeButton><Modal.Title>코드 등록</Modal.Title></Modal.Header>
       <Modal.Body>
         <Form>
           <Form.Group className="mb-3">
@@ -51,12 +50,12 @@ function AcodeModal({ show, onHide, onSubmit }: {
   );
 }
 
-function BcodeModal({ show, onHide, onSubmit }: {
+function BcodeModal({ show, onHide, onSubmit, acode }: {
   show: boolean;
   onHide: () => void;
   onSubmit: (data: { acode: string, bcode: string; bname: string }) => void;
+  acode: string;
 }) {
-  const [acode, setAcode] = useState('');
   const [bcode, setBcode] = useState('');
   const [bname, setBname] = useState('');
 
@@ -70,14 +69,12 @@ function BcodeModal({ show, onHide, onSubmit }: {
 
   return (
     <Modal show={show} onHide={onHide} centered>
-      <Modal.Header closeButton>
-        <Modal.Title>상태 등록</Modal.Title>
-      </Modal.Header>
+      <Modal.Header closeButton><Modal.Title>상태 등록</Modal.Title></Modal.Header>
       <Modal.Body>
         <Form>
-        <Form.Group className="mb-3">
+          <Form.Group className="mb-3">
             <Form.Label>코드 네임</Form.Label>
-            <Form.Control type="text" value={acode} onChange={e => setAcode(e.target.value)} />
+            <Form.Control type="text" value={acode} readOnly />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>상태 코드</Form.Label>
@@ -97,45 +94,43 @@ function BcodeModal({ show, onHide, onSubmit }: {
   );
 }
 
-function CodeManagementPage() {
+function Code() {
   const [acodes, setAcodes] = useState<Code[]>([]);
   const [bcodes, setBcodes] = useState<Code[]>([]);
-  const [selectedAcode, setSelectedAcode] = useState<string>('');
+  const [selectedAcode, setSelectedAcode] = useState('');
   const [showAcodeModal, setShowAcodeModal] = useState(false);
   const [showBcodeModal, setShowBcodeModal] = useState(false);
 
   const refreshAcodes = () => {
     api.get('/acode')
-      .then(res => setAcodes(res.data))
+      .then(res => {
+        setAcodes(res.data);
+        if (res.data.length > 0) {
+          const first = res.data[0].acode;
+          setSelectedAcode(first);
+          refreshBcodes(first);
+        } else {
+          setSelectedAcode('');
+          setBcodes([]);
+        }
+      })
       .catch(console.error);
   };
 
   const refreshBcodes = (acode: string) => {
     setSelectedAcode(acode);
-    api.get(`/bcode/${acode}`)
-      .then(res => setBcodes(res.data))
-      .catch(console.error);
+    api.get(`/bcode/${acode}`).then(res => setBcodes(res.data)).catch(console.error);
   };
 
   const handleDeleteAcode = (acode: string) => {
     if (window.confirm('정말 삭제하시겠습니까?')) {
-      api.patch(`/acode/${acode}`)
-        .then(() => {
-          alert('삭제되었습니다');
-          refreshAcodes();
-        })
-        .catch(console.error);
+      api.patch(`/acode/${acode}`).then(refreshAcodes).catch(console.error);
     }
   };
 
   const handleDeleteBcode = (bcode: string) => {
     if (window.confirm('정말 삭제하시겠습니까?')) {
-      api.patch(`/bcode/${bcode}`)
-        .then(() => {
-          alert('삭제되었습니다');
-          refreshBcodes(selectedAcode);
-        })
-        .catch(console.error);
+      api.patch(`/bcode/${bcode}`).then(() => refreshBcodes(selectedAcode)).catch(console.error);
     }
   };
 
@@ -144,79 +139,87 @@ function CodeManagementPage() {
   }, []);
 
   return (
-    <Container className="mt-4">
-      <h2>코드 관리</h2>
-      <Button className="mb-3" variant="primary" onClick={() => setShowAcodeModal(true)}>코드 등록</Button>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>코드</th>
-            <th>코드 네임</th>
-            <th>삭제</th>
-          </tr>
-        </thead>
-        <tbody>
-          {acodes.map(item => (
-            <tr key={uuid()} onClick={() => refreshBcodes(item.acode)} style={{ cursor: 'pointer' }}>
-              <td>{item.acode}</td>
-              <td>{item.aname}</td>
-              <td><Button variant="danger" size="sm" onClick={e => { e.stopPropagation(); handleDeleteAcode(item.acode); }}>DEL</Button></td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-
-      <Button className="mb-3" variant="success" onClick={() => setShowBcodeModal(true)}>상태 등록</Button>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>코드 네임</th>
-            <th>상태</th>
-            <th>삭제</th>
-          </tr>
-        </thead>
-        <tbody>
-          {bcodes.map(item => (
-            <tr key={uuid()}>
-              <td>{item.aname}</td>
-              <td>{item.bname}</td>
-              <td><Button variant="danger" size="sm" onClick={() => handleDeleteBcode(item.bcode)}>DEL</Button></td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-
-      <AcodeModal
-        show={showAcodeModal}
-        onHide={() => setShowAcodeModal(false)}
-        onSubmit={(data) => {
-          api.post('/acode', data)
-            .then(() => {
-              refreshAcodes();
-            })
-            .catch(error => {
-              console.error(error);
-              alert("등록 실패!");
-            });
-        }}
-      />
-
+    <div className="flex">
+      <CeoNavbar />
+      <Container className="mt-4">
+        <h2 className="mb-4">코드 관리</h2>
+        <Row>
+          <Col md={6}>
+            <div className="border p-3 rounded">
+              <div className="d-flex justify-content-between mb-2">
+                <strong>코드</strong>
+                <Button size="sm" onClick={() => setShowAcodeModal(true)}>코드 등록</Button>
+              </div>
+              <Table bordered>
+                <thead className="table-secondary text-center">
+                  <tr>
+                    <th>코드</th>
+                    <th>코드네임</th>
+                    <th>DEL</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {acodes.map(item => (
+                    <tr key={uuid()}
+                        onClick={() => refreshBcodes(item.acode)}
+                        style={{
+                          cursor: 'pointer',
+                          backgroundColor: selectedAcode === item.acode ? '#e7f3ff' : 'white'
+                        }}>
+                      <td>{item.acode}</td>
+                      <td>{item.aname}</td>
+                      <td className="text-center">
+                        <Button variant="danger" size="sm"
+                          onClick={e => {
+                            e.stopPropagation();
+                            handleDeleteAcode(item.acode);
+                          }}>DEL</Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </div>
+          </Col>
+          <Col md={6}>
+            <div className="border p-3 rounded">
+              <div className="d-flex justify-content-between mb-2">
+                <strong>상태</strong>
+                <Button size="sm" variant="success" onClick={() => setShowBcodeModal(true)}>상태 등록</Button>
+              </div>
+              <Table bordered>
+                <thead className="table-secondary text-center">
+                  <tr>
+                    <th>코드네임</th>
+                    <th>상태</th>
+                    <th>DEL</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {bcodes.map((item) => (
+                    <tr key={uuid()}>
+                      <td>{item.aname}</td>
+                      <td>{item.bname}</td>
+                      <td className="text-center">
+                        <Button variant="outline-warning" size="sm" onClick={() => handleDeleteBcode(item.bcode)}>DEL</Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </div>
+          </Col>
+        </Row>
+      </Container>
+      <AcodeModal show={showAcodeModal} onHide={() => setShowAcodeModal(false)} onSubmit={(data) => api.post('/acode', data).then(refreshAcodes)} />
       <BcodeModal
         show={showBcodeModal}
         onHide={() => setShowBcodeModal(false)}
-        onSubmit={(data) => {
-          api.post('/bcode', { ...data, acode: selectedAcode })
-            .then(() => {
-              refreshBcodes(selectedAcode);
-            })
-            .catch(error => {
-              console.error(error);
-              alert("등록록 실패!");
-            });
-        }}
+        onSubmit={(data) => api.post('/bcode', data).then(() => refreshBcodes(selectedAcode))}
+        acode={selectedAcode}
       />
-    </Container>
+    </div>
   );
 }
 
-export default CodeManagementPage;
+export default Code;

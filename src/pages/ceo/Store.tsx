@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import api from '../../api';
 import { Pagination } from 'react-bootstrap';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import CeoNavbar from '@/components/CeoNavBar';
 
 interface Store {
   userId: number;
@@ -91,6 +92,7 @@ function Store() {
 
   return (
     <div className="container">
+      <CeoNavbar />
       <h1>지점 관리</h1>
       <div>
         <button onClick={openAdd}>지점 등록</button>
