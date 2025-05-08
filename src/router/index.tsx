@@ -7,6 +7,13 @@ import Inventory from "../pages/admin/Inventory";
 import OrderList from "../pages/admin/OrderList";
 import Order from "../pages/admin/Order";
 
+import Code from "../pages/ceo/Code";
+import Product from "../pages/ceo/Product";
+import Store from "../pages/ceo/Store";
+import Post from "../pages/ceo/Post";
+import PostDetail from "../pages/ceo/PostDetail";
+import PostUpdateForm from "../pages/ceo/PostUpdateForm";
+import PostForm from "../pages/ceo/PostForm";
 
 const routes = [
     {path: '/', element: <Home />},
@@ -15,9 +22,16 @@ const routes = [
     {path: '/admin/inventory', element: <Inventory/>},
     {path: '/admin/order-list', element: <OrderList/>},
     {path: '/admin/order', element: <Order/>},
-    {path: '/admin/:id/order', element: <Order/>}
+    {path: '/admin/:id/order', element: <Order/>},
     //{path: '/admin/:id/order', element: <OrderOld/>}
     
+    {path: '/code', element:<Code/>},
+    {path: '/product', element:<Product/>},
+    {path: '/store', element:<Store/>},
+    {path: '/posts', element:<Post/>},
+    {path: '/posts/new', element:<PostForm/>},
+    {path: '/posts/:postId', element:<PostDetail/>},
+    {path: '/posts/:postId/edit', element:<PostUpdateForm/>}
 ]
 
 const router = createBrowserRouter([{
