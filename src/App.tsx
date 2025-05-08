@@ -5,8 +5,8 @@ function App() {
   const currentOutlet = useOutlet();
   const location = useLocation();
   const isCeoPage = location.pathname.includes('/ceo') || 
-                   location.pathname.includes('/code') || 
-                   location.pathname.includes('/store');
+                   location.pathname.includes('/post');
+                   
 
   return (
     <div className="flex">

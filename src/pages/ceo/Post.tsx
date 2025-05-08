@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../api';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Pagination, Table, Button, Form, Row, Col } from 'react-bootstrap';
+import { Pagination, Table, Button, Form, Row, Col, Container } from 'react-bootstrap';
 
 interface Post {
   postId: number;
@@ -77,12 +77,12 @@ function PostList() {
   };
 
   return (
-    <div className="container mt-5">
+    <Container className="container mt-5">
       <h2 className="mb-4">공지 사항</h2>
 
       <Row className="mb-3 align-items-center">
         <Col><Button onClick={() => navigate(`/posts/new`)}>공지 추가</Button></Col>
-        <Col>
+        <Col md="auto">
           <Form.Select name="condition" value={search.condition} onChange={handleSearchChange}>
             <option value="all">전체</option>
             <option value="writer">작성자</option>
@@ -92,13 +92,13 @@ function PostList() {
         <Col>
           <Form.Control type="text" name="keyword" value={search.keyword} onChange={handleSearchChange} placeholder="검색 명..." />
         </Col>
-        <Col>
+        <Col md="auto">
           <Button variant="primary" onClick={() => move(1)}>검색</Button>
         </Col>
       </Row>
 
       <Table striped bordered hover>
-        <thead>
+        <thead className="table-secondary text-center">
           <tr>
             <th>번호</th>
             <th>제목</th>
@@ -108,9 +108,9 @@ function PostList() {
         </thead>
         <tbody>
           {postList.list.map(post => (
-            <tr key={post.postId} onClick={() => navigate(`/posts/${post.postId}`)} style={{ cursor: 'pointer' }}>
+            <tr key={post.postId}>
               <td>{post.postId}</td>
-              <td>{post.title}</td>
+              <td onClick={() => navigate(`/posts/${post.postId}`)} style={{ cursor: 'pointer' }}>{post.title}</td>
               <td>{post.writer}</td>
               <td>{post.creDate}</td>
             </tr>
@@ -125,7 +125,7 @@ function PostList() {
         ))}
         <Pagination.Item onClick={() => move(postList.endPageNum + 1)} disabled={postList.endPageNum >= postList.totalPageCount}>{'>'}</Pagination.Item>
       </Pagination>
-    </div>
+    </Container>
   );
 }
 

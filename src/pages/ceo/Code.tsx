@@ -147,13 +147,13 @@ function Code() {
           <Col md={6}>
             <div className="border p-3 rounded">
               <div className="d-flex justify-content-between mb-2">
-                <strong>코드</strong>
+                <strong>A코드</strong>
                 <Button size="sm" onClick={() => setShowAcodeModal(true)}>코드 등록</Button>
               </div>
               <Table bordered>
                 <thead className="table-secondary text-center">
                   <tr>
-                    <th>코드</th>
+                    <th>그룹</th>
                     <th>코드네임</th>
                     <th>DEL</th>
                   </tr>
@@ -184,21 +184,21 @@ function Code() {
           <Col md={6}>
             <div className="border p-3 rounded">
               <div className="d-flex justify-content-between mb-2">
-                <strong>상태</strong>
-                <Button size="sm" variant="success" onClick={() => setShowBcodeModal(true)}>상태 등록</Button>
+                <strong>B코드</strong>
+                <Button size="sm" variant="success" onClick={() => setShowBcodeModal(true)}>코드 등록</Button>
               </div>
               <Table bordered>
                 <thead className="table-secondary text-center">
                   <tr>
+                    <th>소그룹</th>
                     <th>코드네임</th>
-                    <th>상태</th>
                     <th>DEL</th>
                   </tr>
                 </thead>
                 <tbody>
                   {bcodes.map((item) => (
                     <tr key={uuid()}>
-                      <td>{item.aname}</td>
+                      <td>{item.bcode}</td>
                       <td>{item.bname}</td>
                       <td className="text-center">
                         <Button variant="outline-warning" size="sm" onClick={() => handleDeleteBcode(item.bcode)}>DEL</Button>
