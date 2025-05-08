@@ -13,9 +13,10 @@ import com.example.FinalProject.dto.PostDto;
 public interface ClassMapper {
 	List<HjClassDto> getClassByStore(HjClassListDto dto);
 	int getCount(HjClassListDto dto);
-	List<HjClassDto> getClassDescription(int classId);
+	HjClassDto getClassDescription(int classId);
 	boolean addClass(HjClassDto dto);
 	boolean updateClass(HjClassDto dto);
 	boolean updateClassStatus(HjClassDto dto);
 	List<HjLectureDto> getClassLecture();
+	HjClassDto getClassdetail(int classId);
 }

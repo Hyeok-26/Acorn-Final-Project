@@ -9,12 +9,12 @@ import com.example.FinalProject.dto.PostDto;
 
 public interface ClassService {
 	public HjClassListDto getClassByStore(int pageNum, HjClassListDto search);
-	public List<HjClassDto> getClassDescription(int classId);
+	public HjClassDto getClassDescription(int classId);
 	public boolean addClass(HjClassDto dto);
 	public boolean updateClass(HjClassDto dto);
 	public boolean updateClassStatus(HjClassDto dto);
 	public List<HjLectureDto> getClassLecture();
-	
+	public HjClassDto getClassdetail(int classId);
 	
 	
 	

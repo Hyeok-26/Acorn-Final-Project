@@ -35,6 +35,47 @@
 	<select id="getClassDescription" resultType="com.example.FinalProject.dto.HjClassDto" parameterType="int">
 		SELECT CLASS_ID, CLASS_NAME, description FROM tb_class WHERE class_id = #{classId}
 	</select>
+	
+	<!-- 수업상세 불러오기 -->
+	<select id="getClassdetail" resultType="com.example.FinalProject.dto.HjClassDto" parameterType="int">
+		SELECT 
+	        c.class_id,
+	        c.class_name,
+	        cd_lecture,
+	        t.name AS teacher_name,
+	        t.teacher_id AS teacher_id,
+	        TO_CHAR(c.start_date, 'YYYY-MM-DD') AS start_date,
+	        TO_CHAR(c.end_date, 'YYYY-MM-DD') AS end_date,
+	        c.start_time,
+	        c.end_time,
+	        c.weekday,
+	        NVL(COUNT(sc.student_id), 0) AS current_student, 
+	        c.max_student,
+	        c.price,
+	        TO_CHAR(c.apply_start_date, 'YYYY-MM-DD') AS apply_start_date,
+	        TO_CHAR(c.apply_end_date, 'YYYY-MM-DD') AS apply_end_date,
+	        c.cd_status		
+		FROM tb_class c
+		JOIN tb_teacher t ON c.teacher_id = t.teacher_id
+		LEFT JOIN tb_student_class sc ON c.class_id = sc.class_id 
+		WHERE c.class_id = #{classId}
+		GROUP BY 
+			c.class_id,
+			c.class_name,
+			cd_lecture,
+			t.name,
+			t.teacher_id,
+			c.start_date,
+			c.end_date,
+			c.start_time,
+			c.end_time,
+			c.weekday,
+			c.max_student,
+			c.price,
+			c.apply_start_date,
+			c.apply_end_date,
+			c.cd_status 
+	</select>
 
 	<!-- 해당지점에서 개설한 수업리스트 -->
 	<select id="getClassByStore" resultType="com.example.FinalProject.dto.HjClassDto" parameterType="com.example.FinalProject.dto.HjClassListDto">
@@ -45,7 +86,7 @@
 	            SELECT 
 	                c.class_id,
 	                c.class_name,
-	                c.cd_lecture,
+	                bl.bname AS cd_lecture,
 	                t.name AS teacher_name,
 	                TO_CHAR(c.start_date, 'YYYY-MM-DD') AS start_date,
 	                TO_CHAR(c.end_date, 'YYYY-MM-DD') AS end_date,
@@ -57,10 +98,12 @@
 	                c.price,
 	                TO_CHAR(c.apply_start_date, 'YYYY-MM-DD') AS apply_start_date,
 	                TO_CHAR(c.apply_end_date, 'YYYY-MM-DD') AS apply_end_date,
-	                c.cd_status
+	                bs.bname AS cd_status
 	            FROM tb_class c
 	            JOIN tb_teacher t ON c.teacher_id = t.teacher_id 
 	            LEFT JOIN tb_student_class sc ON c.class_id = sc.class_id 
+	            LEFT JOIN TB_BCODE bl ON bl.bcode=c.cd_lecture
+            	LEFT JOIN TB_BCODE bs ON bs.bcode=c.cd_status
 	            WHERE c.user_id = #{userId}
 	            <if test="cdStatus != null">
 	                AND c.cd_status = #{cdStatus}
@@ -74,7 +117,7 @@
 				GROUP BY 
 					c.class_id,
 					c.class_name,
-					c.cd_lecture,
+					bl.bname,
 					t.name,
 					c.start_date,
 					c.end_date,
@@ -85,8 +128,8 @@
 					c.price,
 					c.apply_start_date,
 					c.apply_end_date,
-					c.cd_status
-	            ORDER BY c.class_id ASC
+					bs.bname
+	            ORDER BY c.class_id DESC
 	        ) result1
 	    )
 	    WHERE rnum BETWEEN #{startRowNum} AND #{endRowNum}
@@ -102,10 +145,10 @@
             AND c.cd_status = #{cdStatus}
         </if>
         <if test="condition != null and condition == 'teacherName'">
-            AND t.name LIKE '%' || #{keyword} || '%'
+            AND LOWER(t.name) LIKE '%' || LOWER(#{keyword}) || '%'
         </if>
         <if test="condition != null and condition == 'className'">
-            AND c.class_name LIKE '%' || #{keyword} || '%'
+            AND LOWER(c.class_name) LIKE '%' || LOWER(#{keyword}) || '%'
         </if>
 	</select>	
 	

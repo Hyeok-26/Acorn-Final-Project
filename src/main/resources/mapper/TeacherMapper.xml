@@ -117,7 +117,7 @@
 			</choose>   
 	</select>
 	
-	<select id="getClassteacher" parameterType="int">
+	<select id="getClassteacher" parameterType="int" resultType="com.example.FinalProject.dto.HjTeacherDto">
 		select * from tb_teacher WHERE USER_ID=#{userId} AND CD_STATUS ='WORK'
 	</select>
 	

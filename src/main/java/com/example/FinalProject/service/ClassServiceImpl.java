@@ -54,6 +54,7 @@ public class ClassServiceImpl implements ClassService {
 		search.setEndRowNum(endRowNum);
 		//글 목록 얻어오기
 		List<HjClassDto> list=classMapper.getClassByStore(search);
+		
 		String findQuery="";
 		if(search.getKeyword() != null) {
 			findQuery="&condition="+search.getCondition()+"&keyword="+search.getKeyword();
@@ -70,6 +71,7 @@ public class ClassServiceImpl implements ClassService {
 				.findQuery(findQuery)
 				.condition(search.getCondition())
 				.keyword(search.getKeyword())
+				.cdStatus(search.getCdStatus())
 				.build();
 				
 		return dto;
@@ -77,7 +79,7 @@ public class ClassServiceImpl implements ClassService {
 
 
 	@Override
-	public List<HjClassDto> getClassDescription(int classId) {
+	public HjClassDto getClassDescription(int classId) {
 		return classMapper.getClassDescription(classId);	
 	}
 
@@ -119,6 +121,12 @@ public class ClassServiceImpl implements ClassService {
 	@Override
 	public List<HjLectureDto> getClassLecture() {
 		return classMapper.getClassLecture();
+	}
+
+
+	@Override
+	public HjClassDto getClassdetail(int classId) {
+		return classMapper.getClassdetail(classId);	
 	}
 
 
