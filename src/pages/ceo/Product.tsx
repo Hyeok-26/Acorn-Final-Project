@@ -156,26 +156,26 @@ function Product() {
       <CeoNavbar />
       <Container className="mt-4">
         <h2 className="mb-4">품목 관리</h2>
-          <Row className="mb-3">
-            <Col md={2}><Button onClick={() => {
-              setShowModal(true);
-              setIsEdit(false);
-              setForm({ productId: 0, productName: '', cdCategory: 'BOOK', price: '' });
-            }}>+ 품목 등록</Button></Col>
-            <Col md={3}>
-              <Form.Select name="condition" value={searchState.condition} onChange={handleSearchChange}>
-                <option value="">전체</option>
-                <option value="BOOK">서적</option>
-                <option value="EQUIPMENT">기자재</option>
-                <option value="P_ETC">기타</option>
-              </Form.Select>
-            </Col>
-            <Col md={4}><Form.Control type="text" name="keyword" value={searchState.keyword} onChange={handleSearchChange} placeholder="품목명 검색" /></Col>
-            <Col>
-              <Button variant="primary" onClick={() => move(1)}>검색</Button>{' '}
-              <Button variant="secondary" onClick={handleReset}>초기화</Button>
-            </Col>
-          </Row>
+        <Row className="mb-3">
+          <Col md={2}><Button onClick={() => {
+            setShowModal(true);
+            setIsEdit(false);
+            setForm({ productId: 0, productName: '', cdCategory: 'BOOK', price: '' });
+          }}>+ 품목 등록</Button></Col>
+          <Col md={3}>
+            <Form.Select name="condition" value={searchState.condition} onChange={handleSearchChange}>
+              <option value="">전체</option>
+              <option value="BOOK">서적</option>
+              <option value="EQUIPMENT">기자재</option>
+              <option value="P_ETC">기타</option>
+            </Form.Select>
+          </Col>
+          <Col md={4}><Form.Control type="text" name="keyword" value={searchState.keyword} onChange={handleSearchChange} placeholder="품목명 검색" /></Col>
+          <Col>
+            <Button variant="primary" onClick={() => move(1)}>검색</Button>{' '}
+            <Button variant="secondary" onClick={handleReset}>초기화</Button>
+          </Col>
+        </Row>
 
         <Table striped bordered hover>
           <thead className="table-secondary text-center">

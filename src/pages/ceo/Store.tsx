@@ -91,8 +91,7 @@ function Store() {
   };
 
   return (
-    <div className="container">
-      <CeoNavbar />
+    <>
       <h1>지점 관리</h1>
       <div>
         <button onClick={openAdd}>지점 등록</button>
@@ -148,7 +147,7 @@ function Store() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 

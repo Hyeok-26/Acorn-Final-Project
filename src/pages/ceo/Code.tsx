@@ -139,8 +139,8 @@ function Code() {
   }, []);
 
   return (
-    <div className="flex">
-      <CeoNavbar />
+    <>
+      
       <Container className="mt-4">
         <h2 className="mb-4">코드 관리</h2>
         <Row>
@@ -218,7 +218,7 @@ function Code() {
         onSubmit={(data) => api.post('/bcode', data).then(() => refreshBcodes(selectedAcode))}
         acode={selectedAcode}
       />
-    </div>
+    </>
   );
 }
 
