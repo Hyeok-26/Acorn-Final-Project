@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.FinalProject.mapper.CeoSaleMapper">
+	
+	<insert id="insertEtcProfit" parameterType="CeoSaleDto">
+        insert into TB_CEO_SALE
+        (CEO_SALE_ID, USER_ID, CRE_DATE, EDIT_DATE, SALE_NAME, PRICE, CD_ACODE, CD_BCODE, AUTO)
+        values(CEO_SALE_ID_SEQ.nextval, #{userId}, sysdate, sysdate, #{saleName}, #{price}, 'PROFIT', 'ETC', 'YES')
+    </insert>
+
+    <insert id="insertEtcProfitSelf" parameterType="CeoSaleDto">
+        insert into TB_CEO_SALE
+        (CEO_SALE_ID, USER_ID, CRE_DATE, EDIT_DATE, SALE_NAME, PRICE, CD_ACODE, CD_BCODE, AUTO)
+        values(CEO_SALE_ID_SEQ.nextval, #{userId}, sysdate, sysdate, #{saleName}, #{price}, 'PROFIT', 'ETC', 'NO')
+    </insert>
+
+    <select id="getList" resultType="CeoSaleDto">
+        select *
+        from TB_CEO_SALE
+    </select>
+
+    <update id="update" parameterType="CeoSaleDto">
+        update TB_CEO_SALE
+        set SALE_NAME = #{saleName},
+            PRICE = #{price},
+            EDIT_DATE = sysdate,
+            CD_ACODE = #{cdAcode},
+            CD_BCODE = #{cdBcode},
+            AUTO = 'NO'
+        where CEO_SALE_ID = #{ceoSaleId}
+    </update>
+    
+</mapper>
