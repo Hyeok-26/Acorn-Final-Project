@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import com.example.FinalProject.dto.HUI_OrderDetailDto;
 import com.example.FinalProject.dto.HUI_OrderDto;
 import com.example.FinalProject.dto.HUI_OrderRequestDto;
+import com.example.FinalProject.dto.TWCeoSaleDto;
 import com.example.FinalProject.mapper.CeoOrderMapper;
+import com.example.FinalProject.mapper.CeoSaleMapper;
 
 import lombok.Data;
 @Service
@@ -23,6 +25,7 @@ public class CeoOrderServiceImpl implements CeoOrderService {
 	final int PAGE_DISPLAY_COUNT = 5;
 	
 	@Autowired private CeoOrderMapper mapper;
+	@Autowired private CeoSaleMapper ceoSaleMapper;
 	
 
 	@Override
@@ -85,7 +88,15 @@ public class CeoOrderServiceImpl implements CeoOrderService {
 	@Override
 	public int updateReply(HUI_OrderDetailDto detailDto) {
 		// 메모 저장하기
-		return mapper.updateReply(detailDto);
+		mapper.updateReply(detailDto);
+		int userId = 1;
+		String saleName = detailDto.getOrderId() + "번 발주서";
+		TWCeoSaleDto dto = TWCeoSaleDto.builder()
+				.userId(userId)
+				.saleName(saleName)
+				.price(detailDto.getPrice())
+				.build();
+		return ceoSaleMapper.insertEtcProfit(dto);
 	}
 
 	@Override

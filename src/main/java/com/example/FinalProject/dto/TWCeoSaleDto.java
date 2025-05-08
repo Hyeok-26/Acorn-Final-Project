@@ -2,8 +2,10 @@ package com.example.FinalProject.dto;
 
 import org.apache.ibatis.type.Alias;
 
+import lombok.Builder;
 import lombok.Data;
 
+@Builder
 @Data
 @Alias("TWCeoSaleDto")
 public class TWCeoSaleDto {
