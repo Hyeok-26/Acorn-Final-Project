@@ -198,7 +198,7 @@
 		values 
 		(seq_ceo_sale_id.nextval, #{userId}, sysdate, sysdate, #{saleName}, #{price}, 'PROFIT', 'ITEM', 'YES') 
 	</insert>
-	<select id="getApprovedOrderInfoByOrderId" parameterType="int" resultType="JstOrderToCostDto">
+	<select id="getApprovedOrderInfoByOrderId" parameterType="int" resultType="JsOrderToCostDto">
 	  SELECT order_id, user_id, ord_date, cd_status, order_name
 	  FROM tb_order 
 	  WHERE order_id=#{orderId}
@@ -214,6 +214,6 @@
 	    (od.quantity * od.price) AS total
 	  FROM tb_order_detail od
 	  JOIN tb_product p ON od.product_id = p.product_id
-	  WHERE od.user_id=#{userId} od.order_id = #{orderId}
+	  WHERE od.user_id=#{userId} and od.order_id = #{orderId}
 	</select>
 </mapper>
