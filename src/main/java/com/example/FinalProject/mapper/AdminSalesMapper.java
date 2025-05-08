@@ -47,7 +47,7 @@ public interface AdminSalesMapper {
 	int insertClsIngProfitToCeo(JsClsToProfitDto dto);
 	JsClsToProfitDto getProfitInfoByClassId(Map<String, Object> search);
 
-	//발주가 "승인"일 때 발주 비용 추가하는 메소드와 관련 메소드(발주에서 사용)
+	//발주가 "승인"일 때 발주 비용 추가하는 메소드와 관련 메소드(발주에서 사용) 
 	int insertOrderApprovedCostToAdmin(JsOrderToCostDto dto);
 	int insertOrderApprovedCostToCeo(JsOrderToCostDto dto);
 	JsOrderToCostDto getApprovedOrderInfoByOrderId(int orderId);

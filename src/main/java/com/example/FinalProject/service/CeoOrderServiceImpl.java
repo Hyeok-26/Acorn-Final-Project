@@ -88,7 +88,13 @@ public class CeoOrderServiceImpl implements CeoOrderService {
 	@Override
 	public int updateReply(HUI_OrderDetailDto detailDto) {
 		// 메모 저장하기
-		mapper.updateReply(detailDto);
+		return mapper.updateReply(detailDto);
+	}
+
+	@Override
+	public int updateApp(HUI_OrderDetailDto detailDto) {
+		// 승인 처리하기
+		mapper.updateApp(detailDto);
 		int userId = 1;
 		String saleName = detailDto.getOrderId() + "번 발주서";
 		TWCeoSaleDto dto = TWCeoSaleDto.builder()
@@ -97,12 +103,6 @@ public class CeoOrderServiceImpl implements CeoOrderService {
 				.price(detailDto.getPrice())
 				.build();
 		return ceoSaleMapper.insertEtcProfit(dto);
-	}
-
-	@Override
-	public int updateApp(HUI_OrderDetailDto detailDto) {
-		// 승인 처리하기
-		return mapper.updateApp(detailDto);
 	}
 
 	@Override
