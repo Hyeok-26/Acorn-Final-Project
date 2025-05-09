@@ -95,7 +95,7 @@ public class CeoOrderServiceImpl implements CeoOrderService {
 	public int updateApp(HUI_OrderDetailDto detailDto) {
 		// 승인 처리하기
 		mapper.updateApp(detailDto);
-		int userId = 1;
+		int userId = 9999;
 		String saleName = detailDto.getOrderId() + "번 발주서";
 		TWCeoSaleDto dto = TWCeoSaleDto.builder()
 				.userId(userId)

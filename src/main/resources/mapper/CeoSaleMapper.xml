@@ -5,13 +5,13 @@
 	<insert id="insertEtcProfit" parameterType="TWCeoSaleDto">
         insert into TB_CEO_SALE
         (CEO_SALE_ID, USER_ID, CRE_DATE, EDIT_DATE, SALE_NAME, PRICE, CD_ACODE, CD_BCODE, AUTO)
-        values(CEO_SALE_ID_SEQ.nextval, #{userId}, sysdate, sysdate, #{saleName}, #{price}, 'PROFIT', 'ETC', 'YES')
+        values(SEQ_CEO_SALE_ID.nextval, #{userId}, sysdate, sysdate, #{saleName}, #{price}, 'PROFIT', 'ETC', 'YES')
     </insert>
 
     <insert id="insertEtcProfitSelf" parameterType="TWCeoSaleDto">
         insert into TB_CEO_SALE
         (CEO_SALE_ID, USER_ID, CRE_DATE, EDIT_DATE, SALE_NAME, PRICE, CD_ACODE, CD_BCODE, AUTO)
-        values(CEO_SALE_ID_SEQ.nextval, #{userId}, sysdate, sysdate, #{saleName}, #{price}, 'PROFIT', 'ETC', 'NO')
+        values(SEQ_CEO_SALE_ID.nextval, #{userId}, sysdate, sysdate, #{saleName}, #{price}, 'PROFIT', 'ETC', 'NO')
     </insert>
 
     <select id="getList" parameterType="TWCeoSalePageDto" resultType="TWCeoSaleDto">
