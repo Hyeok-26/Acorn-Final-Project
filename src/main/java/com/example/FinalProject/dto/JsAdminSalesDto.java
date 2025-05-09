@@ -33,4 +33,6 @@ public class JsAdminSalesDto {
 	private int endPageNum;
 	private int totalPageCount;
 	private int totalRow;
+	private String aname;
+	private String bname;
 }

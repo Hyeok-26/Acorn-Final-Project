@@ -3,25 +3,39 @@
 <mapper namespace="com.example.FinalProject.mapper.AdminSalesMapper">
 
 	<select id="getAdminSalesList" parameterType="map" resultType="JsAdminSalesDto">
-	    SELECT *
-	    FROM (select result1.*, rownum as rnum
-	    	  from
-	    	  		(select admin_sale_id, user_id, TO_CHAR(cre_date, 'YYYY-MM-DD') AS cre_date, TO_CHAR(edit_date, 'YYYY-MM-DD') AS edit_date, sale_name, price, cd_acode, cd_bcode, auto
-	    	  		 from tb_admin_sale
-		            <where>
-		                <if test="user_id != null and user_id != ''">
-		                    AND user_id LIKE '%' || #{userId} || '%'
-		                </if>
-		                <if test="checkedItems != null and checkedItems.size() > 0">
-		                    AND cd_bcode IN
-		                    <foreach item="cd_bcode" collection="checkedItems" open="(" separator="," close=")">
-		                        #{cd_bcode}
-		                    </foreach>
-		                </if>
-		            </where>
-	    	  		 order by admin_sale_id) result1	    	  
-	    	  )
-	    where rnum between #{startRowNum} and #{endRowNum}
+		SELECT *
+		FROM (
+		    SELECT result1.*, rownum AS rnum
+		    FROM (
+		        SELECT 
+		            s.admin_sale_id, 
+		            s.user_id, 
+		            TO_CHAR(s.cre_date, 'YYYY-MM-DD') AS cre_date, 
+		            TO_CHAR(s.edit_date, 'YYYY-MM-DD') AS edit_date, 
+		            s.sale_name, 
+		            s.price, 
+		            s.cd_acode, 
+		            a.aname,        
+		            s.cd_bcode, 
+		            b.bname,         
+		            s.auto
+		        FROM tb_admin_sale s
+		        LEFT JOIN tb_bcode b ON s.cd_bcode = b.bcode
+		        LEFT JOIN tb_acode a ON s.cd_acode = a.acode
+		        WHERE 1 = 1
+		        <if test="userId != null and userId != ''">
+		            AND s.user_id LIKE '%' || #{userId} || '%'
+		        </if>
+		        <if test="checkedItems != null and checkedItems.size() > 0">
+		            AND s.cd_bcode IN
+		            <foreach item="cd_bcode" collection="checkedItems" open="(" separator="," close=")">
+		                #{cd_bcode}
+		            </foreach>
+		        </if>
+		        ORDER BY s.admin_sale_id
+		    ) result1
+		)
+		WHERE rnum BETWEEN #{startRowNum} AND #{endRowNum}
 	</select>
 	<select id="getCountDefault" resultType="int">
 	    SELECT COUNT(*) FROM tb_admin_sale
@@ -96,8 +110,11 @@
 	    SELECT DISTINCT TO_CHAR(c.start_date, 'YYYY') AS sYear
 	    FROM tb_class c
 	    LEFT JOIN tb_bcode b ON c.cd_lecture = b.bcode
+	    LEFT JOIN tb_acode a ON b.acode = a.acode
 	    WHERE c.user_id = #{userId}
-	      AND b.acode = 'LECTURE'
+	      AND a.acode = 'LECTURE'
+	      AND a.deleted = 'NO'
+	      AND b.deleted = 'NO'
 	      AND c.cd_status IN ('START', 'END')
 	      AND b.bcode IN ('JAVA', 'PYTHON', 'JAVASCRIPT')
 	    ORDER BY sYear DESC
@@ -106,37 +123,44 @@
 	    SELECT DISTINCT TO_CHAR(c.start_date, 'MM') AS sMonth
 	    FROM tb_class c
 	    LEFT JOIN tb_bcode b ON c.cd_lecture = b.bcode
+	    LEFT JOIN tb_acode a ON b.acode = a.acode
 	    WHERE c.user_id = #{userId}
 	      AND TO_CHAR(c.start_date, 'YYYY') = #{sYear}
-	      AND b.acode = 'LECTURE'
+	      AND a.acode = 'LECTURE'
+	      AND a.deleted = 'NO'
+	      AND b.deleted = 'NO'
 	      AND c.cd_status IN ('START', 'END')
 	      AND b.bcode IN ('JAVA', 'PYTHON', 'JAVASCRIPT')
 	    ORDER BY sMonth ASC
 	</select>
 	<select id="getAdminSalesStatByLectYearly" parameterType="map" resultType="JsAdminSalesStatDto">
-	    select sYear, cd_lecture, sum(total) total
-	    from (SELECT 
-			        TO_CHAR(c.start_date, 'YYYY') AS sYear, 
-			        c.cd_lecture,
-			        COUNT(sc.student_id) AS student_count, 
-			        c.price price,
-			        COUNT(sc.student_id) * c.price AS total
-			    FROM tb_class c
-			    LEFT JOIN tb_student_class sc ON c.class_id = sc.class_id 
-			    LEFT JOIN tb_bcode b ON c.cd_lecture = b.bcode              
-			    WHERE c.user_id = #{userId} 
-			      AND TO_CHAR(c.start_date, 'YYYY') = #{sYear}
-			      AND b.acode = 'LECTURE' 
-			      AND c.cd_status IN ('START', 'END')
-			      AND b.bcode IN ('JAVA', 'PYTHON', 'JAVASCRIPT')
-			    GROUP BY 
-			        TO_CHAR(c.start_date, 'YYYY'), c.cd_lecture, c.price
-			    ORDER BY sYear, c.cd_lecture)
-		group by syear, cd_lecture
+	    SELECT sYear, cd_lecture, SUM(total) total
+	    FROM (
+	        SELECT 
+	            TO_CHAR(c.start_date, 'YYYY') AS sYear, 
+	            c.cd_lecture,
+	            COUNT(sc.student_id) AS student_count, 
+	            c.price price,
+	            COUNT(sc.student_id) * c.price AS total
+	        FROM tb_class c
+	        LEFT JOIN tb_student_class sc ON c.class_id = sc.class_id 
+	        LEFT JOIN tb_bcode b ON c.cd_lecture = b.bcode              
+	        WHERE c.user_id = #{userId} 
+	          AND TO_CHAR(c.start_date, 'YYYY') = #{sYear}
+	          AND b.acode = 'LECTURE' 
+	          AND c.cd_status IN ('START', 'END')
+	          AND b.bcode IN (
+	              SELECT bcode FROM tb_bcode WHERE acode = 'LECTURE' AND deleted = 'NO'
+	          )
+	        GROUP BY 
+	            TO_CHAR(c.start_date, 'YYYY'), c.cd_lecture, c.price
+	        ORDER BY sYear, c.cd_lecture
+	    )
+	    GROUP BY sYear, cd_lecture
 	</select>
 	<select id="getAdminSalesStatByLectMonthly" parameterType="map" resultType="JsAdminSalesStatDto">
 	    SELECT 
-	    	TO_CHAR(c.start_date, 'YYYY') sYear,
+	        TO_CHAR(c.start_date, 'YYYY') sYear,
 	        TO_CHAR(c.start_date, 'MM') AS sMonth, 
 	        c.cd_lecture, b.bname AS lecture_name,
 	        COUNT(sc.student_id) AS student_count, 
@@ -151,7 +175,9 @@
 	      AND c.cd_status IN ('START', 'END')
 	      AND TO_CHAR(c.start_date, 'YYYY') = #{sYear}
 	      AND TO_CHAR(c.start_date, 'MM') = #{sMonth}
-	      AND b.bcode IN ('JAVA', 'PYTHON', 'JAVASCRIPT')  
+	      AND b.bcode IN (
+	          SELECT bcode FROM tb_bcode WHERE acode = 'LECTURE' AND deleted = 'NO'
+	      )
 	    GROUP BY 
 	        TO_CHAR(c.start_date, 'YYYY'), TO_CHAR(c.start_date, 'MM'), c.cd_lecture, b.bname, c.price, b.bcode
 	    ORDER BY sMonth, c.cd_lecture
