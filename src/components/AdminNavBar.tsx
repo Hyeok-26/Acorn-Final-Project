@@ -35,8 +35,8 @@ const menuItems = [
         name: "매출 관리", 
         icon: Percent,
         subItems: [
-            { name: "매출 현황", path: "admin 매출현황 경로" },
-            { name: "매출 통계", path: "admin 매출통계 경로" }
+            { name: "매출 현황", path: "/admin/salesmanage" },
+            { name: "매출 통계", path: "/admin/salesstat" }
         ] 
     }
 ];
