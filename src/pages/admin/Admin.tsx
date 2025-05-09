@@ -1,9 +1,13 @@
+import AdminNavbar from "@/components/AdminNavBar";
 
 function Admin() {
     return (
-        <>
-          <h1>Admin 대시보드 페이지</h1>  
-        </>
+      <div className="flex">
+            <AdminNavbar />
+            <main className="flex-1 p-8">
+                <h1>Admin 대시보드 페이지</h1>
+            </main>
+        </div>
     );
 }
 
