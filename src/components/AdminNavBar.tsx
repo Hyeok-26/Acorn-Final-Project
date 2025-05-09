@@ -9,7 +9,7 @@ const menuItems = [
         name: "수업 관리", 
         icon: Calendar, 
         subItems: [
-          { name: "수업 관리", path: "/admin/class" },
+          { name: "수업 리스트", path: "/admin/class" },
           { name: "수업 일정표", path: "/admin/calendar" }
       ] 
     },
@@ -18,7 +18,7 @@ const menuItems = [
         icon: User,
         subItems: [
             { name: "학생 관리", path: "/admin/students" },
-            { name: "강사 관리", path: "admin 강사관리 경로" }
+            { name: "강사 관리", path: "ㅍㅍ 강사관리 경로" }
         ]
     },
     { 
