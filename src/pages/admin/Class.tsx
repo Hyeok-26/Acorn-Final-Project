@@ -186,16 +186,11 @@ function Class(props) {
     const [selectedClassId, setSelectedClassId] = useState<number>();
 
     //수강생 현황 모달
-    const [showFirstModal, setShowFirstModal] = useState(true);//※테스트용 true
-    //
-    const [showSecondModal, setShowSecondModal] = useState(false);
-    const [studentCount, setStudentCount] = useState(students.length);
-    const [maxCount, setMaxCount] = useState(10);
-    const [students, setStudents] = useState([]);
-    const [allStudents, setAllStudents] = useState([ ]);
-    const handleRemoveStudent = (id) => {
-        setStudents((prev) => prev.filter((student) => student.id !== id));
-    };
+    const [showApplyStatModal, setShowApplyStatModal] = useState(true);//※테스트용 true
+    
+    // //수강생 현황 모달에서 뜨는 수강생 추가 모달
+    // const [showApplyAddModal, setShowApplyAddModal] = useState(false);
+
     return (
         <div style={centerStyle}>            
         <ClassDescModal show={showClassDescModal} onHide={() => setshowClassDescModal(false)} classId={selectedClassId} />
@@ -207,13 +202,8 @@ function Class(props) {
                                 ...searchState, condition:"", keyword:"", cdStatus:"", pageNum:1,});
                         navigate(`/admin/class?userId=${userId}&pageNum=1`); refresh(1);}}/>
         <ClassEditModal show={showClassEditModal} onHide={() => {setshowClassEditModal(false); refresh(searchState.pageNum);}} classId={selectedClassId} userId={userId} />
-        <StudApplyStatModal   show={showFirstModal}  onClose={() => setShowFirstModal(false)} students={students}  maxCount={maxCount}      studentCount={studentCount} className="수업 이름"  onOpenSecondModal={() => setShowSecondModal(true)} onRemoveStudent={handleRemoveStudent} />
-
-        <StudApplyAddModal show={showSecondModal}   onClose={() => setShowSecondModal(false)}  onAddStudents={(newStudents) => setStudents((prev) => [...prev, ...newStudents])
-        }
-        currentCount={students.length}   maxCount={maxCount}
-        studentCount={studentCount}   allStudents={allStudents}
-        alreadyAddedIds={students.map((s) => s.id)}/>
+        <StudApplyStatModal show={showApplyStatModal} onHide={()=>{setShowApplyStatModal(false)}} classId={selectedClassId} />
+        {/* <StudApplyAddModal show={showApplyAddModal} onHide={()=>setShowApplyAddModal(false)} /> */}
             <div className="d-flex align-items-center justify-content-center">    
                 <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>  {storeName} 수업리스트  </h1>
                 {/* <pre>{JSON.stringify(clist, null, 2)}</pre> */}
@@ -303,7 +293,11 @@ function Class(props) {
                             </td>
                             <td>{item.applyStartDate} ~ {item.applyEndDate}</td>
                             <td>
-                                <Button variant="light" >{item.currentStudent}/{item.maxStudent}</Button>
+                                <Button variant="light"  
+                                onClick={()=>{
+                                        setSelectedClassId(item.classId); 
+                                        setShowApplyStatModal(true)}
+                                }>{item.currentStudent}/{item.maxStudent}</Button>
                                 {item.currentStudent === item.maxStudent && (<Button variant="warning" className="ms-1">마감</Button>)}
                             </td>
                             <td><Button variant="light" 

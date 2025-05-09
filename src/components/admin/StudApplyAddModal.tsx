@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Button, CloseButton, Form, Modal, Table } from 'react-bootstrap';
+import { Button, Form, Modal, Table } from 'react-bootstrap';
 
-function StudApplyAddModal({
-    show, onClose,onAddStudents,currentCount,maxCount, studentCount, allStudents, alreadyAddedIds
-  }) {
+function StudApplyAddModal({show, onHide, onAddStudents,
+    allStudents, alreadyAddedIds, currentCount, maxCount, studentCount}) {
     const [searchKeyword, setSearchKeyword] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [selectedStudents, setSelectedStudents] = useState([]);
@@ -38,13 +37,13 @@ function StudApplyAddModal({
       onAddStudents(selectedStudents); // 전달만 하면 됨
       setSelectedStudents([]);
       setSearchKeyword('');
-      onClose();
+      onHide();
     };
   
     const handleClose = () => {
       setSelectedStudents([]);
       setSearchKeyword('');
-      onClose();
+      onHide();
     };
   
     return (
