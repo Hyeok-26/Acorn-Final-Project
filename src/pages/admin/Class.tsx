@@ -225,7 +225,6 @@ function Class(props) {
                 </div>
             
                 <div className="d-flex flex-column align-items-end">
-                    <Button variant="primary mb-2">캘린더</Button>
                     <Button variant="success" onClick={() => setshowClassAddModal(true)}>수업 개설</Button>
                 </div>
             </div>
