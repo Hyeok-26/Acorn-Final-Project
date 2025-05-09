@@ -192,6 +192,7 @@ function OrderDetail() {
                                     value={orderInfo.memoRequest ?? ""}
                                     style={{ height: '250px' }}
                                     className='p-2'
+                                    disabled
                                 />
                             </Card.Body>
                         </Card>
