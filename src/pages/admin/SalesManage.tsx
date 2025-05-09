@@ -1,0 +1,317 @@
+import React, { MouseEvent, useEffect, useState } from 'react';
+import AdminSalesModal from '../../components/admin/AdminSalesModal';
+import { Button, Form, Pagination } from 'react-bootstrap';
+import axios from 'axios';
+import { BrowserRouter, useSearchParams } from 'react-router-dom';
+import ReactDOM from 'react-dom/client';
+import Layout from '../../Layout';
+import api from '../../api';
+import { AdminSalesDto } from '../../types/AdminSalesDto';
+
+
+interface PageInfo {
+    list: AdminSalesDto[];
+    pageNum: number;
+    startPageNum: number;
+    endPageNum: number;
+    totalPageCount: number;
+    totalRow: number;
+  }
+function SalesManage() {
+    const [acode, setAcodeList] = useState(["수입", "지출"])
+    const A_CODE_MAP: { [key: string]: string } = {
+        "PROFIT": "수입",
+        "COST": "지출"
+    };
+    const [bcode, setBcodeList] = useState([
+        { class: "수입", detail: "수업료 수입" },
+        { class: "수입", detail: "기타 수입" },
+        { class: "지출", detail: "강사 월급" },
+        { class: "지출", detail: "발주 비용" },
+        { class: "지출", detail: "기타 지출" }
+      ]);
+    const B_CODE_MAP: { [key: string]: string } = {
+        "CLS": "수업료 수입",
+        "ETC": "기타 수입",
+        "SALARY": "강사 월급",
+        "ITEM": "발주 비용",
+        "C_ETC": "기타 지출"
+    };
+    const REVERSE_B_CODE_MAP: { [key: string]: string } = {
+        "수업료 수입": "CLS",
+        "기타 수입": "ETC",
+        "강사 월급": "SALARY",
+        "발주 비용": "ITEM",
+        "기타 지출": "C_ETC"
+    };
+    const [modalShow, setModalShow] = useState(false);
+    const [title, setTitle] = useState("매출 추가");
+    const [btnTag, setBtnTag] = useState("추가")
+    const [onBtn, setOnBtn] = useState(()=>{ })
+    //매출 수정/삭제 시 saleId읽어오기 위해 관리되는 값
+    const [selectedItem, setSelectedItem]=useState<AdminSalesDto|null>(null)
+    //검색조건 체크박스 관리값값
+    const [checkedItems, setCheckedItems] = useState<string[]>([]);
+    const [params, setParams] = useSearchParams({
+        checkedItems:checkedItems,
+        userId:"",
+        pageNum:"1"
+    })
+    useEffect(()=>{
+        //query 파라미터 값을 읽어와
+        //만일 존재 하지 않는다면 1 페이지로 설정
+        // let pageNumStr = params.get("pageNum");
+        // let pageNum = pageNumStr ? parseInt(pageNumStr) : 1;
+        handleSearch();
+    },[params.toString()])
+    
+    const move = (page: number) => {
+        const newParams = new URLSearchParams(params);
+        newParams.set("pageNum", page.toString());
+        setParams(newParams);
+    };  
+    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { value, checked } = e.target;
+        setCheckedItems(prev =>
+            checked ? [...prev, value] : prev.filter(item => item !== value)
+        );
+    };
+    const [pageInfo, setPageInfo] = useState<PageInfo>({
+        list: [],
+        pageNum: 1,
+        startPageNum: 1,
+        endPageNum: 1,
+        totalPageCount: 1,
+        totalRow: 0
+      });
+    
+    function listToQuery(list, paramName){
+        let query="";
+        for(let i=0; i<list.length; i++){
+            if(i==list.length-1){
+                query += `${paramName}=${list[i]}`;
+            }else{
+                query += `${paramName}=${list[i]}&`;
+            }
+        }
+        return query;
+    }
+    function range(start:number, end:number):number[] {
+        const result = [];
+        for (let i = start; i <= end; i++) {
+            result.push(i);
+        }
+        return result;
+    }
+    const [pageArray, setPageArray]=useState<number[]>([]);
+    const handleSearch=()=>{
+        const query=listToQuery(checkedItems, "checkedItems");
+        api.get(`/sales?${query}`,{
+            params:{
+                userId:params.get("UserId"),
+                pageNum:params.get("pageNum")
+            }
+        })
+        .then(res=>{
+            setPageInfo(res.data);
+            const mappedData = (res.data.list as AdminSalesDto[]).map(item => ({
+                ...item,
+                cdAcode: A_CODE_MAP[item.cdAcode] || item.cdAcode,  // a_code 매핑 || 못찾으면 원래값
+                cdBcode: B_CODE_MAP[item.cdBcode] || item.cdBcode // b_code 매핑 || 못찾으면 원래값
+            }));
+            setPageInfo({
+                ...res.data,
+                list: mappedData
+            });
+            setPageArray(range(res.data.startPageNum, res.data.endPageNum))
+        })
+        .catch(error=>console.log(error+"리스트를 불러오는데 오류가 생겼습니다"));
+    }
+    const handleAdd = () => {
+        setSelectedItem(null); // 초기화
+        setTitle("매출 추가")
+        setBtnTag("추가")
+        setOnBtn(()=>handleAddSales)
+        setModalShow(true)
+        
+    };
+    const handleAddSales = (data:{
+        selectedAcode: string;
+        selectedBcode: string;
+        saleName:string;
+        price:number;
+    })=>{
+        console.log("Add Sales Data:", data);
+        const requestBody = {
+            cdAcode:data.selectedAcode ==="수입"? "PROFIT":"COST",
+            cdBcode: REVERSE_B_CODE_MAP[data.selectedBcode]||data.selectedBcode,
+            saleName:data.saleName,
+            price:data.price,
+            userId:1
+        }
+        console.log(requestBody)
+        api.post("/sales", requestBody)
+        .then(res=>{
+            console.log(res.data);
+            alert("매출이 추가되었습니다")
+            setModalShow(false)
+            handleSearch(); // 추가 후 리스트 갱신
+        })
+        .catch(error=>{
+            console.error("매출 추가 실패:", error)
+            alert("매출을 추가할 수 없습니다.")
+        })      
+    }
+    const handleUpdate = (id:number) => {   
+        const item = pageInfo.list.find(item => item.adminSaleId === id);
+        if (!item){ 
+            return;
+        }
+        setTitle("매출 수정");
+        setBtnTag("수정");
+        setOnBtn(() => (data) => handleUpdateSales(data, item.adminSaleId)); 
+        setSelectedItem(item); // 모달에 넘길 초기값
+        setModalShow(true);
+    }; 
+    const handleUpdateSales=(
+        data: {
+            selectedAcode: string;
+            selectedBcode: string;
+            saleName: string;
+            price: number;
+            adminSaleId: number;
+        },
+        itemId?:number
+    ) => {
+        const adminSaleId = itemId ?? data.adminSaleId;
+        if (!adminSaleId) return;
+    
+        const requestBody = {
+            cdAcode: data.selectedAcode === "수입" ? "PROFIT" : "COST",
+            cdBcode: REVERSE_B_CODE_MAP[data.selectedBcode] || data.selectedBcode,
+            saleName: data.saleName,
+            price: data.price,
+            adminSaleId: adminSaleId,
+            userId: 1
+        };
+        api.put(`/sales/${adminSaleId}`, requestBody)
+        .then(res=>{
+            alert("매출이 수정되었습니다");
+            setModalShow(false);
+            handleSearch(); // 수정 후 리스트 갱신
+        })
+        .catch(error=>{
+            console.error("매출 수정 실패:", error);
+            alert("매출 수정에 실패했습니다.");
+        })             
+    };
+    const handleDelete=(id:number)=>{
+        const item = pageInfo.list.find(item => item.adminSaleId === id);
+        if (!item) return;
+        console.log("item 삭제"+item)
+        const adminSaleId=item.adminSaleId
+        api.delete(`/sales/${adminSaleId}`)
+        .then(res=>{
+            handleSearch();
+        })
+        .catch(error=>{
+            alert("매출 삭제에 실패했습니다")
+        })
+    }
+    return (
+        <div>
+            <button onClick={()=>{
+                api.get("/sales/ping")
+                .then(res=>{
+                    console.log(res.data)
+                    alert(res.data)
+                })
+                .catch(error=>{
+                    alert("응답하지 않음")
+                })
+            }}>ping 요청</button>
+            <AdminSalesModal show={modalShow} title={title} btnTag={btnTag} onBtn={onBtn} 
+                                onClose={()=>setModalShow(false)} acode={acode} bcode={bcode} initialData={selectedItem}/>
+        
+            <div className='container'>
+            <h3 className="mb-3">매출 리스트</h3>
+                <div className="d-flex justify-content-between align-items-center mb-3 row">
+                    <div className="col-md-8 col-12 d-flex justify-content-between align-items-center">
+                        <Form className='d-flex w-100'>
+                            <Form.Check inline label="수업료 수입" value="CLS" type="checkbox" id="CLS"onChange={handleCheckboxChange}/>
+                            <Form.Check inline label="기타 수입" value="ETC" type="checkbox" id="ETC" onChange={handleCheckboxChange}/>
+                            <Form.Check inline label="강사 월급" value="SALARY" type="checkbox" id="SALARY" onChange={handleCheckboxChange}/>
+                            <Form.Check inline label="발주 비용" value="ITEM" type="checkbox" id="ITEM" onChange={handleCheckboxChange}/>
+                            <Form.Check inline label="기타 지출" value="C_ETC" type="checkbox" id="C_ETC" onChange={handleCheckboxChange}/>
+                            <Button className='btn btn-secondary' size="sm" style={{ width: "50px" }} onClick={()=>{handleSearch(); move(1)}}>검색</Button>
+                        </Form>
+                    </div>
+                    <div className='col-md-4 col-12 d-flex justify-content-end mt-3 mt-md-0'>
+                        <Button className="btn btn-primary me-2"  size="sm" onClick={handleAdd}>매출 추가</Button>
+                    </div>
+                </div>
+                <div>
+                    <table className="table table-bordered responsive" style={{textAlign:"center"}}>
+                        <thead className="table-light">
+                            <tr>
+                                <th>매출등록일자</th>
+                                <th>매출수정일자</th>
+                                <th>항목 내용</th>
+                                <th>금액</th>
+                                <th>대분류</th>
+                                <th>소분류</th>
+                                <th>수정</th>
+                                <th>삭제</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {pageInfo.list.map((item)=>(
+                                <tr className="table-hover" key={item.adminSaleId}>
+                                    <td>{item.creDate}</td>
+                                    <td>{item.editDate}</td>
+                                    <td>{item.saleName}</td>
+                                    <td>{item.price}</td>
+                                    <td>{item.cdAcode}</td>
+                                    <td>{item.cdBcode}</td>
+                                    <td>
+                                        <button onClick={()=>handleUpdate(item.adminSaleId)} className="btn btn-sm btn-outline-primary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button onClick={()=>handleDelete(item.adminSaleId)} className="btn btn-sm btn-outline-danger">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
+                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                                 
+                            }                           
+                        </tbody>
+                    </table>
+                    <Pagination className='mt-3'>
+                        <Pagination.Item onClick={()=>move(pageInfo.startPageNum-1)} 
+                            disabled={pageInfo.startPageNum === 1}>Prev</Pagination.Item>
+                        {
+                            pageArray.map(item => 
+                                <Pagination.Item onClick={()=>move(item)} key={item}
+                                    active={pageInfo.pageNum === item}>{item}</Pagination.Item>
+                            )
+                        }
+                        <Pagination.Item onClick={()=>move(pageInfo.endPageNum+1)}
+                            disabled={pageInfo.endPageNum === pageInfo.totalPageCount}>Next</Pagination.Item>
+                    </Pagination> 
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export default SalesManage
+

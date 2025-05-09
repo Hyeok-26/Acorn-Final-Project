@@ -1,0 +1,218 @@
+// 타입스크립트 무시
+//@ts-nocheck 
+import React, { useEffect, useState } from 'react';
+import { Badge, Button, Col, Container, Form, InputGroup, Pagination, Row, Table } from 'react-bootstrap';
+import api from '../../api';
+// debounce 함수( 지점 입력 끝났을 때, 한번만 동작)
+import _ from 'lodash';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+
+function Order() {
+    // 동적 검색조건 상태(지점, 승인상태, 시작~끝 날짜)
+    const [searchState, setSearchState] = useState({
+        storeName: "",
+        cdStatus: "",
+        startDate: "",
+        endDate: ""
+        // orderName: ""
+    });
+
+    // 발주자 상태갑 관리
+    const [orderName, setOrderName] = useState("");
+
+    // 동적 검색 조건 반영함수
+    const handleSearchCnange = (e) => {
+        setSearchState({
+            ...searchState,
+            [e.target.name]: e.target.value
+
+        });
+        console.log(searchState);
+    };
+
+    // 발주자 이름 별도 관리
+    const handleOrderNameChange = (e)=>{
+        setOrderName(e.target.value);
+    }
+
+    // 발주서 리스트 정보 상태
+    const [orderList, setOrderList] = useState({
+        list: []
+    });
+
+    // 페이징 처리 상태값
+    const [pageNum, setPageNum] = useState(1);
+
+    // 페이징 숫자 버튼 출력시 사용하는 배열
+    const [pageArray, setPageArray] = useState([]);
+
+    // 페이징 숫자 버튼 클릭시 페이지 이동하기
+    const move = (pageNum) => {
+        // console.log("함수 호출 여부");
+        setPageNum(pageNum);
+    }
+
+
+    // 지점 입력란에 입력하고 0.5초 동안 입력 없으면 요청을 보냄
+    const fetchOrderList = _.debounce((updatedState, page) => {
+        api.post("/orders", {
+            ...updatedState,
+            pageNum: page
+        })
+            .then(res => {
+                setOrderList(res.data);
+                // 페이징 처리 숫자 버튼 생성하기
+                const range = _.range(res.data.startPageNum, res.data.endPageNum + 1);
+                setPageArray(range);
+            })
+            .catch(err => console.log("에러", err));
+    }, 500);
+
+    useEffect(() => {
+        if (searchState.storeName.trim() !== "") {
+            fetchOrderList(searchState, pageNum);
+            
+        }
+        return () => {
+            fetchOrderList.cancel(); // 이전 요청 취소
+        }
+    }, [searchState, pageNum]);
+
+    // 페이지 숫자 버튼 클릭시 이동하기
+    const navigate = useNavigate();
+
+    return (
+        <Container>
+            <h2>전체 발주 목록</h2>
+            {/* 서버 응답 테스트 */}
+            <button onClick={() => {
+                api.get("/ceo/sample")
+                    .then(res => {
+                        alert(res.data);
+                    })
+                    .catch(() => {
+                        alert("응답 안함!");
+                    })
+            }}>서버 테스트</button>
+
+            {/* 검색 필터 */}
+            <Row className="align-items-center mb-3">
+                {/* 왼쪽: 검색 조건 */}
+                <Col md={9}>
+                    <Row className="g-2">
+                        <Col md={3}>
+                            <Form.Control placeholder="지점 입력" onChange={handleSearchCnange} value={searchState.storeName} name='storeName' />
+                        </Col>
+                        <Col md={2}>
+                            <Form.Control as="select" onChange={handleSearchCnange} name='cdStatus'>
+                                <option value="">전체</option>
+                                <option value="PEN">대기</option>
+                                <option value="APP">승인</option>
+                                <option value="REJ">반려</option>
+                            </Form.Control>
+                        </Col>
+                        <Col md={5}>
+                            <InputGroup>
+                                <Form.Control type="date" onChange={handleSearchCnange} name='startDate' />
+                                <InputGroup.Text>~</InputGroup.Text>
+                                <Form.Control type="date" onChange={handleSearchCnange} name='endDate' />
+                            </InputGroup>
+                        </Col>
+                    </Row>
+                </Col>
+
+                {/* 오른쪽: 발주자 + 검색 버튼 */}
+                <Col md={3} className="d-flex justify-content-end align-items-center gap-2">
+                    <Form.Control
+                        placeholder="발주자 입력"
+                        size='sm'
+                        style={{ width: '150px' }}
+                        onChange={handleOrderNameChange}
+                        name='orderName'
+                        value={orderName}
+                    />
+                    <Button
+                        variant="dark"
+                        size='sm'
+                        onClick={()=>{
+                            setPageNum(1);
+                            fetchOrderList({...searchState, orderName},1);
+                        }}
+                        >검색</Button>
+                </Col>
+            </Row>
+
+
+            {/* 발주 주문 테이블 */}
+            <Table bordered hover className="text-center">
+                <thead>
+                    <tr>
+                        <th>지점명</th>
+                        <th>발주번호</th>
+                        <th>주문등록일</th>
+                        <th>상태</th>
+                        <th>총액</th>
+                        <th>발주자</th>
+                        <th>상세보기</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {/* <tr>
+                        <td>강남점</td>
+                        <td>1</td>
+                        <td>2025.04.17</td>
+                        <td><Badge bg="warning" text="dark" >대기</Badge></td>
+                        <td>60,000원</td>
+                        <td>강민수</td>
+                        
+                        <td><button>상세보기</button></td>
+                    </tr> */}
+                    {
+                        orderList.list.map(item => (
+                            <tr key={item.orderId}>
+                                <td>{item.storeName}</td>
+                                <td>{item.orderId}</td>
+                                <td>{item.ordDate}</td>
+                                <td>{item.cdStatus}</td>
+                                <td>{item.totalPrice}</td>
+                                <td>{item.orderName}</td>
+                                <td>
+                                    <Link to={`/ceo/orders/${item.orderId}/detail`}>상세보기</Link>
+                                </td>
+                            </tr>
+                        ))
+                    }
+                </tbody>
+            </Table>
+
+            <div className='d-flex justify-content-center mt-3'>
+                <Pagination className='mt-3'>
+                    {/* 이전버튼 */}
+                    <Pagination.Item onClick={() => move(orderList.startPageNum - 1)} disabled={orderList.startPageNum === 1}>Prev</Pagination.Item>
+
+                    {/* 숫자버튼 */}
+                    {
+                        pageArray.map(item =>
+                            <Pagination.Item
+                                key={item}
+                                active={item === pageNum}
+                                onClick={() => move(item)}
+                            >
+                                {item}
+                            </Pagination.Item>
+
+                        )
+                    }
+
+                    {/* 다음버튼 */}
+                    <Pagination.Item onClick={() => move(orderList.endPageNum + 1)} disabled={orderList.endPageNum === orderList.totalPageCount}>Next</Pagination.Item>
+                </Pagination>
+            </div>
+
+        </Container>
+    );
+}
+
+export default Order;

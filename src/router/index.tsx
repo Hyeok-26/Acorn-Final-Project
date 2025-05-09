@@ -3,13 +3,29 @@ import Home from "../pages/Home"
 import Admin from "../pages/admin/Admin";
 import Ceo from "../pages/ceo/Ceo";
 import App from "../App";
-import Class from "../pages/admin/Class";
+import Code from "../pages/ceo/Code";
+import Product from "../pages/ceo/Product";
+import Store from "../pages/ceo/Store";
+import Post from "../pages/ceo/Post";
+import PostDetail from "../pages/ceo/PostDetail";
+import PostUpdateForm from "../pages/ceo/PostUpdateForm";
+import PostForm from "../pages/ceo/PostForm";
+import OrderSale from "../pages/ceo/OrderSale";
+import ViewSale from "../pages/ceo/ViewSale";
 
 const routes = [
     {path: '/', element: <Home />},
     {path: '/admin', element: <Admin />},
     {path: '/ceo', element: <Ceo />},
-    {path:"/admin/class", element:<Class/>}
+    {path: '/ceo/code', element:<Code/>},
+    {path: '/ceo/product', element:<Product/>},
+    {path: '/ceo/store', element:<Store/>},
+    {path: '/posts', element:<Post/>},
+    {path: '/posts/new', element:<PostForm/>},
+    {path: '/posts/:postId', element:<PostDetail/>},
+    {path: '/posts/:postId/edit', element:<PostUpdateForm/>},
+    {path: '/ceo/ordersale', element:<OrderSale/>},
+    {path: '/ceo/viewsale', element:<ViewSale/>}
 ]
 
 const router = createBrowserRouter([{
