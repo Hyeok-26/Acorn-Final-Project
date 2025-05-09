@@ -87,7 +87,7 @@ const ClassCalendar: React.FC = () => {
 
   // 수업 목록 정보를 가져와서 이벤트로 변환
   useEffect(() => {
-    api.get(`/class/list?userId=${userId}`)
+    api.get(`/class/calendar?userId=${userId}`)
       .then((res) => {
         console.log(res.data);
         const eventList = generateEvents(res.data); // generateEvents 에서 생성된 allEvents 배열을 
