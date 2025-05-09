@@ -97,7 +97,7 @@ function Store() {
       })
       .catch(err => {
         if (err.response?.status === 403) {
-          alert('⚠️ 관리자 비밀번호가 일치하지 않습니다.');
+          alert('관리자 비밀번호가 일치하지 않습니다.');
         } else {
           alert('삭제 중 오류가 발생했습니다.');
         }

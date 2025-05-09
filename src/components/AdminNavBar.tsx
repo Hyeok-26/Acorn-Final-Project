@@ -10,7 +10,7 @@ const menuItems = [
         name: "인원 관리",
         icon: User,
         subItems: [
-            { name: "학생 관리", path: "admin 학생관리 경로" },
+            { name: "학생 관리", path: "/admin/students" },
             { name: "강사 관리", path: "admin 강사관리 경로" }
         ]
     },

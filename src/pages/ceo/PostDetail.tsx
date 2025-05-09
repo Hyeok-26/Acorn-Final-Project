@@ -50,8 +50,10 @@ function PostDetail() {
         <Col md="auto">
           {post.uploadFile && (
             <a
-              href={`/files/${post.uploadFile}`}
+              href={`/download/${post.uploadFile}`}
               download
+              target="_blank"
+              rel="noopener noreferrer"
               className="btn btn-success btn-sm"
             >
               다운로드
