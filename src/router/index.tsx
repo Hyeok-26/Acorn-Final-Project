@@ -17,6 +17,7 @@ import Order from "@/pages/ceo/Order";
 import OrderSale from "../pages/ceo/OrderSale";
 import ViewSale from "../pages/ceo/ViewSale";
 import Class from "@/pages/admin/Class";
+import StudentList from "@/pages/admin/StudentList";
 
 
 const routes = [
@@ -36,7 +37,8 @@ const routes = [
 
     {path: '/ceo/ordersale', element:<OrderSale/>},
     {path: '/ceo/viewsale', element:<ViewSale/>},
-    {path:"/admin/class", element:<Class/>}
+    {path:"/admin/class", element:<Class/>},
+    {path: '/admin/students', element:<StudentList/>},
 
 ]
 
