@@ -12,6 +12,7 @@ import PostUpdateForm from "../pages/ceo/PostUpdateForm";
 import PostForm from "../pages/ceo/PostForm";
 import OrderSale from "../pages/ceo/OrderSale";
 import ViewSale from "../pages/ceo/ViewSale";
+import Class from "@/pages/admin/Class";
 
 const routes = [
     {path: '/', element: <Home />},
@@ -25,7 +26,8 @@ const routes = [
     {path: '/posts/:postId', element:<PostDetail/>},
     {path: '/posts/:postId/edit', element:<PostUpdateForm/>},
     {path: '/ceo/ordersale', element:<OrderSale/>},
-    {path: '/ceo/viewsale', element:<ViewSale/>}
+    {path: '/ceo/viewsale', element:<ViewSale/>},
+    {path:"/admin/class", element:<Class/>}
 ]
 
 const router = createBrowserRouter([{
