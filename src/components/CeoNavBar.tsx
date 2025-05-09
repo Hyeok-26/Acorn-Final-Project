@@ -28,8 +28,8 @@ const menuItems = [
         name: "매출 관리", 
         icon: Percent,
         subItems: [
-            { name: "발주 수익", path: "ceo 발주수익 경로" },
-            { name: "매출 수익", path: "ceo 매출수익 경로" }
+            { name: "발주 수익", path: "/ceo/ordersale" },
+            { name: "매출 수익", path: "/ceo/viewsale" }
         ] 
     }
 ];
