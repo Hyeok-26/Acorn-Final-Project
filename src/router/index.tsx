@@ -19,6 +19,8 @@ import ViewSale from "../pages/ceo/ViewSale";
 import Class from "@/pages/admin/Class";
 import StudentList from "@/pages/admin/StudentList";
 import ClassCalendar from "@/pages/admin/ClassCalendar";
+import SalesManage from "@/pages/admin/SalesManage";
+import SalesStatus from "@/pages/admin/SalesStatus";
 
 
 const routes = [
@@ -42,7 +44,8 @@ const routes = [
 
     {path: '/admin/students', element:<StudentList/>},
     {path: '/admin/calendar', element:<ClassCalendar/>},
-
+    {path: '/admin/salesmanage', element:<SalesManage/>},
+    {path: '/admin/salesstat', element:<SalesStatus/>}
 ]
 
 const router = createBrowserRouter([{
