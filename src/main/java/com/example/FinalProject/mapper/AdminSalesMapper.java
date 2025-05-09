@@ -46,7 +46,7 @@ public interface AdminSalesMapper {
 	//수업이 '진행중'일 때 수업료 수입을 추가하는 메소드와 관련 메소드(수업에서 사용)
 	boolean insertClsProfitToAdmin(HjClassDto dto);
 
-	//발주가 "승인"일 때 발주 비용 추가하는 메소드와 관련 메소드(발주에서 사용)
+	//발주가 "승인"일 때 발주 비용 추가하는 메소드와 관련 메소드(발주에서 사용) 
 	int insertOrderApprovedCostToAdmin(JsOrderToCostDto dto);
 	int insertOrderApprovedCostToCeo(JsOrderToCostDto dto);
 	JsOrderToCostDto getApprovedOrderInfoByOrderId(int orderId);
