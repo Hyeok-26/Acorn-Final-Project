@@ -8,6 +8,8 @@ import ClassDescModal from "../../components/admin/ClassDescModal";
 import ClassStatusModal from "../../components/admin/ClassStatusModal";
 import ClassAddModal from "../../components/admin/ClassAddModal";
 import ClassEditModal from "../../components/admin/ClassEditModal";
+import StudApplyStatModal from "@/components/admin/StudApplyStatModal";
+import StudApplyAddModal from "@/components/admin/StudApplyAddModal";
 
 
 
@@ -183,6 +185,17 @@ function Class(props) {
     //모달에 전달할 classid 상태값으로 관리
     const [selectedClassId, setSelectedClassId] = useState<number>();
 
+    //수강생 현황 모달
+    const [showFirstModal, setShowFirstModal] = useState(true);//※테스트용 true
+    //
+    const [showSecondModal, setShowSecondModal] = useState(false);
+    const [studentCount, setStudentCount] = useState(students.length);
+    const [maxCount, setMaxCount] = useState(10);
+    const [students, setStudents] = useState([]);
+    const [allStudents, setAllStudents] = useState([ ]);
+    const handleRemoveStudent = (id) => {
+        setStudents((prev) => prev.filter((student) => student.id !== id));
+    };
     return (
         <div style={centerStyle}>            
         <ClassDescModal show={showClassDescModal} onHide={() => setshowClassDescModal(false)} classId={selectedClassId} />
@@ -194,6 +207,13 @@ function Class(props) {
                                 ...searchState, condition:"", keyword:"", cdStatus:"", pageNum:1,});
                         navigate(`/admin/class?userId=${userId}&pageNum=1`); refresh(1);}}/>
         <ClassEditModal show={showClassEditModal} onHide={() => {setshowClassEditModal(false); refresh(searchState.pageNum);}} classId={selectedClassId} userId={userId} />
+        <StudApplyStatModal   show={showFirstModal}  onClose={() => setShowFirstModal(false)} students={students}  maxCount={maxCount}      studentCount={studentCount} className="수업 이름"  onOpenSecondModal={() => setShowSecondModal(true)} onRemoveStudent={handleRemoveStudent} />
+
+        <StudApplyAddModal show={showSecondModal}   onClose={() => setShowSecondModal(false)}  onAddStudents={(newStudents) => setStudents((prev) => [...prev, ...newStudents])
+        }
+        currentCount={students.length}   maxCount={maxCount}
+        studentCount={studentCount}   allStudents={allStudents}
+        alreadyAddedIds={students.map((s) => s.id)}/>
             <div className="d-flex align-items-center justify-content-center">    
                 <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>  {storeName} 수업리스트  </h1>
                 {/* <pre>{JSON.stringify(clist, null, 2)}</pre> */}
