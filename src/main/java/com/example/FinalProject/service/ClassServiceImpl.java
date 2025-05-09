@@ -7,11 +7,12 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.FinalProject.dto.ClassCheckDto;
 import com.example.FinalProject.dto.HjClassDto;
 import com.example.FinalProject.dto.HjClassListDto;
 import com.example.FinalProject.dto.HjLectureDto;
-import com.example.FinalProject.dto.HCPostDto;
-import com.example.FinalProject.dto.HCPostListDto;
+import com.example.FinalProject.dto.StudentClassDto;
+import com.example.FinalProject.dto.StudentDto;
 import com.example.FinalProject.mapper.AdminSalesMapper;
 import com.example.FinalProject.mapper.ClassMapper;
 
@@ -152,6 +153,52 @@ public class ClassServiceImpl implements ClassService {
 		return classMapper.getClassdetail(classId);	
 	}
 
+	@Override
+	public List<HjClassDto> getAllClassList(int userId) {
+		// TODO Auto-generated method stub
+		return classMapper.getClassList(userId);
+	}
+	
+	@Override
+	public List<StudentClassDto> checkClassOverlap(ClassCheckDto dto) {
+		// TODO Auto-generated method stub
+		return classMapper.checkClassStudent(dto);
+	}
+
+	@Override
+	public boolean insertStudentClass(StudentClassDto dto) {
+		try {
+			return classMapper.insertStudentClass(dto);
+		}catch(Exception e) {
+			return false;
+		}
+		
+	}
+
+
+	@Override
+	public boolean deleteStudentClass(StudentClassDto dto) {
+		try {
+			return classMapper.deleteStudentClass(dto);
+		}catch(Exception e) {
+			return false;
+		}
+		
+	}
+
+
+	@Override
+	public List<StudentDto> getClassStudentList(int classId) {
+		// TODO Auto-generated method stub
+		return classMapper.getClassStudentList(classId);
+	}
+
+
+	@Override
+	public List<StudentDto> getAllStudentList(int userId) {
+		// TODO Auto-generated method stub
+		return classMapper.getAllStudentList(userId);
+	}
 
 
 

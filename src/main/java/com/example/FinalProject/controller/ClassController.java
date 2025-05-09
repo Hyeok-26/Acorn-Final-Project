@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.FinalProject.dto.HjClassDto;
 import com.example.FinalProject.dto.HjClassListDto;
 import com.example.FinalProject.dto.HjLectureDto;
-import com.example.FinalProject.dto.HjTeacherDto;
+import com.example.FinalProject.dto.StudentClassDto;
+import com.example.FinalProject.dto.StudentDto;
 import com.example.FinalProject.service.AdminSalesService;
 import com.example.FinalProject.service.ClassService;
 import com.example.FinalProject.service.ClassServiceImpl.SalesRegisterFailException;
@@ -95,6 +97,29 @@ public class ClassController {
 		return service.getClassLecture();
 	};	
 	
-
+	// 해당 지점 수업 전체 리스트(페이징, 검색 조건 처리 없이) 가져오기
+	// class/calendar?userId=1
+	@GetMapping("/class/calendar")
+	public List<HjClassDto> getClassList(@RequestParam int userId) {
+		
+		return service.getAllClassList(userId);
+	}
+	
+	// 해당 수업 학생 리스트 가져오기
+	@GetMapping("/class/student")
+	public List<StudentDto> getClassStudentList(int classId){
+		return service.getClassStudentList(classId);
+	}
+	
+	// 해당 지점 학생 리스트 가져오기
+	@GetMapping("/class/all-student")
+	public List<StudentDto> getAllStudentList(int userId){
+		return service.getAllStudentList(userId);
+	}
+	
+	@DeleteMapping("/class/delete-student")
+	public boolean deleteStudentClass(@RequestBody StudentClassDto dto) {
+		return service.deleteStudentClass(dto);
+	}
 	
 }
