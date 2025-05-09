@@ -54,6 +54,7 @@
 		JOIN tb_user
 			ON tb_order.user_id = tb_user.user_id
 		<include refid="orderCondition"/>
+		AND tb_order.cd_status NOT IN ('WAIT')
 	</select>
 	
 	
