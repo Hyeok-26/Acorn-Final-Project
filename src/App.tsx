@@ -5,8 +5,9 @@ import AdminNavBar from "@/components/AdminNavBar";
 function App() {
   const currentOutlet = useOutlet();
   const location = useLocation();
-  const isCeoPage = location.pathname.includes('/ceo');
-  const isAdminPage = location.pathname.includes('/admin');
+  const isCeoPage = location.pathname.includes('/ceo') || 
+                   location.pathname.includes('/post');
+  const isAdminPage = location.pathname.includes('/admin');                 
 
   return (
     <div className="flex">
