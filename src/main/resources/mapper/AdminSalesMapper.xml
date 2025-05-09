@@ -157,33 +157,17 @@
 	    ORDER BY sMonth, c.cd_lecture
 	</select>
 	
-	<insert id="insertClsIngProfitToAdmin" parameterType="JsClsToProfitDTo">
+	
+	
+	<!-- 수업상태값변경시 sales테이블에 insert하는 메소드  -->
+	<insert id="insertClsProfitToAdmin" parameterType="com.example.FinalProject.dto.HjClassDto">
 		insert into tb_admin_sale
-		(admin_sale_id, user_id,cre_date,edit_date, sale_name,price, cd_acode, cd_bcode,auto)
+		(admin_sale_id, user_id, cre_date, edit_date,sale_name,price, cd_acode, cd_bcode,auto)
 		values 
-		(seq_admin_sale_id.nextval,#{userId}, sysdate, sysdate, #{saleName}, #{price}, 'PROFIT', 'LECTURE', 'YES') 
+		(seq_admin_sale_id.nextval,#{userId}, sysdate, sysdate, #{className}, #{price}, 'PROFIT', 'CLS', 'YES') 
 	</insert>
-	<insert id="insertClsIngProfitToCeo" parameterType="JsClsToProfitDTo">
-		insert into tb_ceo_sale
-		(ceo_sale_id, user_id,cre_date,edit_date, sale_name,price, cd_acode, cd_bcode,auto)
-		values 
-		(seq_ceo_sale_id.nextval,#{userId}, sysdate, sysdate, #{saleName}, #{price}, 'PROFIT', 'LECTURE', 'YES') 
-	</insert>
-	<select id="getProfitInfoByClassId" parameterType="map" resultType="JsClsToProfitDto">
-	    SELECT 
-	        c.user_id userId,
-	        c.cd_lecture cdLecture,
-	        c.class_name className,
-	        COUNT(sc.student_id) AS studentCount, 
-	        c.price price,
-	        COUNT(sc.student_id) * c.price AS profit
-	    FROM tb_class c
-	    LEFT JOIN tb_student_class sc ON c.class_id = sc.class_id 
-	    LEFT JOIN tb_bcode b ON c.cd_lecture = b.bcode              
-	    WHERE c.user_id = #{userId} and class_id=#{classId}
-	    GROUP BY 
-	        TO_CHAR(c.start_date, 'YYYY'), c.cd_lecture, c.price
-	</select>
+
+
 
 
 	<insert id="insertOrderApprovedCostToAdmin" parameterType="JsOrderToCostDto">

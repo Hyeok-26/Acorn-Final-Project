@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.example.FinalProject.dto.HjClassDto;
 import com.example.FinalProject.dto.JsAdminSalesDto;
 import com.example.FinalProject.dto.JsAdminSalesStatDto;
 import com.example.FinalProject.dto.JsClsToProfitDto;
@@ -43,9 +44,7 @@ public interface AdminSalesMapper {
 	
 
 	//수업이 '진행중'일 때 수업료 수입을 추가하는 메소드와 관련 메소드(수업에서 사용)
-	int insertClsIngProfitToAdmin(JsClsToProfitDto dto);
-	int insertClsIngProfitToCeo(JsClsToProfitDto dto);
-	JsClsToProfitDto getProfitInfoByClassId(Map<String, Object> search);
+	boolean insertClsProfitToAdmin(HjClassDto dto);
 
 	//발주가 "승인"일 때 발주 비용 추가하는 메소드와 관련 메소드(발주에서 사용)
 	int insertOrderApprovedCostToAdmin(JsOrderToCostDto dto);

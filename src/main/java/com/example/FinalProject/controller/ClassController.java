@@ -1,6 +1,8 @@
 package com.example.FinalProject.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,11 +16,14 @@ import com.example.FinalProject.dto.HjClassDto;
 import com.example.FinalProject.dto.HjClassListDto;
 import com.example.FinalProject.dto.HjLectureDto;
 import com.example.FinalProject.dto.HjTeacherDto;
+import com.example.FinalProject.service.AdminSalesService;
 import com.example.FinalProject.service.ClassService;
+import com.example.FinalProject.service.ClassServiceImpl.SalesRegisterFailException;
 
 @RestController
 public class ClassController {
 	@Autowired private ClassService service;
+	@Autowired private AdminSalesService adminservice;
 	
 	// 테스트용
 	@GetMapping("/class/ping")
@@ -59,9 +64,30 @@ public class ClassController {
 	
 	//수업상태값 수정
 	@PatchMapping("/class/status")
-	public boolean updateClassStatus(@RequestBody HjClassDto dto) {
-		return service.updateClassStatus(dto);
-	}	
+	public Map<String, Object> updateClassStatus(@RequestBody HjClassDto dto) {
+
+		Map<String, Object> result = new HashMap<>();
+		
+	    try {
+	    	boolean updateResult = service.updateClassStatus(dto);
+	        result.put("success", updateResult);
+	        
+	        if (updateResult) {
+	            result.put("message", "수업 상태변경에 성공하였습니다.");
+	        } else {
+	            result.put("message", "수업 상태변경에 실패하였습니다.");
+	        }
+	        
+	        
+	    } catch (SalesRegisterFailException e) {
+	        result.put("success", false);
+	        result.put("message",  e.getMessage());
+	    }
+
+	    return result;
+	}
+	
+		
 	
 	// 수업 강의분류 가져오기
 	@GetMapping("/class/lecture")
