@@ -52,7 +52,7 @@ function ClassDescModal(props) {
 
         <Modal show={props.show} onHide={props.onHide} centered size="lg">
             <Modal.Header closeButton>
-                <Modal.Title>[{classdesc.classId}] {classdesc.className} 수업설명</Modal.Title>
+                <Modal.Title>[{classdesc.classId}] {classdesc.className}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
             <div style={{

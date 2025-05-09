@@ -51,7 +51,7 @@ function ClassStatusModal(props) {
             if (res.data.success) {
                 alert(res.data.message);
             } else {
-                alert("else"+res.data.message);
+                alert(res.data.message);
                 
             }
             props.onHide();
