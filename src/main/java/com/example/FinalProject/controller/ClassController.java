@@ -105,12 +105,15 @@ public class ClassController {
 		return service.getAllClassList(userId);
 	}
 	
+	
+	//class/student?classId=6
 	// 해당 수업 학생 리스트 가져오기
 	@GetMapping("/class/student")
 	public List<StudentDto> getClassStudentList(int classId){
 		return service.getClassStudentList(classId);
 	}
 	
+	//class/all-student?userId=2
 	// 해당 지점 학생 리스트 가져오기
 	@GetMapping("/class/all-student")
 	public List<StudentDto> getAllStudentList(int userId){

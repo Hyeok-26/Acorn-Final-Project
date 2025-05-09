@@ -250,7 +250,7 @@
   <select id="getClassStudentList" parameterType="int" resultType="StudentDto">
   	SELECT 
   		s.student_id,
-  		s.name AS student_name,
+  		s.name,
   		s.phone
   	FROM tb_student_class sc
   	LEFT JOIN tb_student s ON s.student_id = sc.student_id
@@ -262,7 +262,7 @@
   <select id="getAllStudentList" parameterType="int" resultType="StudentDto">
 	SELECT 
 		s.student_id, 
-		s.name AS student_name, 
+		s.name, 
 		s.phone
 	FROM tb_student s
 	WHERE s.user_id = #{userId}
