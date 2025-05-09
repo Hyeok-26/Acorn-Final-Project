@@ -187,9 +187,6 @@ function Class(props) {
 
     //수강생 현황 모달
     const [showApplyStatModal, setShowApplyStatModal] = useState(true);//※테스트용 true
-    
-    // //수강생 현황 모달에서 뜨는 수강생 추가 모달
-    // const [showApplyAddModal, setShowApplyAddModal] = useState(false);
 
     return (
         <div style={centerStyle}>            
@@ -202,8 +199,9 @@ function Class(props) {
                                 ...searchState, condition:"", keyword:"", cdStatus:"", pageNum:1,});
                         navigate(`/admin/class?userId=${userId}&pageNum=1`); refresh(1);}}/>
         <ClassEditModal show={showClassEditModal} onHide={() => {setshowClassEditModal(false); refresh(searchState.pageNum);}} classId={selectedClassId} userId={userId} />
+
         <StudApplyStatModal show={showApplyStatModal} onHide={()=>{setShowApplyStatModal(false)}} classId={selectedClassId} />
-        {/* <StudApplyAddModal show={showApplyAddModal} onHide={()=>setShowApplyAddModal(false)} /> */}
+
             <div className="d-flex align-items-center justify-content-center">    
                 <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>  {storeName} 수업리스트  </h1>
                 {/* <pre>{JSON.stringify(clist, null, 2)}</pre> */}
