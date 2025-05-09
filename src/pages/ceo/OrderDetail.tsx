@@ -10,8 +10,24 @@ function OrderDetail() {
     const { orderId } = useParams();
 
     // 검색한 상품 이름
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const productName = searchParams.get("productName");
+
+    // 검색어 상태 추가
+    const [searchText, setSearchText] = useState("");
+
+    // 검색 버튼 클릭 시 실행할 함수
+    const handleSearch = () => {
+        // 검색어가 있는 경우 검색 파라미터 추가    
+        if (searchText.trim()) {
+            setSearchParams({ productName: searchText });
+        } else {
+            // 검색어가 없는 경우 검색 파라미터 제거
+            setSearchParams({});
+        }
+    }
+
+
 
 
     // 발주 품목 상세정보 기본정보 상태값으로 관리
@@ -30,8 +46,10 @@ function OrderDetail() {
         api.get(`/orders/info/${orderId}`)
             .then(res => {
                 setOrderInfo(res.data);
-                if(!memoReply){
-                    setMemoReply(res.data.memoReply ?? "");
+                console.log(res.data);
+                if (!writeReply) {
+                    // null 또는 undefined 시 빈 문자열로 처리
+                    setWriteReply(res.data.memoReply ?? "");
                 }
 
             })
@@ -51,11 +69,10 @@ function OrderDetail() {
         api.get("/orders/product", {
             params: {
                 orderId,
-                productName
+                productName: searchText
             }
         })
             .then(res => {
-                console.log("성공!");
                 // console.log(res.data);
                 setOrderProduct(res.data);
 
@@ -71,21 +88,20 @@ function OrderDetail() {
     const [rejectModalShow, setRejectModalShow] = useState(false);
 
 
-
     // 승인 완료 시 이동할 훅
     const navigate = useNavigate();
 
     // 작성한 본사 메모 내용 상태값으로 관리
-    const [memoReply, setMemoReply] = useState("");
+    const [writeReply, setWriteReply] = useState("");
 
     // 저장 버튼 클릭시 메모 저장
     const saveMemo = () => {
         api.patch("/orders/memoreply", {
             orderId,
-            memoReply : memoReply
+            memoReply: writeReply
         })
             .then((res => {
-                console.log("확인", res.data)
+                console.log("확인", res.data);
                 alert("메모 저장 성공!")
                 getInfo();
             }))
@@ -94,14 +110,18 @@ function OrderDetail() {
             })
     }
 
+
+
     useEffect(() => {
         // 기본 정보로 가지고 오기(본사, 지점 메모 포함)
         getInfo();
         // orderId 애 해당하는 품목 가지고 오기
         getProduct();
         // null 혹은 undefined 인 경우 빈 문자열 저장
-        setMemoReply(orderInfo.memoReply ?? "")
-        
+        setWriteReply(orderInfo.memoReply ?? "")
+
+
+
     }, [orderId, productName]);
 
 
@@ -128,7 +148,7 @@ function OrderDetail() {
                 }}
             >
             </ConfirmModal>
-            
+
             {/* 반려 모달창 */}
             <ConfirmModal
                 show={rejectModalShow}
@@ -148,6 +168,12 @@ function OrderDetail() {
                     setRejectModalShow(false);
                 }}
             >
+                {
+                    !writeReply.trim() &&
+                    <div style={{ color: 'red', fontWeight: 'bold', marginTop: '10px', fontSize: '14px' }}>
+                        ※ 본사요청 메모가 비어있습니다.
+                    </div>
+                }
             </ConfirmModal>
 
 
@@ -177,12 +203,18 @@ function OrderDetail() {
                                 <Form.Control
                                     as="textarea"
                                     rows={6}
-                                    value={orderInfo.memoReply} // 기존 본사 피드백이 있었다면 가지고 오기
-                                    onChange={(e) => setMemoReply(e.target.value)} 
+                                    value={writeReply} // 기존 본사 피드백이 있었다면 가지고 오기
+                                    onChange={(e) => setWriteReply(e.target.value)}
                                     style={{ height: '230px' }}
                                     className='p-2'
+                                    disabled={orderInfo.cdStatus === 'APP'} // 승인 상태면 비활성화
                                 />
-                                <Button variant='success' className='mt-2 float-end' onClick={saveMemo}>저장</Button>
+                                {
+                                    // 승인 상태면 메모 수정 못함
+                                    orderInfo.cdStatus !== 'APP' &&
+                                    <Button variant='success' className='mt-2 float-end' onClick={saveMemo}>저장</Button>
+                                }
+
                             </Card.Body>
                         </Card>
                     </Col>
@@ -243,15 +275,23 @@ function OrderDetail() {
                             {/* 검색 */}
                             <Col md={5}>
                                 <InputGroup>
-                                    <Form.Control placeholder="상품명 입력..." />
-                                    <Button variant="dark">검색</Button>
+                                    <Form.Control
+                                        placeholder="상품명 입력..."
+                                        value={searchText}
+                                        onChange={(e) => setSearchText(e.target.value)}
+                                    />
+                                    <Button variant="dark" onClick={handleSearch}>검색</Button>
                                 </InputGroup>
                             </Col>
                             {/* 버튼 */}
-                            <Col md={4} className="text-end">
-                                <Button variant="primary" className="me-2" onClick={() => setAppModalShow(true)}>승인</Button>
-                                <Button variant="danger" onClick={() => setRejectModalShow(true)}>반려</Button>
-                            </Col>
+                            {
+                                orderInfo.cdStatus !== 'APP' &&
+                                // 승인 상태가 아닐 때만 승인/ 반려 가능
+                                <Col md={4} className="text-end">
+                                    <Button variant="primary" className="me-2" onClick={() => setAppModalShow(true)}>승인</Button>
+                                    <Button variant="danger" onClick={() => setRejectModalShow(true)}>반려</Button>
+                                </Col>
+                            }
                         </Row>
 
                         {/* 테이블 */}

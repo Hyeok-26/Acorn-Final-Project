@@ -29,6 +29,8 @@ function Order() {
             [e.target.name]: e.target.value
 
         });
+        // 검색 조건 변경 시 무조건 처음 페이지로!
+        setPageNum(1);
         console.log(searchState);
     };
 
@@ -63,17 +65,18 @@ function Order() {
         })
             .then(res => {
                 setOrderList(res.data);
+                // console.log(res.data);
                 // 페이징 처리 숫자 버튼 생성하기
-                const range = _.range(res.data.startPageNum, res.data.endPageNum + 1);
+                const range = _.range(res.data.startPageNum, res.data.endPageNum+1);
                 setPageArray(range);
+                // console.log(range);
             })
             .catch(err => console.log("에러", err));
     }, 500);
 
     useEffect(() => {
         if (searchState.storeName.trim() !== "") {
-            fetchOrderList(searchState, pageNum);
-            
+            fetchOrderList(searchState, pageNum);            
         }
         return () => {
             fetchOrderList.cancel(); // 이전 요청 취소
@@ -190,7 +193,7 @@ function Order() {
             <div className='d-flex justify-content-center mt-3'>
                 <Pagination className='mt-3'>
                     {/* 이전버튼 */}
-                    <Pagination.Item onClick={() => move(orderList.startPageNum - 1)} disabled={orderList.startPageNum === 1}>Prev</Pagination.Item>
+                    <Pagination.Item onClick={() => move(orderList.startPageNum - 1)} disabled={orderList.startPageNum === 1 || orderList.list.length === 0 }>Prev</Pagination.Item>
 
                     {/* 숫자버튼 */}
                     {
