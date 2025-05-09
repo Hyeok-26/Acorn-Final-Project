@@ -11,15 +11,15 @@ function StudApplyAddModal({show, onHide, onAddStudents,
       const results = allStudents.filter(
         (s) =>
           s.name.toLowerCase().includes(searchKeyword.toLowerCase()) &&
-          !alreadyAddedIds.includes(s.id)
+          !alreadyAddedIds.includes(s.studentId)
       );
       setSearchResults(results);
     }, [searchKeyword, allStudents, alreadyAddedIds]);
   
     const toggleStudent = (student) => {
-      const alreadySelected = selectedStudents.find((s) => s.id === student.id);
+      const alreadySelected = selectedStudents.find((s) => s.studentId === student.studentId);
       if (alreadySelected) {
-        setSelectedStudents((prev) => prev.filter((s) => s.id !== student.id));
+        setSelectedStudents((prev) => prev.filter((s) => s.studentId !== student.studentId));
       } else {
         const totalAfterAdd = currentCount + selectedStudents.length + 1;
         if (totalAfterAdd > maxCount) {
@@ -31,7 +31,7 @@ function StudApplyAddModal({show, onHide, onAddStudents,
     };
   
     const isSelected = (studentId) =>
-      selectedStudents.some((s) => s.id === studentId);
+      selectedStudents.some((s) => s.studentId === studentId);
   
     const handleConfirm = () => {
       onAddStudents(selectedStudents); // 전달만 하면 됨
@@ -72,11 +72,11 @@ function StudApplyAddModal({show, onHide, onAddStudents,
                   </thead>
                   <tbody>
                     {searchResults.map((student) => (
-                        <tr key={student.id}>
+                        <tr key={student.studentId}>
                         <td>
                             <Form.Check
                             type="checkbox"
-                            checked={isSelected(student.id)}
+                            checked={isSelected(student.studentId)}
                             onChange={() => toggleStudent(student)}
                             // disabled={
                             //   !isSelected(student.id) &&
@@ -84,7 +84,7 @@ function StudApplyAddModal({show, onHide, onAddStudents,
                             // }
                             />
                         </td>
-                        <td>{student.id}</td>
+                        <td>{student.studentId}</td>
                         <td>{student.name}</td>
                         <td>{student.phone}</td>
                         </tr>
@@ -106,7 +106,7 @@ function StudApplyAddModal({show, onHide, onAddStudents,
                 </thead>
                 <tbody>
                     {selectedStudents.map((s) => (
-                    <tr key={s.id}>
+                    <tr key={s.studentId}>
                         <td>{s.name}</td>
                         <td>{s.phone}</td>
                         <td>
@@ -114,7 +114,7 @@ function StudApplyAddModal({show, onHide, onAddStudents,
                             variant="danger"
                             size="sm"
                             onClick={() =>
-                            setSelectedStudents((prev) => prev.filter((student) => student.id !== s.id))
+                            setSelectedStudents((prev) => prev.filter((student) => student.studentId !== s.studentId))
                             }
                         >
                             삭제

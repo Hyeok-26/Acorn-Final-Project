@@ -9,7 +9,6 @@ import ClassStatusModal from "../../components/admin/ClassStatusModal";
 import ClassAddModal from "../../components/admin/ClassAddModal";
 import ClassEditModal from "../../components/admin/ClassEditModal";
 import StudApplyStatModal from "@/components/admin/StudApplyStatModal";
-import StudApplyAddModal from "@/components/admin/StudApplyAddModal";
 
 
 
@@ -186,7 +185,7 @@ function Class(props) {
     const [selectedClassId, setSelectedClassId] = useState<number>();
 
     //수강생 현황 모달
-    const [showApplyStatModal, setShowApplyStatModal] = useState(true);//※테스트용 true
+    const [showApplyStatModal, setShowApplyStatModal] = useState(false);
 
     return (
         <div style={centerStyle}>            
@@ -200,7 +199,8 @@ function Class(props) {
                         navigate(`/admin/class?userId=${userId}&pageNum=1`); refresh(1);}}/>
         <ClassEditModal show={showClassEditModal} onHide={() => {setshowClassEditModal(false); refresh(searchState.pageNum);}} classId={selectedClassId} userId={userId} />
 
-        <StudApplyStatModal show={showApplyStatModal} onHide={()=>{setShowApplyStatModal(false)}} classId={selectedClassId} />
+
+        <StudApplyStatModal show={showApplyStatModal} onHide={()=>{setShowApplyStatModal(false); refresh(searchState.pageNum);}} classId={selectedClassId} />
 
             <div className="d-flex align-items-center justify-content-center">    
                 <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>  {storeName} 수업리스트  </h1>
