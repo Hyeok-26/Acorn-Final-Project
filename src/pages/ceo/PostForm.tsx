@@ -33,9 +33,7 @@ function PostWrite() {
       formData.append("uploadFile", uploadFile);
     }
 
-    api.post("/posts", formData,{
-      headers:{'Content-Type':'multipart/form-data'}
-      })
+    api.post("/posts", formData)
       .then(() => {
         alert("등록 완료!");
         navigate("/posts");
