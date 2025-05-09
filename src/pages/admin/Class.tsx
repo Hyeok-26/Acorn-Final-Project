@@ -191,8 +191,7 @@ function Class(props) {
     const [showSecondModal, setShowSecondModal] = useState(false);
     const [studentCount, setStudentCount] = useState(students.length);
     const [maxCount, setMaxCount] = useState(10);
-    const [students, setStudents] = useState([]);
-    const [allStudents, setAllStudents] = useState([ ]);
+
     const handleRemoveStudent = (id) => {
         setStudents((prev) => prev.filter((student) => student.id !== id));
     };
@@ -208,9 +207,7 @@ function Class(props) {
                         navigate(`/admin/class?userId=${userId}&pageNum=1`); refresh(1);}}/>
         <ClassEditModal show={showClassEditModal} onHide={() => {setshowClassEditModal(false); refresh(searchState.pageNum);}} classId={selectedClassId} userId={userId} />
         <StudApplyStatModal   show={showFirstModal}  onClose={() => setShowFirstModal(false)} students={students}  maxCount={maxCount}      studentCount={studentCount} className="수업 이름"  onOpenSecondModal={() => setShowSecondModal(true)} onRemoveStudent={handleRemoveStudent} />
-
-        <StudApplyAddModal show={showSecondModal}   onClose={() => setShowSecondModal(false)}  onAddStudents={(newStudents) => setStudents((prev) => [...prev, ...newStudents])
-        }
+        <StudApplyAddModal show={showSecondModal}   onClose={() => setShowSecondModal(false)}  onAddStudents={(newStudents) => setStudents((prev) => [...prev, ...newStudents])}
         currentCount={students.length}   maxCount={maxCount}
         studentCount={studentCount}   allStudents={allStudents}
         alreadyAddedIds={students.map((s) => s.id)}/>

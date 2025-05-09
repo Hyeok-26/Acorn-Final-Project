@@ -18,6 +18,7 @@ import OrderSale from "../pages/ceo/OrderSale";
 import ViewSale from "../pages/ceo/ViewSale";
 import Class from "@/pages/admin/Class";
 import StudentList from "@/pages/admin/StudentList";
+import ClassCalendar from "@/pages/admin/ClassCalendar";
 
 
 const routes = [
@@ -38,7 +39,9 @@ const routes = [
     {path: '/ceo/ordersale', element:<OrderSale/>},
     {path: '/ceo/viewsale', element:<ViewSale/>},
     {path:"/admin/class", element:<Class/>},
+
     {path: '/admin/students', element:<StudentList/>},
+    {path: '/admin/calendar', element:<ClassCalendar/>},
 
 ]
 
