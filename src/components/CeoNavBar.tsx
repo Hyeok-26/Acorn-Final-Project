@@ -20,8 +20,8 @@ const menuItems = [
         path: "ceo 발주관리 경로",
         subItems: [
             { name: "발주 품목 관리", path: "/ceo/product" },
-            { name: "발주 현황", path: "ceo 발주현황 경로" },
-            { name: "발주 승인/반려", path: "ceo 발주승인반려 경로" }
+            { name: "발주 현황", path: "/ceo/orders" }
+            // { name: "발주 승인/반려", path: "ceo 발주승인반려 경로" }
         ] 
     },
     { 
