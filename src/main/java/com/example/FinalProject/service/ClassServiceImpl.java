@@ -3,25 +3,30 @@ package com.example.FinalProject.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.example.FinalProject.dto.ClassCheckDto;
 import com.example.FinalProject.dto.HjClassDto;
 import com.example.FinalProject.dto.HjClassListDto;
 import com.example.FinalProject.dto.HjLectureDto;
-import com.example.FinalProject.dto.HCPostDto;
-import com.example.FinalProject.dto.HCPostListDto;
+import com.example.FinalProject.dto.StudentClassDto;
+import com.example.FinalProject.dto.StudentDto;
+import com.example.FinalProject.mapper.AdminSalesMapper;
 import com.example.FinalProject.mapper.ClassMapper;
 
 @Service
 public class ClassServiceImpl implements ClassService {
 	
 	//한 페이지에 몇개씩 표시할 것인지
-	final int PAGE_ROW_COUNT=10;
+	final int PAGE_ROW_COUNT=3;
 	//하단 페이지를 몇개씩 표시할 것인지
 	final int PAGE_DISPLAY_COUNT=5;
 	
 	
 	@Autowired private ClassMapper classMapper;
+	@Autowired private AdminSalesMapper salesmapper;
 
 
 	@Override
@@ -104,17 +109,36 @@ public class ClassServiceImpl implements ClassService {
 		}
 		
 	}
+	
+	//예외처리
+	public static class SalesRegisterFailException extends DataAccessException{
 
+		public SalesRegisterFailException(String msg) {
+			super(msg);
+		}
+	}
 
+	//매출+수업변경 
 	@Override
+	@Transactional
 	public boolean updateClassStatus(HjClassDto dto) {
 		
-		try {
-			return classMapper.updateClassStatus(dto);
-		}catch(Exception e) {
-			return false;
-		}
 		
+			String cdStatus = dto.getCdStatus();
+	        if ("START".equals(cdStatus)) {
+	            // START일 경우: 상태 업데이트 + 매출 등록
+	    		boolean adminResult = salesmapper.insertClsProfitToAdmin(dto);
+	    		boolean updateResult = classMapper.updateClassStatus(dto);
+	            if (adminResult && updateResult ) {
+	                return true;
+	            } else {
+	                throw new SalesRegisterFailException("개강 및 매출테이블 등록에 실패하였습니다");
+	            }
+	        } else {
+	            // START 아닐 경우: 상태 업데이트만
+	    		boolean updateResult = classMapper.updateClassStatus(dto);
+	    		return updateResult;
+	        }
 	}
 
 
@@ -129,6 +153,52 @@ public class ClassServiceImpl implements ClassService {
 		return classMapper.getClassdetail(classId);	
 	}
 
+	@Override
+	public List<HjClassDto> getAllClassList(int userId) {
+		// TODO Auto-generated method stub
+		return classMapper.getClassList(userId);
+	}
+	
+	@Override
+	public List<StudentClassDto> checkClassOverlap(ClassCheckDto dto) {
+		// TODO Auto-generated method stub
+		return classMapper.checkClassStudent(dto);
+	}
+
+	@Override
+	public boolean insertStudentClass(StudentClassDto dto) {
+		try {
+			return classMapper.insertStudentClass(dto);
+		}catch(Exception e) {
+			return false;
+		}
+		
+	}
+
+
+	@Override
+	public boolean deleteStudentClass(StudentClassDto dto) {
+		try {
+			return classMapper.deleteStudentClass(dto);
+		}catch(Exception e) {
+			return false;
+		}
+		
+	}
+
+
+	@Override
+	public List<StudentDto> getClassStudentList(int classId) {
+		// TODO Auto-generated method stub
+		return classMapper.getClassStudentList(classId);
+	}
+
+
+	@Override
+	public List<StudentDto> getAllStudentList(int userId) {
+		// TODO Auto-generated method stub
+		return classMapper.getAllStudentList(userId);
+	}
 
 
 

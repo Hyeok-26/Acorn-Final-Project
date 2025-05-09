@@ -7,6 +7,9 @@ import org.apache.ibatis.annotations.Mapper;
 import com.example.FinalProject.dto.HjClassDto;
 import com.example.FinalProject.dto.HjClassListDto;
 import com.example.FinalProject.dto.HjLectureDto;
+import com.example.FinalProject.dto.StudentClassDto;
+import com.example.FinalProject.dto.StudentDto;
+import com.example.FinalProject.dto.ClassCheckDto;
 import com.example.FinalProject.dto.HCPostDto;
 
 @Mapper
@@ -19,4 +22,11 @@ public interface ClassMapper {
 	boolean updateClassStatus(HjClassDto dto);
 	List<HjLectureDto> getClassLecture();
 	HjClassDto getClassdetail(int classId);
+	
+	List<HjClassDto> getClassList(int userId);
+	List<StudentClassDto> checkClassStudent(ClassCheckDto dto);
+	boolean insertStudentClass(StudentClassDto dto);
+	boolean deleteStudentClass(StudentClassDto dto);
+	List<StudentDto> getClassStudentList(int classId);
+	List<StudentDto> getAllStudentList(int userId);
 }

@@ -40,6 +40,7 @@
 	<select id="getClassdetail" resultType="com.example.FinalProject.dto.HjClassDto" parameterType="int">
 		SELECT 
 	        c.class_id,
+	        c.user_id,
 	        c.class_name,
 	        cd_lecture,
 	        t.name AS teacher_name,
@@ -61,6 +62,7 @@
 		WHERE c.class_id = #{classId}
 		GROUP BY 
 			c.class_id,
+			c.user_id,
 			c.class_name,
 			cd_lecture,
 			t.name,
@@ -156,5 +158,115 @@
 	<select id="getClassLecture" resultType="com.example.FinalProject.dto.HjLectureDto">
 		select * FROM tb_bcode WHERE ACODE = 'LECTURE'
 	</select>	
+	
+	<!-- 해당지점에서 개설한 수업리스트(페이징, 검색 조건 없이) -->
+	<select id="getClassList" parameterType="int" resultType="com.example.FinalProject.dto.HjClassDto">
+				SELECT 
+	                c.class_id,
+	                c.class_name,
+	                c.cd_lecture,
+	                t.name AS teacher_name,
+	                TO_CHAR(c.start_date, 'YYYY-MM-DD') AS start_date,
+	                TO_CHAR(c.end_date, 'YYYY-MM-DD') AS end_date,
+	                c.start_time,
+	                c.end_time,
+	                c.weekday,
+	                COUNT(sc.student_id) AS current_student, 
+	                c.max_student,
+	                c.price,
+	                TO_CHAR(c.apply_start_date, 'YYYY-MM-DD') AS apply_start_date,
+	                TO_CHAR(c.apply_end_date, 'YYYY-MM-DD') AS apply_end_date,
+	                c.cd_status
+	            FROM tb_class c
+	            JOIN tb_teacher t ON c.teacher_id = t.teacher_id 
+	            LEFT JOIN tb_student_class sc ON c.class_id = sc.class_id AND c.cd_status IN ('BEFORE', 'READY', 'START', 'END')
+	            WHERE c.user_id = #{userId}
 
+	            GROUP BY 
+					c.class_id,
+					c.class_name,
+					c.cd_lecture,
+					t.name,
+					c.start_date,
+					c.end_date,
+					c.start_time,
+					c.end_time,
+					c.weekday,
+					c.max_student,
+					c.price,
+					c.apply_start_date,
+					c.apply_end_date,
+					c.cd_status
+	            ORDER BY c.class_id ASC
+	</select>
+	
+	<!-- 수업 중복 체크 -->
+	<!-- 전체 수업 중 겹치는 수업이 1개라도 나오면 중복 -->
+	<select id="checkClassStudent" parameterType="ClassCheckDto" resultType="StudentClassDto">
+	SELECT c.class_id, c.class_name, sc.student_id, s.name AS student_name 
+	FROM tb_student_class sc
+	JOIN tb_class c ON sc.class_id = c.class_id
+	JOIN tb_student s ON sc.student_id = s.student_id
+	WHERE sc.student_id = IN <!-- 신청하려는 학생의 studentIdList -->
+	<foreach item="id" collection="studentIdList" open="(" separator="," close=")">
+	    #{id}
+	</foreach>
+	  AND (
+	    <!-- 요일이 겹치는 경우 (예: 월요일 '1'이면 SUBSTR(weekday, 1, 1) = '1') -->
+	    <!-- 신청하려는 수업의 요일 :newWeekday -->
+	    <!-- SUBSTR(문자열, 시작위치, 길이)는 문자열에서 일부 문자를 추출하여 요일 비교 가능 -->
+		<!-- N번째 요일이 수업 있는 날인지 확인 (1이면 있음, 0이면 없음) -->
+		<!-- 수업이 실제로 있는 요일인지 까지 체크 -->
+	    SUBSTR(c.weekday, 1, 1) = SUBSTR(#{newWeekday}, 1, 1) AND SUBSTR(c.weekday, 1, 1) = '1' <!-- 월 -->
+	    OR SUBSTR(c.weekday, 2, 1) = SUBSTR(#{newWeekday}, 2, 1) AND SUBSTR(c.weekday, 2, 1) = '1' <!-- 화 -->
+	    OR SUBSTR(c.weekday, 3, 1) = SUBSTR(#{newWeekday}, 3, 1) AND SUBSTR(c.weekday, 3, 1) = '1' <!-- 수 -->
+	    OR SUBSTR(c.weekday, 4, 1) = SUBSTR(#{newWeekday}, 4, 1) AND SUBSTR(c.weekday, 4, 1) = '1' <!-- 목 -->
+	    OR SUBSTR(c.weekday, 5, 1) = SUBSTR(#{newWeekday}, 5, 1) AND SUBSTR(c.weekday, 5, 1) = '1' <!-- 금 -->
+	    OR SUBSTR(c.weekday, 6, 1) = SUBSTR(#{newWeekday}, 6, 1) AND SUBSTR(c.weekday, 6, 1) = '1' <!-- 토 -->
+	    OR SUBSTR(c.weekday, 7, 1) = SUBSTR(#{newWeekday}, 7, 1) AND SUBSTR(c.weekday, 7, 1) = '1' <!-- 일 -->
+	  )
+	  AND (
+		<!-- 겹치는 요일이 있을 때 시간까지 겹치는 경우 -->
+	    TO_DATE(#{newEndTime}, 'HH24:MI') > TO_DATE(c.end_time, 'HH24:MI') <!-- 신청하려는 수업의 종료 시간 -->
+	    AND TO_DATE(c.start_time, 'HH24:MI') > TO_DATE(#{newStartTime}, 'HH24:MI') <!-- 신청하려는 수업의 시작 시간 -->
+	  )
+	
+	</select>
+
+  <!-- 학생들 수업 추가 -->
+  <insert id="insertStudentClass" parameterType="StudentClassDto">
+	INSERT INTO tb_student_class 
+	(student_id, class_id)
+	VALUES (#{studentId}, #{classId})
+	</insert>
+	
+  <!-- 학생 수업 삭제 -->
+  <delete id="deleteStudentClass" parameterType="StudentClassDto">
+    DELETE FROM tb_student_class
+    WHERE student_id=#{studentId} and class_id=#{classId}
+  </delete> 
+  
+  <!-- 해당 수업 수강생 정보 리스트 가져오기 --> 
+  <select id="getClassStudentList" parameterType="int" resultType="StudentDto">
+  	SELECT 
+  		s.student_id,
+  		s.name,
+  		s.phone
+  	FROM tb_student_class sc
+  	LEFT JOIN tb_student s ON s.student_id = sc.student_id
+  	WHERE sc.class_id = #{classId}
+	ORDER BY s.student_id ASC
+  </select>
+  
+  <!-- 해당 지점 모든 학생 정보 리스트 가져오기 --> 
+  <select id="getAllStudentList" parameterType="int" resultType="StudentDto">
+	SELECT 
+		s.student_id, 
+		s.name, 
+		s.phone
+	FROM tb_student s
+	WHERE s.user_id = #{userId}
+	  AND s.cd_status = 'STUDY'
+	ORDER BY s.student_id ASC
+  </select>
 </mapper>
