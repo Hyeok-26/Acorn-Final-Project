@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.FinalProject.dto.TWCeoSaleDto;
+import com.example.FinalProject.dto.TWCeoSalePageDto;
 import com.example.FinalProject.service.CeoSaleService;
 
 @RestController
@@ -17,8 +18,8 @@ public class CeoSaleController {
 	@Autowired private CeoSaleService ceoSaleService;
 	
 	@GetMapping("/ceosale")
-	public List<TWCeoSaleDto> getList() {
-		return ceoSaleService.getList();
+	public List<TWCeoSaleDto> getList(TWCeoSalePageDto dto) {
+		return ceoSaleService.getList(dto);
 	}
 	
 	@PostMapping("/ceosale") 

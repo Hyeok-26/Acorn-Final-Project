@@ -14,9 +14,14 @@
         values(CEO_SALE_ID_SEQ.nextval, #{userId}, sysdate, sysdate, #{saleName}, #{price}, 'PROFIT', 'ETC', 'NO')
     </insert>
 
-    <select id="getList" resultType="TWCeoSaleDto">
-        select *
-        from TB_CEO_SALE
+    <select id="getList" parameterType="TWCeoSalePageDto" resultType="TWCeoSaleDto">
+		select *
+        from
+            (select result1.*, rowNum as rnum
+                from
+                    (select * from TB_CEO_SALE
+                              order by CRE_DATE desc) result1)
+            where rnum between #{startRowNum} and #{endRowNum}
     </select>
 
     <update id="update" parameterType="TWCeoSaleDto">
