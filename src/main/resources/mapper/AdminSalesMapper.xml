@@ -60,16 +60,30 @@
 		where admin_sale_id=#{adminSaleId}
 	</select>
 	<insert id="insertAdminSales" parameterType="JsAdminSalesDto">
-		insert into tb_admin_sale
-		(admin_sale_id, user_id, cre_date, edit_date, sale_name, price, cd_acode, cd_bcode, auto)
-		values 
-		(seq_admin_sale_id.nextval, #{userId}, sysdate, sysdate, #{saleName}, #{price}, #{cdAcode}, #{cdBcode}, 'NO' )				
+	    insert into tb_admin_sale (
+	      admin_sale_id, user_id, cre_date, edit_date, sale_name, price, cd_acode, cd_bcode, auto
+	    ) values (
+	      seq_admin_sale_id.nextval,
+	      #{userId},
+	      sysdate,
+	      sysdate,
+	      #{saleName},
+	      #{price},
+  	      (select acode from tb_acode where aname = #{aname} and deleted = 'NO'),
+	      (select bcode from tb_bcode where bname = #{bname} and deleted = 'NO'),
+	      'NO'
+	    )			
 	</insert>
 	<update id="editAdminSales" parameterType="JsAdminSalesDto">
-		update tb_admin_sale
-		set user_id=#{userId}, edit_date=sysdate, sale_name=#{saleName}, 
-		     price=#{price}, cd_acode=#{cdAcode}, cd_bcode=#{cdBcode}, auto='NO'
-		where admin_sale_id=#{adminSaleId}
+		  update tb_admin_sale
+		  set user_id = #{userId},
+		      edit_date = sysdate,
+		      sale_name = #{saleName},
+		      price = #{price},
+		      cd_acode = (select acode from tb_acode where aname = #{aname} and deleted = 'NO'),
+		      cd_bcode = (select bcode from tb_bcode where bname = #{bname} and deleted = 'NO'),
+		      auto = 'NO'
+		  where admin_sale_id = #{adminSaleId}
 	</update>
 	<delete id="deleteAdminSales">
 		delete from tb_admin_sale
