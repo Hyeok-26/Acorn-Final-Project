@@ -31,6 +31,9 @@
                 <if test="condition == 'userName' and keyword != null and keyword != ''">
                     AND user_name LIKE '%' || #{keyword} || '%'
                 </if>
+                <if test="condition == 'all' and keyword != null and keyword != ''">
+			        AND (store_name LIKE '%' || #{keyword} || '%' OR user_name LIKE '%' || #{keyword} || '%')
+			    </if>
                 ORDER BY store_name ASC
             ) result1
         )
@@ -57,7 +60,7 @@
 	  INSERT INTO tb_user (
 	    user_id, store_name, store_call, id, pwd, user_name, phone, cd_role
 	  ) VALUES (
-	    seq_user.NEXTVAL,
+	    seq_user_id.NEXTVAL,
 	    #{storeName},
 	    #{storeCall},
 	    #{id},
@@ -77,7 +80,7 @@
     </select>
 
     <!--지점 정보 수정 -->
-    <update id="updateStore" parameterType="StoreDto">
+   	<update id="updateStore" parameterType="StoreDto">
         UPDATE tb_user
            SET user_name  = #{userName},
                phone      = #{phone},

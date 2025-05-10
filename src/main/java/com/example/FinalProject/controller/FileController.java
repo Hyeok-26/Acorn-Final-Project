@@ -3,6 +3,7 @@ package com.example.FinalProject.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -47,11 +48,18 @@ public class FileController {
             throw new RuntimeException("File not found");
         }
 
+        // MIME 타입 자동 추론
+        String contentType = Files.probeContentType(file.toPath());
+        if (contentType == null) {
+            contentType = "application/octet-stream"; // 기본값 (바이너리 파일)
+        }
+
         InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
         return ResponseEntity.ok()
             .contentLength(file.length())
             .header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
+            .header("Content-Type", contentType)
             .body(resource);
     }
 }

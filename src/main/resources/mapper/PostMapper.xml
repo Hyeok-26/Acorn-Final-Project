@@ -6,18 +6,21 @@
 
 	  <!-- 검색조건 공통 SQL -->
 	  <sql id="search">
-	    <where>
-	      <if test="condition == 'writer' and keyword != null and keyword != ''">
-	        AND writer LIKE '%' || #{keyword} || '%'
-	      </if>
-	      <if test="condition == 'title' and keyword != null and keyword != ''">
-	        AND title LIKE '%' || #{keyword} || '%'
-	      </if>
-	      <if test="condition == 'all' and keyword != null and keyword != ''">
-	        AND (writer LIKE '%' || #{keyword} || '%' OR title LIKE '%' || #{keyword} || '%')
-	      </if>
-	    </where>
-	  </sql>
+		  <where>
+		    <choose>
+		      <when test="condition == 'writer' and keyword != ''">
+		        AND writer LIKE '%' || #{keyword} || '%'
+		      </when>
+		      <when test="condition == 'title' and keyword != ''">
+		        AND title LIKE '%' || #{keyword} || '%'
+		      </when>
+		      <when test="condition == 'all' and keyword != ''">
+		        AND (writer LIKE '%' || #{keyword} || '%' 
+		             OR title  LIKE '%' || #{keyword} || '%')
+		      </when>
+		    </choose>
+		  </where>
+		</sql>
 	
 	  <!--전체 공지사항 수 조회 -->
 	  <select id="getPostCount" parameterType="PostDto" resultType="int">
@@ -26,7 +29,7 @@
 	    <include refid="search" />
 	  </select>
 	
-	  <!-- 공지사항 리스트 조회 (검색 + 페이징) -->
+	  <!-- 2) 공지사항 리스트 조회 (검색 + 페이징) -->
 	  <select id="getPostList" parameterType="PostDto" resultType="PostDto">
 	    SELECT *
 	    FROM (
@@ -55,7 +58,7 @@
 	      upload_file,
 	      cre_date
 	    ) VALUES (
-	      tb_post_seq.NEXTVAL,
+	      seq_post_id.NEXTVAL,
 	      #{title},
 	      #{writer},
 	      #{content},
@@ -66,14 +69,17 @@
 	
 	  <!-- 공지사항 수정 -->
 	  <update id="updatePost" parameterType="PostDto">
-	    UPDATE tb_post
-	    SET
-	      title = #{title},
-	      content = #{content},
-	      upload_file = #{uploadFile},
-	      edit_date = SYSDATE
-	    WHERE post_id = #{postId}
-	  </update>
+		  UPDATE tb_post
+		  <set>
+		    title   = #{title},
+		    content = #{content, jdbcType=CLOB},
+		    <if test="uploadFile != null">
+		      upload_file = #{uploadFile, jdbcType=CLOB},
+		    </if>
+		    edit_date = SYSDATE
+		  </set>
+		  WHERE post_id = #{postId}
+		</update>
 	
 	  <!-- 공지사항 삭제 -->
 	  <delete id="deletePost" parameterType="int">
