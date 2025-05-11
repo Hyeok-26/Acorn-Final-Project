@@ -38,7 +38,7 @@ const routes = [
     {path: '/ceo/code', element:<Code/>},
     {path: '/ceo/product', element:<Product/>},
     {path: '/ceo/store', element:<Store/>},
-    {path: '/ceo/posts', element:<Post/>},
+    {path: '/posts', element:<Post/>},
     {path: '/posts/new', element:<PostForm/>},
     {path: '/posts/:postId', element:<PostDetail/>},
     {path: '/posts/:postId/edit', element:<PostUpdateForm/>},
