@@ -1,11 +1,13 @@
 import api from '@/api';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 function Home() {
     const navigate = useNavigate();
     const [id, setId] =useState('');
     const [pw, setUserPassword] =useState('');
+    const dispatch = useDispatch();
     
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
@@ -13,10 +15,28 @@ function Home() {
             id: id,
             pw: pw
         }).then((res) => {
-            if(res.data.cdRole === 'CEO'){
-                navigate('/ceo');
-            }else if(res.data.cdRole === 'ADMIN'){
-                navigate('/admin');
+            if(res.data.cdRole === 'CEO' || res.data.cdRole === 'ADMIN'){
+                localStorage.setItem('user', JSON.stringify({
+                    userId: res.data.userId,
+                    userName: res.data.userName,
+                    storeName: res.data.storeName,
+                    cdRole: res.data.cdRole
+                }));
+
+                // Redux에도 바로 반영
+                dispatch({
+                    type: 'LOGIN',
+                    payload: {
+                        userInfo: {
+                            userId: res.data.userId,
+                            userName: res.data.userName,
+                            storeName: res.data.storeName,
+                            cdRole: res.data.cdRole
+                        }
+                    }
+                });
+
+                navigate(res.data.cdRole === 'CEO' ? '/ceo' : '/admin');
             }else{
                 alert('아이디 또는 비밀번호가 틀렸습니다.');
             }

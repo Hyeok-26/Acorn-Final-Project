@@ -123,6 +123,7 @@ export default function AdminNavbar() {
           href="#"
           onClick={e => {
             e.preventDefault();
+            localStorage.removeItem('user');
             navigate("/");
           }}
           className="flex items-center gap-3 text-white opacity-70 hover:opacity-100 transition-opacity"

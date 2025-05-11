@@ -1,10 +1,10 @@
 import OverviewSection from "@/components/OverviewSection";
 import SalesAnalyticsSection from "@/components/SalesAnalyticsSection";
 import PopularItemsSection from "@/components/PopularItemsSection";
+import { useEffect } from "react";
 
-function Ceo() {
-  // 예시 데이터
-  const overview = [
+ // 예시 데이터
+ const overview = [
     {
       title: "본사 발주수익",
       value: "$35,485",
@@ -52,6 +52,19 @@ function Ceo() {
     { name: "PYTHON", count: 2890, earned: 11200 },
     { name: "JAVASCRIPT", count: 2100, earned: 9800 },
   ];
+
+function Ceo() {
+
+    useEffect(() => {
+        // localStorage에서
+        const userStr = localStorage.getItem('user');
+        const user = userStr ? JSON.parse(userStr) : null;
+        console.log('localStorage user:', user);
+    
+        // Redux에서
+        // const user = useSelector((state) => state.userInfo);
+        // console.log('redux user:', user);
+      }, []);
 
   return (
     <div className="flex flex-col gap-6 p-8 bg-gray-50 min-h-screen">

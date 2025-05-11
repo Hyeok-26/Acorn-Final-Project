@@ -13,9 +13,10 @@ const initState: State = {
 
 interface State {
   userInfo: {
-    id: string;
-    name: string;
-    role: string;
+    userId: string;
+    userName: string;
+    storeName: string;
+    cdRole: string;
   } | null;
   isLogin: boolean;
 }
@@ -24,9 +25,10 @@ interface Action {
   type: 'LOGIN';
   payload: {
     userInfo: {
-      id: string;
-      name: string;
-      role: string;
+      userId: string;
+      userName: string;
+      storeName: string;
+      cdRole: string;
     }
   }
 }
@@ -43,6 +45,22 @@ const reducer: Reducer<State, Action> = (state = initState, action: Action) => {
   }
 }
 const store = createStore<State, Action>(reducer);
+
+const userStr = localStorage.getItem('user');
+if (userStr) {
+  const user = JSON.parse(userStr);
+  store.dispatch({
+    type: 'LOGIN',
+    payload: {
+      userInfo: {
+        userId: user.userId,
+        userName: user.userName,
+        storeName: user.storeName,
+        cdRole: user.cdRole
+      }
+    }
+  });
+}
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(

@@ -1,6 +1,7 @@
 import OverviewSection from "@/components/OverviewSection";
 import SalesAnalyticsSection from "@/components/SalesAnalyticsSection";
 import PopularItemsSection from "@/components/PopularItemsSection";
+import { useEffect } from "react";
 
 const overview = [
   {
@@ -51,6 +52,17 @@ const items = [
 ];
 
 function Admin() {
+
+  useEffect(() => {
+    // localStorage에서
+    const userStr = localStorage.getItem('user');
+    const user = userStr ? JSON.parse(userStr) : null;
+    console.log('localStorage user:', user);
+
+    // Redux에서
+    // const user = useSelector((state) => state.userInfo);
+    // console.log('redux user:', user);
+  }, []);
     
     return (
         <div className="flex flex-col gap-6 p-8 bg-gray-50 min-h-screen">
