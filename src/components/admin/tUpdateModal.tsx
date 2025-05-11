@@ -94,7 +94,22 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ teacher, show, onClose, onUpd
         const { name, value } = e.target;
         setForm(prevForm => ({ ...prevForm, [name]: value }));
     };
-    
+/*
+    // 숫자 형식 포맷
+    const formatNumber = (num: string): string => {
+        const onlyNum = num.replace(/[^0-9]/g, ''); // 숫자만 추출
+        return Number(onlyNum).toLocaleString();
+    };
+
+    const handleSalaryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const input = e.target.value;
+        const formatted = formatNumber(input);
+        setForm(prev => ({
+            ...prev,
+            salary: formatted
+        }));
+    };
+*/
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if(isInvalid === true || form.phone.length < 9) {
@@ -103,8 +118,8 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ teacher, show, onClose, onUpd
         }
         const formData = new FormData(e.currentTarget);
         const formObject = Object.fromEntries(formData.entries());
-        formObject.salary = salary.replace(/[^0-9]/g, '');
-        
+        //formObject.salary = salary.replace(/[^0-9]/g, '');
+
         api.patch(`/teachers/${teacherId}`, formObject)
             .then((res) => {
                 console.log(res.data);
@@ -117,18 +132,6 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ teacher, show, onClose, onUpd
                alert("강사 정보 수정 실패했습니다");
             }); 
     };
-
-  // 숫자 형식 포맷
-  const formatNumber = (num: string): string => {
-    const onlyNum = num.replace(/[^0-9]/g, ''); // 숫자만 추출
-    return Number(onlyNum).toLocaleString();
-  };
-
-  const handleSalaryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const input = e.target.value;
-    const formatted = formatNumber(input);
-    setSalary(formatted);
-  };
 
     useEffect(()=>{
         setForm({ ...teacher });        
@@ -173,7 +176,7 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ teacher, show, onClose, onUpd
 
                     <Form.Group className="mb-3">
                         <Form.Label>급여</Form.Label>
-                        <Form.Control name="salary" value={form.salary} onChange={handleSalaryChange} required />
+                        <Form.Control name="salary" value={form.salary} onChange={handleChange} required />
                     </Form.Group>
 
                 </Modal.Body>

@@ -54,7 +54,9 @@ function TeacherList() {
     const [params, setParams] = useSearchParams(); // URL 기준으로 상태 유지 및 변경
     const [pageArray, setPageArray] = useState<number[]>([]);
     
-    const userId = "2"; // userId 데이터 가져오기
+    // const userId = "2"; // userId 데이터 가져오기
+    const userStr = localStorage.getItem('user');
+    const user = userStr ? JSON.parse(userStr) : null;
     
     const state = params.get("state") || "WORK";
     const condition = params.get("condition") || "";
