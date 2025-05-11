@@ -14,8 +14,11 @@ import StudApplyStatModal from "@/components/admin/StudApplyStatModal";
 
 
 function Class(props) {
-    const userId = 2; //여기 반드시 수정
-    const storeName = "강남점";
+    //로그인한 userId가져오기
+    const userStr = localStorage.getItem('user');
+    const user = userStr ? JSON.parse(userStr) : null;
+    const userId = user.userId; 
+    const storeName = user.storeName;
 
     //전체 div에 적용될 css
     const centerStyle: React.CSSProperties ={

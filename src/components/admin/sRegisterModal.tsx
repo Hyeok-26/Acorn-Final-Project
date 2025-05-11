@@ -12,8 +12,12 @@ interface RegisterModalProps {
 const RegisterModal: React.FC<RegisterModalProps> = ({ show, onClose, onRegister }) => {
     const [phone, setPhone] = useState("");
     const [isInvalid, setIsInvalid] = useState<boolean | null>(null);
-    const userId = '2'; // userId 데이터 불러오기
-    const storeName = '스토어1'; // storeName 데이터 불러오기
+    // const userId = '2'; // userId 데이터 불러오기
+    // const storeName = '스토어1'; // storeName 데이터 불러오기
+    const userStr = localStorage.getItem('user');
+    const user = userStr ? JSON.parse(userStr) : null;
+    const userId = user.userId; 
+    const storeName = user.storeName;
 
     // 전화번호 포맷 지정 
     const formatPhoneNumber = (value: string) => {
