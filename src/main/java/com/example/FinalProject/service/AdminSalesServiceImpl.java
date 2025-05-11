@@ -23,7 +23,7 @@ public class AdminSalesServiceImpl implements AdminSalesService {
 	final int PAGE_ROW_COUNT=10;
 	//하단 페이지를 몇개씩 표시할 것인지
 	final int PAGE_DISPLAY_COUNT=10;
-	
+	Integer userId;
 
 	@Autowired AdminSalesMapper salesmapper;
 	
@@ -99,7 +99,6 @@ public class AdminSalesServiceImpl implements AdminSalesService {
 
 	@Override
 	public List<JsAdminSalesStatDto> getSYears(String sYear, Integer userId) {
-		if(userId==null) userId=1;//임시로 하드코딩
 		// 연도 목록 가져오기
 	    List<JsAdminSalesStatDto> yearList = salesmapper.getSYear(userId); // sYear만 채워진 DTO 리스트
 	    return yearList;
@@ -109,7 +108,6 @@ public class AdminSalesServiceImpl implements AdminSalesService {
 
 	@Override
 	public List<JsAdminSalesStatDto> getSMonths(String sYear, Integer userId) {
-	    if (userId == null) userId = 1;  // 임시로 하드코딩
 	    Map<String, Object> search = new HashMap<>();
 	    search.put("userId", userId);
 	    search.put("sYear", sYear);
@@ -121,7 +119,6 @@ public class AdminSalesServiceImpl implements AdminSalesService {
 
 	@Override
 	public JsAdminSalesStatDto getYearlySalesStat(String sYear, Integer userId){
-		if(userId==null) userId=1;//임시로 하드코딩
 		//연도별로 과목별 연매출, 과목별 월별 매출들을 담은 dto
 		JsAdminSalesStatDto dto = new JsAdminSalesStatDto();
 	    List<JsAdminSalesStatDto> sYearList = this.getSYears(sYear, userId);
@@ -164,7 +161,6 @@ public class AdminSalesServiceImpl implements AdminSalesService {
 	
 	
 	public JsAdminSalesStatDto getSalesStatsByLecture(String sYear, String sMonth, Integer userId) {
-	    if (userId == null) userId = 1;//임시로 하드 코딩
 	    JsAdminSalesStatDto dto = new JsAdminSalesStatDto();
 	    List<JsAdminSalesStatDto> sYearList = salesmapper.getSYearList(userId);  // 연도 목록
 	    for(JsAdminSalesStatDto yearDto: sYearList) {
@@ -199,7 +195,6 @@ public class AdminSalesServiceImpl implements AdminSalesService {
 	
 	@Override
 	public List<JsAdminSalesStatDto> getAdminSalesStatByLectYearly(String sYear, Integer userId) {
-		 if (userId == null) userId = 1; // 예외처리 or 하드코딩
 		 Map<String, Object> paramMap = new HashMap<>();
 		 paramMap.put("sYear", sYear);
 		 paramMap.put("userId", userId);
@@ -209,7 +204,7 @@ public class AdminSalesServiceImpl implements AdminSalesService {
 
 	@Override
 	public List<JsAdminSalesStatDto> getAdminSalesStatByLectMonthly(String sYear, String sMonth, Integer userId) {
-	    if (userId == null) userId = 1;
+	   
 	    Map<String, Object> paramMap = new HashMap<>();
 	    paramMap.put("sYear", sYear);
 	    paramMap.put("sMonth", sMonth);
