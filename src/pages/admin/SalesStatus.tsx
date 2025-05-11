@@ -274,7 +274,7 @@ function SalesStatus(props) {
                 </div>
          
                 <div className="mb-3">
-                    <div style={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
+                    <div style={{ width: '100%', minWidth: '800px', margin: '0 auto' }}>
                         <Form className="d-flex align-items-end" style={{ paddingLeft: '70px' }} >
                             <Form.Select value={selected} onChange={handleSelect} size="sm" aria-label="yearorlecture" className='me-2 w-auto' >
                                 <option value="salesByYear">연별 매출</option>
@@ -292,7 +292,7 @@ function SalesStatus(props) {
                     <div className="d-flex flex-wrap gap-2 justify-content-center">
                     {
                         selected==="salesByYear"?
-                        <LineChart width={1000} height={400} data={salesData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                        <LineChart width={1000} height={600} data={salesData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="sMonth" />
                             <Tooltip formatter={(value) => {

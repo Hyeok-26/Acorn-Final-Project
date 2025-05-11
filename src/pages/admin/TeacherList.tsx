@@ -221,7 +221,7 @@ function TeacherList() {
                 
             </div>
             <Table>
-                <thead className="table-dark">
+                <thead className="table-success">
                     <tr>
                         <th>번호</th>
                         <th>지점명</th>
