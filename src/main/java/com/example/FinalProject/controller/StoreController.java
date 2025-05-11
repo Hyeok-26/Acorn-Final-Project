@@ -19,14 +19,13 @@ import com.example.FinalProject.dto.HCStoreListDto;
 import com.example.FinalProject.service.StoreService;
 
 @RestController
-@RequestMapping("/stores")
 public class StoreController {
 
     @Autowired
     private StoreService service;
 
     //지점 리스트 조회 (검색 + 페이징)
-    @GetMapping
+    @GetMapping("/store")
     public HCStoreListDto list(
             @RequestParam(defaultValue = "1") int pageNum,
             @ModelAttribute HCStoreDto search
@@ -35,19 +34,19 @@ public class StoreController {
     }
 
     // 지점 상세 조회
-    @GetMapping("/{userId}")
+    @GetMapping("/store/{userId}")
     public HCStoreDto getDetail(@PathVariable int userId) {
         return service.getStoreDetail(userId);
     }
 
     // 지점 등록
-    @PostMapping
+    @PostMapping("/store")
     public void create(@RequestBody HCStoreDto dto) {
         service.insertStore(dto);
     }
 
     // 지점 정보 수정
-    @PutMapping("/{userId}")
+    @PutMapping("/store/{userId}")
     public void update(
             @PathVariable int userId,
             @RequestBody HCStoreDto dto
@@ -57,7 +56,7 @@ public class StoreController {
     }
 
     // 지점 삭제 (관리자 비밀번호 검증 포함)
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/store/{userId}")
     public void delete(
             @PathVariable int userId,
             @RequestParam String adminPwd
