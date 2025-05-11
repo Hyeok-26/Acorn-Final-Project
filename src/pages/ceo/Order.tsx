@@ -186,11 +186,51 @@ function CeoOrder() {
                                 <td>{item.storeName}</td>
                                 <td>{item.orderId}</td>
                                 <td>{item.ordDate}</td>
-                                <td>{item.cdStatus}</td>
-                                <td>{item.totalPrice}</td>
+                                <td>
+                                    <Button
+                                        variant={
+                                            item.cdStatus === 'PEN' ? 'warning'
+                                                : item.cdStatus === 'APP' ? 'success'
+                                                    : item.cdStatus === 'REJ' ? 'danger'
+                                                        : 'secondary' // 예외 처리 
+                                        }
+                                        style={{
+                                            fontSize: '15px',
+                                            fontWeight: 'bold',
+                                            backgroundColor:
+                                                item.cdStatus === 'PEN' ? '#FFA500' :    // 진한 주황 (PEN)
+                                                    item.cdStatus === 'APP' ? '#28a745' :    // 진한 초록 (APP)
+                                                        item.cdStatus === 'REJ' ? '#dc3545' :    // 진한 빨강 (REJ)
+                                                            '#6c757d',                                    // 예외: 회색
+                                            color: 'white'
+                                        }}
+                                        size="sm"
+                                        disabled
+
+                                    > {
+                                            item.cdStatus === 'PEN' ? '대기중' :
+                                                item.cdStatus === 'APP' ? '승인' :
+                                                    item.cdStatus === 'REJ' ? '반려' :
+                                                        '미확인'
+                                        }</Button>
+                                </td>
+                                <td>{item.totalPrice.toLocaleString()}</td>
                                 <td>{item.orderName}</td>
                                 <td>
-                                    <Link to={`/ceo/orders/${item.orderId}/detail`}>상세보기</Link>
+                                    <Button
+                                        as={Link}
+                                        to={`/ceo/orders/${item.orderId}/detail`}
+                                        variant="outline-dark"
+                                        size="sm"
+                                        style={{
+                                            fontWeight: 'bold',
+                                            fontSize: '14px',
+                                            padding: '4px 12px',
+                                            borderRadius: '6px',
+                                            textDecoration: 'none' // 밑줄 제거
+                                        }}
+                                    >상세보기</Button>
+                                    {/* <Link to={`/ceo/orders/${item.orderId}/detail`}>상세보기</Link> */}
                                 </td>
                             </tr>
                         ))

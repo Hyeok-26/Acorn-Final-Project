@@ -160,7 +160,7 @@ function OrderDetail() {
                 message="선택하신 주문을 반려하시겠습니까?"
                 onCancel={() => setRejectModalShow(false)}
                 onYes={() => {
-                    
+
                     api.patch("/orders/rej", {
                         orderId
                     })
@@ -251,7 +251,7 @@ function OrderDetail() {
                                         <Col md={3}>
                                             <Form.Group controlId="totalAmount">
                                                 <Form.Label className="fw-bold">총금액</Form.Label>
-                                                <Form.Control className="fw-bold" value={orderInfo.totalPrice} readOnly />
+                                                <Form.Control className="fw-bold" value={orderInfo.totalPrice.toLocaleString()} readOnly />
                                             </Form.Group>
                                         </Col>
                                     </Row>
@@ -279,7 +279,32 @@ function OrderDetail() {
                             {/* 상태 */}
                             <Col md={3} className="d-flex align-items-center">
                                 <span className="me-2 fw-bold">현재 주문 상태 :</span>
-                                <Button variant="warning" size="sm" disabled>{orderInfo.cdStatus}</Button>
+                                <Button
+                                    variant={
+                                        orderInfo.cdStatus === 'PEN' ? 'warning'
+                                        : orderInfo.cdStatus === 'APP' ? 'success'
+                                        : orderInfo.cdStatus === 'REJ' ? 'danger'
+                                        : 'secondary' // 예외 처리 
+                                    }
+                                    style={{
+                                        fontSize: '15px',
+                                        fontWeight: 'bold',
+                                        backgroundColor:
+                                        orderInfo.cdStatus === 'PEN' ? '#FFA500' :    // 진한 주황 (PEN)
+                                        orderInfo.cdStatus === 'APP' ? '#28a745' :    // 진한 초록 (APP)
+                                        orderInfo.cdStatus === 'REJ' ? '#dc3545' :    // 진한 빨강 (REJ)
+                                        '#6c757d',                                    // 예외: 회색
+                                         color: 'white'
+                                    }}
+                                    size="sm"
+                                    disabled
+
+                                >{
+                                            orderInfo.cdStatus === 'PEN' ? '대기중' :
+                                                orderInfo.cdStatus === 'APP' ? '승인' :
+                                                    orderInfo.cdStatus === 'REJ' ? '반려' :
+                                                        '미확인'
+                                        }</Button>
                             </Col>
                             {/* 검색 */}
                             <Col md={5}>
@@ -288,8 +313,8 @@ function OrderDetail() {
                                         placeholder="상품명 입력..."
                                         value={searchText}
                                         onChange={(e) => setSearchText(e.target.value)}
-                                        onKeyDown={(e)=>{
-                                            if(e.key === "Enter"){
+                                        onKeyDown={(e) => {
+                                            if (e.key === "Enter") {
                                                 e.preventDefault();
                                                 handleSearch();
                                             }
@@ -331,9 +356,9 @@ function OrderDetail() {
                                                         <tr key={uuid()}>
                                                             <td>{item.productId}</td>
                                                             <td>{item.productName}</td>
-                                                            <td>{item.price}</td>
+                                                            <td>{item.price.toLocaleString()}</td>
                                                             <td>{item.quantity}</td>
-                                                            <td>{item.cost}</td>
+                                                            <td>{item.cost.toLocaleString()}</td>
                                                         </tr>
                                                     ))
                                                 }
