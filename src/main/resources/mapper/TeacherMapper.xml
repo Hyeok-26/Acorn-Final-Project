@@ -5,13 +5,13 @@
 	<insert id="insert" parameterType="TeacherDto">
 		INSERT INTO tb_teacher
 		(teacher_id, name, phone, user_id, salary, cd_status, birth)
-		VALUES(seq_teacher_id.NEXTVAL, #{name}, #{phone}, #{userId}, #{salary}, #{cdStatus}, TO_DATE(#{birth}, 'YYYY-MM-DD'))
+		VALUES(seq_teacher_id.NEXTVAL, #{name}, #{phone}, #{userId}, TO_NUMBER(#{salary}), #{cdStatus}, TO_DATE(#{birth}, 'YYYY-MM-DD'))
 	</insert>	
 	
 	<!-- 강사 정보 수정 -->
 	<update id="update" parameterType="TeacherDto">
 		UPDATE tb_teacher
-		SET name=#{name}, phone=#{phone}, salary=#{salary}, cd_status=#{cdStatus}, TO_DATE(#{birth}, 'YYYY-MM-DD')
+		SET name=#{name}, phone=#{phone}, salary=TO_NUMBER(#{salary}), cd_status=#{cdStatus}, birth=TO_DATE(#{birth}, 'YYYY-MM-DD')
 		WHERE teacher_id=#{teacherId}
 	</update>
 
@@ -52,7 +52,7 @@
 				    t.name,
 				    TO_CHAR(t.birth, 'YYYY-MM-DD') AS birth,
 				    t.phone,
-				    t.salary,
+				    TO_NUMBER(t.salary) AS salary,
 				    t.user_id,
 				    u.store_name,
 				    t.cd_status,
