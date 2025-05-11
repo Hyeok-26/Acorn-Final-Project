@@ -221,12 +221,12 @@ public class ClassServiceImpl implements ClassService {
 	    @Override
 	    public void addStudentsToClass(int classId, List<Integer> studentIds) {
 	        if (studentIds == null || studentIds.isEmpty()) return ;
-	        classMapper.insertStudentClass(studentIds, classId);
+	        classMapper.insertStudentClass(classId, studentIds);
 	    }
 
 	    @Override
-	    public void removeStudentFromClass(int studentId, int classId) {
-	        classMapper.deleteStudentClass(studentId, classId);
+	    public void removeStudentFromClass(int classId, int studentId) {
+	        classMapper.deleteStudentClass(classId, studentId);
 	    }
 
 	

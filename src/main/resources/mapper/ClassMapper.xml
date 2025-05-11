@@ -213,7 +213,7 @@
     FROM student_class sc
     JOIN class c ON sc.class_id = c.class_id
     WHERE sc.student_id = #{studentId}
-    AND sc.class_id != #{targetClassId}
+    AND sc.class_id != #{classId}
 </select>
 
 <insert id="insertStudentClass" parameterType="map">

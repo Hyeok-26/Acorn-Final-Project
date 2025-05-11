@@ -38,7 +38,7 @@ public class SecurityConfig {
 	 */
 	@Bean //메소드에서 리턴되는 SecurityFilterChain 을 bean 으로 만들어준다.
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
-		String[] whiteList= {"/**","/auth","/upload/**","/editor_upload","/gemini/**", "/sales/**"};
+		String[] whiteList= {"/**","/auth","/upload/**","/editor_upload","/gemini/**", "/sales/**", "/students/**", "/teachers/**", "/class/**"};
 		 
 		httpSecurity
 		.headers(header->

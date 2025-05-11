@@ -24,5 +24,5 @@ public interface ClassService {
 	
 	List<SelectableStudentDto> checkStudentsWithConflict(int classId, int userId); // 중복 체크 가능한 학생 반환
 	public void addStudentsToClass(int classId, List<Integer> studentIds); // 학생 수업 추가
-	public void removeStudentFromClass(int studentId, int classId); // 학생 수업 삭제
+	public void removeStudentFromClass(int classId, int studentId); // 학생 수업 삭제
 }

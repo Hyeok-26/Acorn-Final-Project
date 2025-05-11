@@ -137,7 +137,7 @@ public class ClassController {
 	        return ResponseEntity.ok("학생들이 수업에 성공적으로 추가되었습니다.");
 	    }
 
-	    @DeleteMapping("/class/{classId}/student")
+	    @DeleteMapping("/class/{classId}/student/{studentId}")
 	    public ResponseEntity<Void> removeStudentFromClass(
 	       @PathVariable int classId,
 	        @PathVariable int studentId) {
