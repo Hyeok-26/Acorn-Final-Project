@@ -102,7 +102,7 @@ public class ClassController {
 	// 해당 지점 수업 전체 리스트(페이징, 검색 조건 처리 없이) 가져오기
 	// class/calendar?userId=1
 	@GetMapping("/class/calendar")
-	public List<HjClassDto> getClassList(@RequestParam int userId) {
+	public List<HjClassDto> getClassList(@RequestParam int userId){ 
 		
 		return service.getAllClassList(userId);
 	}
@@ -131,10 +131,11 @@ public class ClassController {
 	}
 
 	 @PostMapping("/class/{classId}/students")
-	    public ResponseEntity<String> addStudentsToClass(@PathVariable int classId,
+	    public ResponseEntity<Void> addStudentsToClass(@PathVariable int classId,
 	        @RequestBody List<Integer> studentIds) {
+		 	System.out.println(studentIds);
 	        service.addStudentsToClass(classId, studentIds);
-	        return ResponseEntity.ok("학생들이 수업에 성공적으로 추가되었습니다.");
+	        return ResponseEntity.ok().build();
 	    }
 
 	    @DeleteMapping("/class/{classId}/student/{studentId}")
