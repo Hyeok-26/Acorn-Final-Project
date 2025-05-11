@@ -7,6 +7,7 @@ import { InventoryItemList } from '../../types/InventoryType';
 import PrdList from '../../components/admin/PrdList';
 import { OrderItem } from '../../types/OrderType';
 import { useParams } from 'react-router-dom';
+import AdminNavbar from '@/components/AdminNavBar';
 
 function Order() {
     // 경로 파라미터의 :id 값 추출 (params.id)
@@ -42,7 +43,7 @@ function Order() {
             })
             .catch(err => console.log(err));
     }
-    
+
     // 컴포넌트 활성화 시
     useEffect(() => {
         // 재고 현황 불러오기
@@ -50,7 +51,8 @@ function Order() {
     }, []);
 
     return (
-        <>
+        <><div className="flex">
+            <AdminNavbar></AdminNavbar>
             {/* <pre>{JSON.stringify(orderItem,null,4)}</pre> */}
             <Container fluid className="p-4" >
                 <Row>
@@ -58,14 +60,13 @@ function Order() {
                         <div>
                             <PrdList
                                 setOrderItem={setOrderItem}
-                                clickCnt = {clickCnt}
+                                clickCnt={clickCnt}
                                 setClickCnt={setClickCnt}
                             ></PrdList>
                         </div>
                         <div className='pt-3'>
                             <InvList
                                 setPId={null}
-                                refreshDetail={null}
                                 filterType={filterType}
                                 setFilterType={setFilterType}
                                 keyword={keyword}
@@ -81,13 +82,14 @@ function Order() {
                         <div>
                             <OrdDetail
                                 orderItem={orderItem}
-                                clickCnt = {clickCnt}
-                                orderId = {params.id}
+                                clickCnt={clickCnt}
+                                orderId={params.id}
                             ></OrdDetail>
                         </div>
                     </Col>
                 </Row>
             </Container>
+        </div>
         </>
     );
 }

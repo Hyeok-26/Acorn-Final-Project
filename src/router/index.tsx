@@ -23,7 +23,6 @@ const routes = [
     {path: '/admin/order-list', element: <OrderList/>},
     {path: '/admin/order', element: <Order/>},
     {path: '/admin/:id/order', element: <Order/>},
-    //{path: '/admin/:id/order', element: <OrderOld/>}
     
     {path: '/code', element:<Code/>},
     {path: '/product', element:<Product/>},

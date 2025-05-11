@@ -67,15 +67,39 @@ function OrdDetail({
                 ...orderDetail,
                 infoDto: {
                     ...orderDetail.infoDto,
-                    tmp: true
+                    tmp: true,
+                    cdStatus: 'WAIT'
                 }
             };
-            console.log(newOrderDetail); // 여기에는 tmp: true
-            api.post("/ord/add", newOrderDetail)
-                .then(res => {
-                    console.log(res.data);
+            // console.log(newOrderDetail);
+            
+            // 이미 있던 발주서를 임시 저장 하는 경우
+            if(newOrderDetail.infoDto.cdStatus === 'WAIT'
+            ){
+                api.patch("/ord/edit", newOrderDetail)
+                .then(() => {
+                    alert("임시저장 성공");
+                    // 발주 현황 목록 화면으로 돌아가기
+                    navigate("/admin/order-list");
                 })
-                .catch(err => console.log(err));
+                .catch(err =>{ 
+                    console.log(err);
+                    alert("임시저장 실패");
+                });
+            } else {
+                api.post("/ord/add", newOrderDetail)
+                .then(() => {
+                    alert("임시저장 성공");
+                    // 발주 현황 목록 화면으로 돌아가기
+                    navigate("/admin/order-list");
+                })
+                .catch(err =>{ 
+                    console.log(err);
+                    alert("임시저장 실패");
+                });
+            }
+
+            
         }
     }
 
@@ -104,14 +128,14 @@ function OrdDetail({
     const requestBtnHandle = () => {
         // 빈칸 확인
         if (orderDetail.infoDto.orderName === '') {
-            alert("발주자 이름을 입력하세요.");
+            alert("❗발주자 이름을 입력하세요.");
         } else if (orderDetail.itemList.length < 1) {
-            alert("발주 품목을 추가하세요.");
+            alert("❗발주 품목을 추가하세요.");
         } else {
 
             const hasInvalidItem = orderDetail.itemList.some((item, index) => {
-                if (item.quantity === 0 || item.quantity === undefined) {
-                    alert(`❗주문 품목의 수량을 입력해주세요. \n수량이 0인 품목: ${item.productName} (NO:${index + 1})`);
+                if (item.quantity < 1 || item.quantity === undefined) {
+                    alert(`❗주문 품목의 올바른 수량을 입력해주세요. \n- 품목: ${item.productName} (NO:${index + 1})`);
                     return true;
                 }
                 return false;
@@ -137,22 +161,26 @@ function OrdDetail({
                         }
                     });
                     api.patch("/ord/edit", orderDetail)
-                        .then(res => {
-                            console.log(res.data);
-                            alert("발주 요청이 성공되었습니다.");
+                        .then(() => {
+                            alert("발주 요청 성공");
                             navigate("/admin/order-list")
                         })
-                        .catch(err => console.log(err));
+                        .catch(err => {
+                            console.log(err);
+                            alert("발주 요청 실패");
+                        });
                     // 새발주 경우
                 } else {
                     api.post("/ord/add", orderDetail)
-                        .then(res => {
-                            console.log(res.data);
-                            alert("발주 요청이 성공되었습니다.");
+                        .then(() => {
+                            alert("발주 요청 성공");
                             // 발주 현황 목록 화면으로 돌아가기
                             navigate("/admin/order-list")
                         })
-                        .catch(err => console.log(err));
+                        .catch(err => {
+                            console.log(err);
+                            alert("발주 요청 실패");
+                        });
                 }
             }
         }
@@ -161,22 +189,19 @@ function OrdDetail({
     // 품목의 수량 입력 핸들러
     const handleQuantityChange = (index: number, value: number) => {
         const updated = [...orderDetail.itemList];
-        console.log(updated);
-        console.log("index 번호:", index)
+        // console.log(updated);
+        console.log("index 번호:", index, value)
         // 해당 품목의 수량 반영
         updated[index].quantity = value;
         // 수량과 금액 곱한 값 반영
         updated[index].calPrice = updated[index].price * value;
-        console.log(updated);
-        setOrderDetail({ ...orderDetail, itemList: updated });
-
-        // 전체 금액 계산
-        setOrderDetail({
-            ...orderDetail, infoDto: {
+        setOrderDetail({ 
+            itemList: updated,
+            infoDto: {
                 ...orderDetail.infoDto,
                 totalPrice: updated.reduce((sum, item) => sum + item.quantity * item.price, 0)
             }
-        });
+         });
     };
 
     // 품목 삭제 핸들러
@@ -190,13 +215,13 @@ function OrdDetail({
         // console.log("발주서 상태:" + orderDetail.infoDto.cdStatus)
         // 최초 클릭 경우 배열 초기화 후 품목 추가
         if (clickCnt === 1 && orderDetail.infoDto.cdStatus === '') {
-            console.log("최초 추가 버튼", orderItem)
+            console.log("최초 추가 버튼", clickCnt, orderItem)
             setOrderDetail({ ...orderDetail, itemList: [orderItem] });
             // 그 외의 경우 기존 배열에 품목 추가
         } else if ((clickCnt > 1)
             || (clickCnt === 1 && orderDetail.infoDto.cdStatus === 'PEN')
         ) {
-            console.log("이후 추가 버튼", orderItem)
+            console.log("이후 추가 버튼", clickCnt, orderItem)
             setOrderDetail({ ...orderDetail, itemList: [...orderDetail.itemList, orderItem] });
         }
     }, [orderItem]);
@@ -276,7 +301,7 @@ function OrdDetail({
                                     </tr>
                                     :
                                     orderDetail.itemList.map((item, i) => (
-                                        <tr key={uuid()}>
+                                        <tr key={i}>
                                             <td>{i + 1}</td>
                                             <td>{item.productId}</td>
                                             <td>{item.productName}</td>
@@ -284,9 +309,12 @@ function OrdDetail({
                                             <td>
                                                 <Form.Control
                                                     type="number"
-                                                    defaultValue={0}
+                                                    value={item.quantity ?? 0}
                                                     readOnly={orderDetail.infoDto.cdStatus === 'APP' || orderDetail.infoDto.cdStatus === 'APR'}
-                                                    onChange={(e) => handleQuantityChange(i, Number(e.target.value))}
+                                                    onChange={(e) => {
+                                                        const val = Number(e.target.value);
+                                                        if (!isNaN(val)) handleQuantityChange(i, val);
+                                                    }}
                                                 />
                                             </td>
                                             <td>{isNaN(item.price * item.quantity) ? 0 : item.price * item.quantity}</td>
