@@ -14,4 +14,5 @@ public interface TeacherService {
 	public List<TeacherClassHistoryDto> getAllClasses(int teacherId);
 	public TeacherListDto getResult(int pageNum, TeacherSearchPageDto dto);
 	public List<HjTeacherDto> getClassteacher(int userId);
+	public boolean isPhoneInUse(String phone);
 }

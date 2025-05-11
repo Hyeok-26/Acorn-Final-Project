@@ -3,6 +3,7 @@ package com.example.FinalProject.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -79,4 +80,13 @@ public class TeacherController {
 		return teacherService.getClassteacher(userId);
 	};	
 	
+	/*
+	ResponseEntity<T>는 Spring MVC에서 HTTP 응답(Response)을 직접 구성하여 API 응답을 세밀하게 제어 가능
+	*/
+	// teachers/phone-check?phone=010-1111-1111
+	@GetMapping("/teachers/phone-check")
+	    public ResponseEntity<Boolean> checkPhoneValidation(@RequestParam String phone) {
+	        boolean isInvalid = teacherService.isPhoneInUse(phone);
+	        return ResponseEntity.ok(isInvalid); // true면 중복, false면 사용 가능
+	    }
 }

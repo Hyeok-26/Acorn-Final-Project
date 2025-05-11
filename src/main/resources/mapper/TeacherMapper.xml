@@ -121,5 +121,10 @@
 		select * from tb_teacher WHERE USER_ID=#{userId} AND CD_STATUS ='WORK'
 	</select>
 	
+	<select id="getPhoneCount" resultType="int">
+		SELECT COUNT(*) 
+		FROM tb_teacher 
+		WHERE phone = #{phone}
+	</select>
 	
 </mapper>

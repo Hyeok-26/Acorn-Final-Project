@@ -96,5 +96,9 @@ public class TeacherServiceImpl implements TeacherService{
 		return teacherMapper.getClassteacher(userId);
 	}
 
-
+  	@Override
+  	public boolean isPhoneInUse(String phone){
+  		return teacherMapper.getPhoneCount(phone) > 0;
+  
+  	}
 }
