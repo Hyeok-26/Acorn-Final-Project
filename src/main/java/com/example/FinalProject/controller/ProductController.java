@@ -42,6 +42,7 @@ public class ProductController {
 	@PatchMapping("/product/{productId}")
 	public void update(@PathVariable int productId,
 		    @RequestBody HCProductDto dto) {
+		dto.setProductId(productId);
 	    service.updateProduct(dto);
 	}
 
