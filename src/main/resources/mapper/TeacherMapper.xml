@@ -52,6 +52,7 @@
 				    t.name,
 				    TO_CHAR(t.birth, 'YYYY-MM-DD') AS birth,
 				    t.phone,
+				    t.salary,
 				    t.user_id,
 				    u.store_name,
 				    t.cd_status,
@@ -83,7 +84,7 @@
 					</when>
 				</choose>   
 				GROUP BY
-				  	t.teacher_id, t.name, t.birth, t.phone, t.user_id, u.store_name, t.cd_status, b.bname
+				  	t.teacher_id, t.name, t.birth, t.phone, t.salary, t.user_id, u.store_name, t.cd_status, b.bname
 				ORDER BY t.name ASC) result1) 
 		WHERE rnum BETWEEN #{page.startRowNum} AND #{page.endRowNum}
 	</select>

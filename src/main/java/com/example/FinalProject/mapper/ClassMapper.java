@@ -31,9 +31,7 @@ public interface ClassMapper {
 	List<StudentDto> getAllStudentList(int userId);
     List<ConflictClassDto> getStudentSchedules(@Param("studentId") int studentId,
             @Param("classId") int classId);
-    void insertStudentClass(@Param("studentIds") List<Integer> studentIds,
-            @Param("classId") int classId);
-    void deleteStudentClass(@Param("studentId") int studentId,
-         @Param("classId") int classId);
+    void insertStudentClass(@Param("classId") int classId, @Param("studentIds") List<Integer> studentIds);
+    void deleteStudentClass(@Param("classId") int classId, @Param("studentId") int studentId);
 	
 }
