@@ -15,13 +15,44 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ show, onClose, onRegister
     const userId = '2'; // userId 데이터 불러오기
     const storeName = '스토어1'; // storeName 데이터 불러오기
 
-  // 전화번호 포맷 지정
-  const formatPhoneNumber = (value: string) => {
-    const numbersOnly = value.replace(/\D/g, ''); // 숫자만 
-    if (numbersOnly.length < 4) return numbersOnly;
-    if (numbersOnly.length < 8) return `${numbersOnly.slice(0, 3)}-${numbersOnly.slice(3)}`;
-    return `${numbersOnly.slice(0, 3)}-${numbersOnly.slice(3, 7)}-${numbersOnly.slice(7, 11)}`; // 자동 하이픈 삽입
-  };
+    // 전화번호 포맷 지정 
+    const formatPhoneNumber = (value: string) => {
+        /*
+        const numbersOnly = value.replace(/\D/g, ''); // 숫자만 
+        if (numbersOnly.length < 4) return numbersOnly;
+        if (numbersOnly.length < 8) return `${numbersOnly.slice(0, 3)}-${numbersOnly.slice(3)}`;
+        return `${numbersOnly.slice(0, 3)}-${numbersOnly.slice(3, 7)}-${numbersOnly.slice(7, 11)}`; // 자동 하이픈 삽입
+        */
+        let formatNum = '';
+        const onlyNum = value.replace(/\D/g, ''); // 숫자만 
+    
+        if(onlyNum.length >= 11){    
+            //formatNum = value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+            if (onlyNum.length < 4) return onlyNum;
+            if (onlyNum.length < 8) return `${onlyNum.slice(0, 3)}-${onlyNum.slice(3)}`;
+            formatNum = `${onlyNum.slice(0, 3)}-${onlyNum.slice(3, 7)}-${onlyNum.slice(7, 11)}`; // 자동 하이픈 삽입
+        }else if(onlyNum.length==8){
+            //formatNum = value.replace(/(\d{4})(\d{4})/, '$1-$2');
+            if (onlyNum.length < 5) return onlyNum;
+            formatNum = `${onlyNum.slice(0, 4)}-${onlyNum.slice(4, 8)}`;
+        }else{    
+            if(onlyNum.indexOf('02')==0){    
+                //formatNum = value.replace(/(\d{2})(\d{4})(\d{4})/, '$1-$2-$3');
+                if (onlyNum.length < 3) return onlyNum;
+                if (onlyNum.length < 7) return `${onlyNum.slice(0, 2)}-${onlyNum.slice(2)}`;
+                formatNum = `${onlyNum.slice(0, 2)}-${onlyNum.slice(2, 6)}-${onlyNum.slice(6, 10)}`;
+            }else{        
+                //formatNum = value.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+                if (onlyNum.length < 4) return onlyNum;
+                if (onlyNum.length < 7) return `${onlyNum.slice(0, 3)}-${onlyNum.slice(3)}`;
+                formatNum = `${onlyNum.slice(0, 3)}-${onlyNum.slice(3, 6)}-${onlyNum.slice(6, 10)}`;
+            }
+    
+        }
+
+        return formatNum;   
+        
+    };
 
   // 전화번호 변경 핸들러
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,25 +66,25 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ show, onClose, onRegister
   useEffect(() => {
     const timeout = setTimeout(() => {
       
-      if (phone.length >= 12) {
+      if (phone.length > 8) {
         api.get(`/students/phone-check?phone=${phone}`)
           .then((res) => setIsInvalid(res.data)) // true or false
           .catch((err) => console.error("중복 체크 오류:", err));
       }
-    }, 1000); // 1초 후 체크
+    }, 500); // 0.5초 후 체크
 
     return () => clearTimeout(timeout); // 초기화
   }, [phone]);
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const formData = new FormData(e.currentTarget);
-        const formObject = Object.fromEntries(formData.entries());
-        formObject.userId = userId;
-
-        if(isInvalid === true || phone.length < 12) {
+        if(isInvalid === true || phone.length < 9) {
             alert("전화번호를 확인해 주십시오");
             return;
         }
+        const formData = new FormData(e.currentTarget);
+        const formObject = Object.fromEntries(formData.entries());
+        formObject.userId = userId;
         
         api.post('/students', formObject)
             .then(() => {
@@ -63,7 +94,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ show, onClose, onRegister
             })
             .catch(err => {
                 console.log(err);
-                alert("등록 중 오류가 발생했습니다.");
+                alert("학생 정보 등록 실패했습니다.");
             });
     };
 
