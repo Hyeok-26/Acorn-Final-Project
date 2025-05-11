@@ -85,7 +85,7 @@
            SET user_name  = #{userName},
                phone      = #{phone},
                pwd        = #{pwd},
-               pwd_status = 0    <!-- 비밀번호 수정 상태 -->
+               pwd_status = 1    
          WHERE user_id = #{userId}
     </update>
 
