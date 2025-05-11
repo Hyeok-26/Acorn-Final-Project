@@ -103,7 +103,8 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ teacher, show, onClose, onUpd
         }
         const formData = new FormData(e.currentTarget);
         const formObject = Object.fromEntries(formData.entries());
-
+        formObject.salary = salary.replace(/[^0-9]/g, '');
+        
         api.patch(`/teachers/${teacherId}`, formObject)
             .then((res) => {
                 console.log(res.data);

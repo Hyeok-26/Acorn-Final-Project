@@ -28,10 +28,10 @@ const HistoryModal: React.FC<HistoryModalProps> = ({ student, show, onClose }) =
     const studentId = student.studentId;
 
     useEffect(() => {
-            api.get(`/students/class?studentId=${studentId}`)
+            api.get(`/students/class?studentId=${student.studentId}`)
                 .then(res => {
-                    console.log(res.data)
-                    setHistories(res.data)
+                    console.log(res.data);
+                    setHistories(res.data);
                 })
                 .catch(err => console.log(err));
     }, [studentId]);
