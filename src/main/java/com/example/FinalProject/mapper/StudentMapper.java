@@ -15,4 +15,5 @@ public interface StudentMapper {
 	int update(StudentDto dto); // 학생 정보 수정 메소드
 	List<StudentDto> getResult(StudentSearchPageDto dto); // 검색조건에 따른 학생 목록 가져오는 메소드
 	int getCount(StudentSearchPageDto dto); // 학생 수 리턴하는 메소드
+	int getPhoneCount(String phone); // 전화번호 중복 체크
 }

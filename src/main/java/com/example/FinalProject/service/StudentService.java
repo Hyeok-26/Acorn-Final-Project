@@ -12,4 +12,5 @@ public interface StudentService {
 	public int updateStudent(StudentDto dto);
 	public List<StudentClassHistoryDto> getAllClasses(int studentId);
 	public StudentListDto getResult(int pageNum, StudentSearchPageDto dto);
+	public boolean isPhoneInUse(String phone);
 }

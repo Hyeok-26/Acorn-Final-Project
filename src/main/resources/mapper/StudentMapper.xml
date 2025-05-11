@@ -24,18 +24,18 @@
 	    c.class_name,
 	    c.teacher_id,
 	    t.name AS teacherName,
-	    c.start_date,
-	    c.end_date,
+		TO_CHAR(c.start_date, 'YYYY-MM-DD') AS start_date,
+	  	TO_CHAR(c.end_date, 'YYYY-MM-DD') AS end_date,
 	    c.start_time,
 	    c.end_time,
 	    c.weekday
 	  FROM tb_student s
 	  LEFT JOIN tb_student_class sc ON s.student_id = sc.student_id
-	  LEFT JOIN tb_class c ON sc.class_id = c.class_id
+	  LEFT JOIN tb_class c ON sc.class_id = c.class_id AND c.cd_status IN ('START','END') <!-- 진행중, 종강 -->
 	  LEFT JOIN tb_teacher t ON c.teacher_id = t.teacher_id
 	  WHERE 
 	  	s.student_id = #{studentId}
-	  	AND c.cd_status IN ('START','END') <!-- 진행중, 종강 -->
+	  	
 	  ORDER BY c.end_date, c.end_time DESC
 	</select>
 	<!-- LEFT JOIN 하게 되면 sc.classid 가 NULL 인 경우 classname 은 NULL -->
@@ -75,10 +75,10 @@
 				</choose>
 				<choose>
 					<when test="search.condition == 'STUDENT'">
-						AND s.name LIKE '%' || #{search.keyword} || '%'
+						AND LOWER(s.name) LIKE '%' || LOWER(#{search.keyword}) || '%'
 					</when>
 					<when test="search.condition == 'CLASS'">
-						AND c.class_name LIKE '%' || #{search.keyword} || '%'
+						AND LOWER(c.class_name) LIKE '%' || LOWER(#{search.keyword}) || '%'
 					</when>
 				</choose>
 				GROUP BY s.student_id, s.name, s.phone, s.user_id, u.store_name, s.cd_status, b.bname
@@ -107,11 +107,17 @@
 			</choose>
 			<choose>
 				<when test="search.condition == 'STUDENT'">
-					AND s.name LIKE '%' || #{search.keyword} || '%'
+					AND LOWER(s.name) LIKE '%' || LOWER(#{search.keyword}) || '%'
 				</when>
 				<when test="search.condition == 'CLASS'">
-					AND c.class_name LIKE '%' || #{search.keyword} || '%'
+					AND LOWER(c.class_name) LIKE '%' || LOWER(#{search.keyword}) || '%'
 				</when>
 			</choose>
+	</select>
+	
+	<select id="getPhoneCount" resultType="int">
+		SELECT COUNT(*) 
+		FROM tb_student 
+		WHERE phone = #{phone}
 	</select>
 </mapper>

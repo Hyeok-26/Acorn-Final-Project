@@ -91,7 +91,13 @@ public class StudentServiceImpl implements StudentService{
 		return resultDto;
 		
 	}
-
+	
+  	@Override
+  	public boolean isPhoneInUse(String phone){
+  		return studentMapper.getPhoneCount(phone) > 0;
+  
+  	}
+		
 	
 
 
