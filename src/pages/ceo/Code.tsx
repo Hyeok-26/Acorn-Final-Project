@@ -201,7 +201,7 @@ function Code() {
                       <td>{item.bcode}</td>
                       <td>{item.bname}</td>
                       <td className="text-center">
-                        <Button variant="outline-warning" size="sm" onClick={() => handleDeleteBcode(item.bcode)}>DEL</Button>
+                        <Button variant="danger" size="sm" onClick={() => handleDeleteBcode(item.bcode)}>DEL</Button>
                       </td>
                     </tr>
                   ))}

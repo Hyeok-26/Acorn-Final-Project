@@ -52,7 +52,7 @@ function PostEdit() {
       return;
     }
 
-    editorTool.current.exec(); // 에디터 내용을 textarea로 반영
+    editorTool.current.exec("UPDATE_CONTENTS_FIELD", []); // 에디터 내용을 textarea로 반영
 
     const formData = new FormData();
     formData.append('title', inputTitle.current?.value || '');
