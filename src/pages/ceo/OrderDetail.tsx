@@ -112,6 +112,8 @@ function OrderDetail() {
 
 
 
+
+
     useEffect(() => {
         // 기본 정보로 가지고 오기(본사, 지점 메모 포함)
         getInfo();
@@ -140,12 +142,12 @@ function OrderDetail() {
                         .then(res => {
                             console.log("승인 성공", res.data);
                             setAppModalShow(false);
-                            alert("승인 성공!")
+                            alert("승인을 성공했습니다.")
                             navigate("/ceo/orders");
                         })
                         .catch(error => {
                             console.log(error);
-                            alert("승인 실패!");
+                            alert("승인을 실패했습니다.");
                         });
                     setAppModalShow(false);
                 }}
@@ -158,14 +160,17 @@ function OrderDetail() {
                 message="선택하신 주문을 반려하시겠습니까?"
                 onCancel={() => setRejectModalShow(false)}
                 onYes={() => {
+                    
                     api.patch("/orders/rej", {
                         orderId
                     })
                         .then(res => {
+                            alert("반려를 성공했습니다.")
                             console.log("반려 성공", res.data);
                             navigate("/ceo/orders");
                         })
                         .catch(error => {
+                            alert("반려를 실패했습니다.")
                             console.log(error);
                         });
                     setRejectModalShow(false);
