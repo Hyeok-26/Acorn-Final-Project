@@ -35,7 +35,7 @@ function CeoOrder() {
     };
 
     // 발주자 이름 별도 관리
-    const handleOrderNameChange = (e)=>{
+    const handleOrderNameChange = (e) => {
         setOrderName(e.target.value);
     }
 
@@ -67,7 +67,7 @@ function CeoOrder() {
                 setOrderList(res.data);
                 // console.log(res.data);
                 // 페이징 처리 숫자 버튼 생성하기
-                const range = _.range(res.data.startPageNum, res.data.endPageNum+1);
+                const range = _.range(res.data.startPageNum, res.data.endPageNum + 1);
                 setPageArray(range);
                 // console.log(range);
             })
@@ -75,12 +75,13 @@ function CeoOrder() {
     }, 500);
 
     useEffect(() => {
-        if (searchState.storeName.trim() !== "") {
-            fetchOrderList(searchState, pageNum);            
-        }
+        fetchOrderList(searchState, pageNum);
+
         return () => {
-            fetchOrderList.cancel(); // 이전 요청 취소
-        }
+            if (fetchOrderList.cancel) {
+                fetchOrderList.cancel();
+            }
+        };
     }, [searchState, pageNum]);
 
     // 페이지 숫자 버튼 클릭시 이동하기
@@ -135,15 +136,22 @@ function CeoOrder() {
                         onChange={handleOrderNameChange}
                         name='orderName'
                         value={orderName}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                e.preventDefault(); // 폼 제출 방지
+                                setPageNum(1);
+                                fetchOrderList({ ...searchState, orderName }, 1);
+                            }
+                        }}
                     />
                     <Button
                         variant="dark"
                         size='sm'
-                        onClick={()=>{
+                        onClick={() => {
                             setPageNum(1);
-                            fetchOrderList({...searchState, orderName},1);
+                            fetchOrderList({ ...searchState, orderName }, 1);
                         }}
-                        >검색</Button>
+                    >검색</Button>
                 </Col>
             </Row>
 
@@ -193,7 +201,7 @@ function CeoOrder() {
             <div className='d-flex justify-content-center mt-3'>
                 <Pagination className='mt-3'>
                     {/* 이전버튼 */}
-                    <Pagination.Item onClick={() => move(orderList.startPageNum - 1)} disabled={orderList.startPageNum === 1 || orderList.list.length === 0 }>Prev</Pagination.Item>
+                    <Pagination.Item onClick={() => move(orderList.startPageNum - 1)} disabled={orderList.startPageNum === 1 || orderList.list.length === 0}>Prev</Pagination.Item>
 
                     {/* 숫자버튼 */}
                     {

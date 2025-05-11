@@ -288,6 +288,12 @@ function OrderDetail() {
                                         placeholder="상품명 입력..."
                                         value={searchText}
                                         onChange={(e) => setSearchText(e.target.value)}
+                                        onKeyDown={(e)=>{
+                                            if(e.key === "Enter"){
+                                                e.preventDefault();
+                                                handleSearch();
+                                            }
+                                        }}
                                     />
                                     <Button variant="dark" onClick={handleSearch}>검색</Button>
                                 </InputGroup>
