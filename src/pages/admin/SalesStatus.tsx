@@ -258,38 +258,38 @@ function SalesStatus(props) {
             setSubjectColorMap(prev => ({ ...prev, ...newMap }));
         }
     }, [yearlySalesByLecture, monthlySalesByLecture, selected]);
+
+    //전체 div에 적용될 css
+    const centerStyle: React.CSSProperties ={
+        maxWidth:"1600px",
+        margin:"0 auto",
+        padding:"2rem",
+        textAlign:"center"
+    }
     return (
-        <div>
-            <button onClick={()=>{
-                api.get("/sales/ping")
-                .then(res=>{
-                    console.log(res.data)
-                    alert(res.data)
-                })
-                .catch(error=>{
-                    alert("응답하지 않음")
-                })
-            }}>ping 요청</button>
-            <div>
-                <h3>매출 확인 영역</h3>
-                <div className="d-flex justify-content-between align-items-center mb-3 row">
-                    <div className="col-md-8 col-12 d-flex justify-content-between align-items-center">
-                        <Form className='d-flex'>
-                            <Form.Select value={selected} onChange={handleSelect} size="sm" aria-label="yearorlecture" className='me-2' style={{ minWidth: "250px", maxWidth:"500px" }}>
+        <div  >
+            <div className="mb-3"> 
+                <div className="d-flex align-items-center justify-content-center">
+                    <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>매출 통계</h1>
+                </div>
+         
+                <div className="mb-3">
+                    <div style={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
+                        <Form className="d-flex align-items-end" style={{ paddingLeft: '70px' }} >
+                            <Form.Select value={selected} onChange={handleSelect} size="sm" aria-label="yearorlecture" className='me-2 w-auto' >
                                 <option value="salesByYear">연별 매출</option>
                                 <option value="salesByLecture">과목별 매출</option>
                             </Form.Select>
-                            <Form.Select hidden={hideSubCondition} size="sm" aria-label="year" className='me-2' style={{ minWidth: "250px", maxWidth:"300px" }}  value={sYear} onChange={(e)=> {whenYearChange(e)}}>
+                            <Form.Select hidden={hideSubCondition} size="sm" aria-label="year" className='me-2 w-auto'   value={sYear} onChange={(e)=> {whenYearChange(e)}}>
                                 <option value="selectyearcondition">연도 선택</option>
                                 {sYearList.map((item, index) => (
                                     <option key={index}>{item}</option>
                                 ))}
                             </Form.Select>
-                            <Button className='btn btn-secondary' size="sm" style={{ width: "120px" }}>검색</Button>
+                            <Button className='btn btn-secondary me-2 w-auto' size="sm" style={{ width: "120px" }}>검색</Button>
                         </Form>
                     </div>
-                </div>
-                
+                    <div className="d-flex flex-wrap gap-2 justify-content-center">
                     {
                         selected==="salesByYear"?
                         <LineChart width={1000} height={400} data={salesData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
@@ -391,6 +391,10 @@ function SalesStatus(props) {
                         <div>
                         </div>
                     }
+                </div>
+                    
+                </div>
+
             </div>
 
         </div>
