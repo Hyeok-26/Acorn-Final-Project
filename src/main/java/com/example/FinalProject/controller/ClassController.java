@@ -130,14 +130,14 @@ public class ClassController {
 	    return ResponseEntity.ok(students);
 	}
 
-	 @PostMapping("/classes/{classId}/students")
+	 @PostMapping("/class/{classId}/students")
 	    public ResponseEntity<String> addStudentsToClass(@PathVariable int classId,
 	        @RequestBody List<Integer> studentIds) {
 	        service.addStudentsToClass(classId, studentIds);
 	        return ResponseEntity.ok("학생들이 수업에 성공적으로 추가되었습니다.");
 	    }
 
-	    @DeleteMapping
+	    @DeleteMapping("/class/{classId}/student")
 	    public ResponseEntity<Void> removeStudentFromClass(
 	       @PathVariable int classId,
 	        @PathVariable int studentId) {
