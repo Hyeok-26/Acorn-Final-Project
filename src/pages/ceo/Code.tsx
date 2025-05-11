@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import api from '../../api';
 import { v4 as uuid } from 'uuid';
 import { Button, Modal, Form, Table, Container, Row, Col } from 'react-bootstrap';
-import CeoNavbar from '@/components/CeoNavBar';
 
 interface Code {
   acode: string;
