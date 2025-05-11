@@ -5,13 +5,20 @@ import { useState } from "react";
 const menuItems = [
     { name: "대시보드", icon: Home, path: "/admin" },
     { name: "공지사항", icon: StickyNote, path: "admin 공지사항 경로" },
-    { name: "수업 관리", icon: Calendar, path: "admin 수업관리 경로" },
+    { 
+        name: "수업 관리", 
+        icon: Calendar, 
+        subItems: [
+          { name: "수업 리스트", path: "/admin/class" },
+          { name: "수업 일정표", path: "/admin/calendar" }
+      ] 
+    },
     { 
         name: "인원 관리",
         icon: User,
         subItems: [
-            { name: "학생 관리", path: "admin 학생관리 경로" },
-            { name: "강사 관리", path: "admin 강사관리 경로" }
+            { name: "학생 관리", path: "/admin/students" },
+            { name: "강사 관리", path: "ㅍㅍ 강사관리 경로" }
         ]
     },
     { 
@@ -28,8 +35,8 @@ const menuItems = [
         name: "매출 관리", 
         icon: Percent,
         subItems: [
-            { name: "매출 현황", path: "admin 매출현황 경로" },
-            { name: "매출 통계", path: "admin 매출통계 경로" }
+            { name: "매출 현황", path: "/admin/salesmanage" },
+            { name: "매출 통계", path: "/admin/salesstat" }
         ] 
     }
 ];

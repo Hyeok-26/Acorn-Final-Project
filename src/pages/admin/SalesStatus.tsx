@@ -123,14 +123,22 @@ function SalesStatus(props) {
         });    
     };
 
-    
+    const DEFAULT_COLORS = [
+        '#8884d8', '#82ca9d', '#ffc658', '#ff8042', '#a28ee6',
+        '#00C49F', '#FFBB28', '#0088FE', '#FF6666', '#66CCFF',
+        '#CC66FF', '#FFCC66', '#66FF66', '#FF99CC', '#9966CC',
+        '#66FFFF', '#FF9933', '#6699FF', '#FF66B2', '#A3E4D7',
+        '#F1948A', '#BB8FCE', '#F7DC6F', '#48C9B0', '#F0B27A',
+        '#D7BDE2', '#AED6F1', '#F8C471', '#DC7633', '#5499C7'
+    ];
+
     // const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042'];
-    const SUBJECT_COLORS: { [key: string]: string } = {
-        JAVA: '#8884d8',        // 보라
-        JAVASCRIPT: '#82ca9d',  // 초록
-        PYTHON: '#ffc658',      // 노랑
-        '알 수 없음': '#ff8042'  // 기타 (예외 처리용)
-    };
+    // const SUBJECT_COLORS: { [key: string]: string } = {
+    //     JAVA: '#8884d8',        // 보라
+    //     JAVASCRIPT: '#82ca9d',  // 초록
+    //     PYTHON: '#ffc658',      // 노랑
+    //     '알 수 없음': '#ff8042'  // 기타 (예외 처리용)
+    // };
     const [yearlySalesByLecture, setYearlySalesByLecture] = useState<LectureSalesData[]>([]);
     const [monthlySalesByLecture, setMonthlySalesByLecture] = useState<LectureSalesData[]>([]);
     
@@ -229,6 +237,27 @@ function SalesStatus(props) {
             setMonthlySalesByLecture([]);
         }
     }, [sMonth]);
+    const [subjectColorMap, setSubjectColorMap] = useState<{ [key: string]: string }>({});
+
+    useEffect(() => {
+        if (selected === "salesByLecture") {
+            const allSubjects = new Set<string>();
+            yearlySalesByLecture.forEach(item => allSubjects.add(item.subject || "알 수 없음"));
+            monthlySalesByLecture.forEach(item => allSubjects.add(item.subject || "알 수 없음"));
+
+            const newMap: { [key: string]: string } = {};
+            let colorIndex = 0;
+
+            for (let subject of allSubjects) {
+                if (!subjectColorMap[subject]) {
+                    newMap[subject] = DEFAULT_COLORS[colorIndex % DEFAULT_COLORS.length];
+                    colorIndex++;
+                }
+            }
+
+            setSubjectColorMap(prev => ({ ...prev, ...newMap }));
+        }
+    }, [yearlySalesByLecture, monthlySalesByLecture, selected]);
     return (
         <div>
             <button onClick={()=>{
@@ -308,7 +337,7 @@ function SalesStatus(props) {
                                         {yearlySalesByLecture.map((entry, index) => (
                                         <Cell
                                             key={`cell-yearly-${index}`}
-                                            fill={SUBJECT_COLORS[entry.subject ?? '알 수 없음'] || '#ccc'}
+                                            fill={subjectColorMap[entry.subject ?? '알 수 없음'] || '#ccc'}
                                         />
                                         ))}
                                     </Pie>
@@ -348,7 +377,7 @@ function SalesStatus(props) {
                                         {monthlySalesByLecture.map((entry, index) => (
                                         <Cell
                                             key={`cell-monthly-${index}`}
-                                            fill={SUBJECT_COLORS[entry.subject ?? '알 수 없음'] || '#ccc'}
+                                            fill={subjectColorMap[entry.subject ?? '알 수 없음'] || '#ccc'}
                                         />
                                         ))}
                                     </Pie>

@@ -15,6 +15,18 @@ import PostDetail from "../pages/ceo/PostDetail";
 import PostUpdateForm from "../pages/ceo/PostUpdateForm";
 import PostForm from "../pages/ceo/PostForm";
 
+import OrderDetail from "@/pages/ceo/OrderDetail";
+import Order from "@/pages/ceo/Order";
+
+import OrderSale from "../pages/ceo/OrderSale";
+import ViewSale from "../pages/ceo/ViewSale";
+import Class from "@/pages/admin/Class";
+import StudentList from "@/pages/admin/StudentList";
+import ClassCalendar from "@/pages/admin/ClassCalendar";
+import SalesManage from "@/pages/admin/SalesManage";
+import SalesStatus from "@/pages/admin/SalesStatus";
+
+
 const routes = [
     {path: '/', element: <Home />},
     {path: '/admin', element: <Admin />},
@@ -23,14 +35,25 @@ const routes = [
     {path: '/admin/order-list', element: <OrderList/>},
     {path: '/admin/order', element: <Order/>},
     {path: '/admin/:id/order', element: <Order/>},
-    
-    {path: '/code', element:<Code/>},
-    {path: '/product', element:<Product/>},
-    {path: '/store', element:<Store/>},
+    {path: '/ceo/code', element:<Code/>},
+    {path: '/ceo/product', element:<Product/>},
+    {path: '/ceo/store', element:<Store/>},
     {path: '/posts', element:<Post/>},
     {path: '/posts/new', element:<PostForm/>},
     {path: '/posts/:postId', element:<PostDetail/>},
-    {path: '/posts/:postId/edit', element:<PostUpdateForm/>}
+    {path: '/posts/:postId/edit', element:<PostUpdateForm/>},
+
+    {path: '/ceo/orders', element:<Order/>},
+    {path: '/ceo/orders/:orderId/detail', element:<OrderDetail/>},
+
+    {path: '/ceo/ordersale', element:<OrderSale/>},
+    {path: '/ceo/viewsale', element:<ViewSale/>},
+    {path:"/admin/class", element:<Class/>},
+
+    {path: '/admin/students', element:<StudentList/>},
+    {path: '/admin/calendar', element:<ClassCalendar/>},
+    {path: '/admin/salesmanage', element:<SalesManage/>},
+    {path: '/admin/salesstat', element:<SalesStatus/>}
 ]
 
 const router = createBrowserRouter([{

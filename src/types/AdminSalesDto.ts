@@ -17,4 +17,6 @@ export interface AdminSalesDto {
     endPageNum: number;
     totalPageCount: number;
     totalRow: number;
+    aname:string;
+    bname:string;
   }
