@@ -115,9 +115,11 @@ const ClassCalendar: React.FC = () => {
             // 시작(start)과 끝(end) 기준으로 연속된 이벤트 바 하나 생성
             // 반복되는 요일에 반복 이벤트를 생성하기 위해 여러 이벤트 객체로 분할해서 각 이벤트를 events 배열에 push
             // startDate 에서 currentDate 시작, endDate 까지, currentDate 의 날짜 하루씩 증가하면서 for 문 반복
-            // currentDate.getDay(); 0~6 (일~토) 리턴
+            
             for (let currentDate = new Date(startDate); currentDate <= endDate; currentDate.setDate(currentDate.getDate() + 1)) {
-              if (activeDays.includes(currentDate.getDay())) {
+              // getDay(); 0~6 (일~토) 리턴 → (월~일) 로 변환
+              const convertedDateIdx = currentDate.getDay() === 0 ? 6 : currentDate.getDay()-1; // 일요일이면 6, 그 외 -1
+              if (activeDays.includes(convertedDateIdx)) {
                 // 날짜 문자열 생성 : YYYY-MM-DD 형식
                 const currentDateStr = currentDate.toISOString().slice(0, 10); // 0부터 10번째 문자까지 
                 console.log('currentDateStr:', currentDateStr); // 현재 날짜 출력
