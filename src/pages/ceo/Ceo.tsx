@@ -1,6 +1,6 @@
-import OverviewSection from "@/components/ceo/OverviewSection";
-import SalesAnalyticsSection from "@/components/ceo/SalesAnalyticsSection";
-import PopularItemsSection from "@/components/ceo/PopularItemsSection";
+import OverviewSection from "@/components/OverviewSection";
+import SalesAnalyticsSection from "@/components/SalesAnalyticsSection";
+import PopularItemsSection from "@/components/PopularItemsSection";
 
 function Ceo() {
   // 예시 데이터
