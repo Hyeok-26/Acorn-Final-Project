@@ -62,7 +62,7 @@
 	      #{title},
 	      #{writer},
 	      #{content},
-	      #{uploadFile},
+	      #{uploadFile, jdbcType=CLOB},
 	      SYSDATE
 	    )
 	  </insert>
