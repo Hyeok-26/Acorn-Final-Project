@@ -52,7 +52,6 @@ function Order() {
 
     return (
         <><div className="flex">
-            <AdminNavbar></AdminNavbar>
             {/* <pre>{JSON.stringify(orderItem,null,4)}</pre> */}
             <Container fluid className="p-4" >
                 <Row>
