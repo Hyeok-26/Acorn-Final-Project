@@ -55,7 +55,7 @@ function StudentList() {
     //const userId = "2"; // TODO: 실제 로그인한 사용자 userId 데이터 가져오기
     const userStr = localStorage.getItem('user');
     const user = userStr ? JSON.parse(userStr) : null;
-    
+    const userId = user.userId; 
 
     const state = params.get("state") || "STUDY";
     const condition = params.get("condition") || "";

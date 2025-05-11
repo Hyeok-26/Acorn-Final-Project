@@ -57,7 +57,9 @@ function TeacherList() {
     // const userId = "2"; // userId 데이터 가져오기
     const userStr = localStorage.getItem('user');
     const user = userStr ? JSON.parse(userStr) : null;
-    
+    const userId = user.userId; 
+
+
     const state = params.get("state") || "WORK";
     const condition = params.get("condition") || "";
     const keyword = params.get("keyword") || "";

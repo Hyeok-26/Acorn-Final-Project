@@ -61,7 +61,9 @@ const ClassCalendar: React.FC = () => {
   // const storeName = "스토어01"; // storeName 데이터 가져오기
   const userStr = localStorage.getItem('user');
   const user = userStr ? JSON.parse(userStr) : null;
+  const userId = user.userId; 
   const storeName = user.storeName;
+
 
   // classId 이용해서 HSL 방식으로 고정된 배경색 생성
   function getBgColor(classId: number): string {
