@@ -62,7 +62,7 @@ export default function AdminNavbar() {
   };
 
   return (
-    <aside className="h-screen w-64 bg-[#2e8b57] flex flex-col justify-between rounded-2xl m-2 shadow-lg">
+    <aside className="h-screen w-64 bg-[#a8d5ba] flex flex-col justify-between rounded-2xl m-2 shadow-lg">
       {/* 로고 */}
       <div>
         <div className="flex items-center gap-2 px-6 py-8">
@@ -123,6 +123,7 @@ export default function AdminNavbar() {
           href="#"
           onClick={e => {
             e.preventDefault();
+            localStorage.removeItem('user');
             navigate("/");
           }}
           className="flex items-center gap-3 text-white opacity-70 hover:opacity-100 transition-opacity"

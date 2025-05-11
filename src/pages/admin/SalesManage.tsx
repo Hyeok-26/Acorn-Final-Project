@@ -259,7 +259,7 @@ function SalesManage() {
                             }                           
                         </tbody>
                     </Table>
-                    <Pagination className='mt-3'>
+                    <Pagination className='mt-3 justify-content-center'>
                         <Pagination.Item onClick={()=>move(pageInfo.startPageNum-1)} 
                             disabled={pageInfo.startPageNum === 1}>Prev</Pagination.Item>
                         {

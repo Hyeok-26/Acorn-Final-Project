@@ -90,6 +90,7 @@ const RegisterModal:React.FC<RegisterModalProps> = ({ show, onClose, onRegister 
         const formData = new FormData(e.currentTarget);
         const formObject = Object.fromEntries(formData.entries());
         formObject.userId = userId;
+        formObject.salary = salary.replace(/[^0-9]/g, '');
         console.log(formObject);
         
 
@@ -138,7 +139,7 @@ const RegisterModal:React.FC<RegisterModalProps> = ({ show, onClose, onRegister 
 
                     <Form.Group className="mb-3">
                         <Form.Label>생년월일</Form.Label>
-                        <Form.Control type="date" required/>
+                        <Form.Control name="birth" type="date" required/>
                         {/* <Form.Control name="birth" placeholder="생년월일을 입력하세요" required /> */}
                     </Form.Group>
 

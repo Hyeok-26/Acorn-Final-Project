@@ -1,16 +1,9 @@
 import OverviewSection from "@/components/OverviewSection";
 import SalesAnalyticsSection from "@/components/SalesAnalyticsSection";
 import PopularItemsSection from "@/components/PopularItemsSection";
+import { useEffect } from "react";
 
 const overview = [
-  {
-    title: "지점 매출수익",
-    value: "₩12,345,000",
-    diff: "+3.2%",
-    sub: "작년 대비 +₩380,000",
-    color: "text-green-600",
-    diffColor: "text-green-500"
-  },
   {
     title: "현재 수강생 수",
     value: "320",
@@ -24,6 +17,14 @@ const overview = [
     value: "15",
     diff: "",
     sub: "현재 근무 중",
+    color: "text-indigo-600",
+    diffColor: ""
+  },
+  {
+    title: "현재 수업 개수",
+    value: "15",
+    diff: "",
+    sub: "현재 강의 중",
     color: "text-indigo-600",
     diffColor: ""
   }
@@ -52,7 +53,16 @@ const items = [
 
 function Admin() {
 
+  useEffect(() => {
+    // localStorage에서
+    const userStr = localStorage.getItem('user');
+    const user = userStr ? JSON.parse(userStr) : null;
+    console.log('localStorage user:', user);
 
+    // Redux에서
+    // const user = useSelector((state) => state.userInfo);
+    // console.log('redux user:', user);
+  }, []);
     
     return (
         <div className="flex flex-col gap-6 p-8 bg-gray-50 min-h-screen">
