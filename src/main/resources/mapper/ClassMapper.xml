@@ -179,9 +179,8 @@
                    TO_CHAR(c.apply_end_date, 'YYYY-MM-DD') AS apply_end_date,
                    c.cd_status
                FROM tb_class c
-               JOIN tb_teacher t ON c.teacher_id = t.teacher_id 
-               LEFT JOIN tb_student_class sc ON c.class_id = sc.class_id AND c.cd_status IN ('BEFORE', 'READY', 'START', 'END')
-               WHERE c.user_id = #{userId}
+               JOIN tb_teacher t ON c.teacher_id = t.teacher_id  
+               WHERE c.user_id = #{userId} AND c.cd_status IN ('BEFORE', 'READY', 'START', 'END')
 
                
                ORDER BY c.class_id ASC
