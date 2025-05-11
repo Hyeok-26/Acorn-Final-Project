@@ -88,7 +88,6 @@ function OrderList() {
     return (
         <>
             <div className="flex">
-                <AdminNavbar></AdminNavbar>
                 <Container fluid className="p-4">
                     <h2 className="mb-4 text-center">발주 현황</h2>
                     <div className="d-flex justify-content-between align-items-center mb-3">
