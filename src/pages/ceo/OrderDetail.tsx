@@ -139,10 +139,13 @@ function OrderDetail() {
                     })
                         .then(res => {
                             console.log("승인 성공", res.data);
+                            setAppModalShow(false);
+                            alert("승인 성공!")
                             navigate("/ceo/orders");
                         })
                         .catch(error => {
                             console.log(error);
+                            alert("승인 실패!");
                         });
                     setAppModalShow(false);
                 }}
