@@ -1,21 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.css";
-import api from '../../api';
+import api from '@/api';
 
+
+// 등록 모달 props 타입
 interface RegisterModalProps {
     show: boolean;
     onClose: () => void;
     onRegister: () => void;
 }
 
-const RegisterModal: React.FC<RegisterModalProps> = ({ show, onClose, onRegister }) => {
+const RegisterModal:React.FC<RegisterModalProps> = ({ show, onClose, onRegister }) => {
     const [phone, setPhone] = useState("");
     const [isInvalid, setIsInvalid] = useState<boolean | null>(null);
+    const [salary, setSalary] = useState("");
     const userId = '2'; // userId 데이터 불러오기
-    const storeName = '스토어1'; // storeName 데이터 불러오기
+    const storeName='스토어1'; // storeName 데이터 불러오기
 
-    // 전화번호 포맷 지정 
+        // 전화번호 포맷 지정 
     const formatPhoneNumber = (value: string) => {
         /*
         const numbersOnly = value.replace(/\D/g, ''); // 숫자만 
@@ -54,6 +57,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ show, onClose, onRegister
         
     };
 
+
   // 전화번호 변경 핸들러
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formattedPhone = formatPhoneNumber(e.target.value);
@@ -67,7 +71,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ show, onClose, onRegister
     const timeout = setTimeout(() => {
       
       if (phone.length > 8) {
-        api.get(`/students/phone-check?phone=${phone}`)
+        api.get(`/teachers/phone-check?phone=${phone}`)
           .then((res) => setIsInvalid(res.data)) // true or false
           .catch((err) => console.error("중복 체크 오류:", err));
       }
@@ -75,44 +79,67 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ show, onClose, onRegister
 
     return () => clearTimeout(timeout); // 초기화
   }, [phone]);
-
+    
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+        e.preventDefault(); //폼 제출 방지
         if(isInvalid === true || phone.length < 9) {
             alert("전화번호를 확인해 주십시오");
             return;
         }
+
         const formData = new FormData(e.currentTarget);
         const formObject = Object.fromEntries(formData.entries());
         formObject.userId = userId;
+        console.log(formObject);
         
-        api.post('/students', formObject)
-            .then(() => {
+
+        api.post('/teachers', formObject)
+            .then(res => {
+                console.log(res.data);
+                alert("강사 정보를 등록하였습니다");
                 onRegister();
-                alert("학생 정보를 등록하였습니다");
                 onClose();
             })
             .catch(err => {
                 console.log(err);
-                alert("학생 정보 등록 실패했습니다.");
+                alert("강사 정보 등록에 실패했습니다.");
             });
     };
 
+ // 숫자 형식 포맷
+  const formatNumber = (num: string): string => {
+    const onlyNum = num.replace(/[^0-9]/g, ''); // 숫자만 추출
+    return Number(onlyNum).toLocaleString();
+  };
+
+  const handleSalaryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+    const formatted = formatNumber(input);
+    setSalary(formatted);
+  };
+    
     return (
-        <Modal show={show} onHide={onClose}>
-            <Modal.Header closeButton>
-                <Modal.Title>학생 정보 등록</Modal.Title>
+        <Modal show={show} onHide={onClose}> {/* 모달 닫힐 때 부모 컴포넌트에서 실행될 함수 onClose */}
+            <Modal.Header closeButton> {/* 닫기 버튼 누르면 onHide 호출 */}
+                <Modal.Title>강사 정보 등록</Modal.Title>
             </Modal.Header>
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit}> {/* 폼에 함수 연결 */}
                 <Modal.Body>
                     <Form.Group className="mb-3">
                         <Form.Label>지점명</Form.Label>
                         <Form.Control name="storeName" value={storeName} readOnly />
+                        {/* storename 가져오기 */}
                     </Form.Group>
 
                     <Form.Group className="mb-3">
                         <Form.Label>이름</Form.Label>
                         <Form.Control name="name" placeholder="이름을 입력하세요" required />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                        <Form.Label>생년월일</Form.Label>
+                        <Form.Control type="date" required/>
+                        {/* <Form.Control name="birth" placeholder="생년월일을 입력하세요" required /> */}
                     </Form.Group>
 
                     <Form.Group className="mb-3">
@@ -126,17 +153,23 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ show, onClose, onRegister
                         <Form.Label>상태</Form.Label>
                         <Form.Select name="cdStatus" required>
                             <option value="">상태를 선택하세요</option>
-                            <option value="STUDY">재원</option>
-                            <option value="S_QUIT">퇴원</option>
+                            <option value="WORK">재직</option>
+                            <option value="T_QUIT">퇴직</option>
                         </Form.Select>
                     </Form.Group>
+                    
+                    <Form.Group className="mb-3">
+                        <Form.Label>급여</Form.Label>
+                        <Form.Control name="salary" placeholder="급여를 입력하세요" value={salary} onChange={handleSalaryChange} required />
+                    </Form.Group>
+
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button type="submit" variant="primary">등록</Button>
-                </Modal.Footer>
+                    <Button type="submit" variant="primary">등록</Button> {/* 등록 버튼에 onClick 등록하지 않음 */}
+                </Modal.Footer> {/* 폼 안에 버튼 포함 */}
             </Form>
         </Modal>
     );
-};
+}
 
 export default RegisterModal;

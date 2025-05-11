@@ -1,6 +1,6 @@
 import React, { MouseEvent, useEffect, useState } from 'react';
 import AdminSalesModal from '../../components/admin/AdminSalesModal';
-import { Button, Form, Pagination } from 'react-bootstrap';
+import { Button, Form, Pagination, Table } from 'react-bootstrap';
 import axios from 'axios';
 import { BrowserRouter, useSearchParams } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
@@ -18,7 +18,7 @@ interface PageInfo {
     totalRow: number;
   }
 function SalesManage() {
-
+    const userId = '2'
     const [modalShow, setModalShow] = useState(false);
     const [title, setTitle] = useState("매출 추가");
     const [btnTag, setBtnTag] = useState("추가")
@@ -107,13 +107,14 @@ function SalesManage() {
         selectedBname: string;
         saleName:string;
         price:number;
+        userId:string;
     })=>{
         const requestBody = {
             aname:data.selectedAname,
             bname: data.selectedBname,
             saleName:data.saleName,
             price:data.price,
-            userId:1
+            userId:data.userId
         }
         api.post("/sales", requestBody)
         .then(res=>{
@@ -144,6 +145,7 @@ function SalesManage() {
             saleName: string;
             price: number;
             adminSaleId: number;
+            userId: number;
         },
         itemId?:number
     ) => {
@@ -156,7 +158,7 @@ function SalesManage() {
             saleName: data.saleName,
             price: data.price,
             adminSaleId: adminSaleId,
-            userId: 1
+            userId: data.userId
         };
         api.put(`/sales/${adminSaleId}`, requestBody)
         .then(res=>{
@@ -181,14 +183,23 @@ function SalesManage() {
             alert("매출 삭제에 실패했습니다")
         })
     }
+    //전체 div에 적용될 css
+    const centerStyle: React.CSSProperties ={
+        maxWidth:"1600px",
+        margin:"0 auto",
+        padding:"2rem",
+        textAlign:"center"
+    }
     return (
         <div>
             <AdminSalesModal show={modalShow} title={title} btnTag={btnTag} onBtn={onBtn} 
-                                onClose={()=>setModalShow(false)} initialData={selectedItem}/>
+                                onClose={()=>setModalShow(false)} initialData={selectedItem} userid={userId}/>
         
-            <div className='container'>
-            <h3 className="mb-3">매출 리스트</h3>
-                <div className="d-flex justify-content-between align-items-center mb-3 row">
+            <div style={centerStyle}> 
+                <div className="d-flex align-items-center justify-content-center">
+                    <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>매출 리스트</h1>
+                </div>
+                <div className="d-flex justify-content-between mb-3">
                     <div className="col-md-8 col-12 d-flex justify-content-between align-items-center">
                         <Form className='d-flex w-100'>
                             <Form.Check inline label="수업수입" value="CLS" type="checkbox" id="CLS"onChange={handleCheckboxChange}/>
@@ -204,8 +215,8 @@ function SalesManage() {
                     </div>
                 </div>
                 <div>
-                    <table className="table table-bordered responsive" style={{textAlign:"center"}}>
-                        <thead className="table-light">
+                    <Table className="mx-auto text-center " style={{ tableLayout: 'fixed' }} bordered hover responsive>
+                        <thead className="table-success">
                             <tr>
                                 <th>매출등록일자</th>
                                 <th>매출수정일자</th>
@@ -247,8 +258,8 @@ function SalesManage() {
                                  
                             }                           
                         </tbody>
-                    </table>
-                    <Pagination className='mt-3'>
+                    </Table>
+                    <Pagination className='mt-3 justify-content-center'>
                         <Pagination.Item onClick={()=>move(pageInfo.startPageNum-1)} 
                             disabled={pageInfo.startPageNum === 1}>Prev</Pagination.Item>
                         {

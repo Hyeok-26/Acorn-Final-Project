@@ -1,21 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.css";
-import api from '../../api';
+import api from '@/api';
 
-interface RegisterModalProps {
+
+interface UpdateModalProps{
+    teacher: {
+        teacherId: number;
+        name: string;
+        birth: string;
+        phone: string;
+        storeName: string;
+        salary: number;
+        cdStatus: string;
+        statusName: string;
+    }
     show: boolean;
     onClose: () => void;
-    onRegister: () => void;
+    onUpdate: () => void;
 }
 
-const RegisterModal: React.FC<RegisterModalProps> = ({ show, onClose, onRegister }) => {
+const UpdateModal: React.FC<UpdateModalProps> = ({ teacher, show, onClose, onUpdate }) => { //기존에 저장된 강사 정보 전달받음
     const [phone, setPhone] = useState("");
     const [isInvalid, setIsInvalid] = useState<boolean | null>(null);
-    const userId = '2'; // userId 데이터 불러오기
-    const storeName = '스토어1'; // storeName 데이터 불러오기
+    const [salary, setSalary] = useState("");
+    const [form, setForm] = useState({ ...teacher });
+    const teacherId = teacher.teacherId;
 
-    // 전화번호 포맷 지정 
+        // 전화번호 포맷 지정 
     const formatPhoneNumber = (value: string) => {
         /*
         const numbersOnly = value.replace(/\D/g, ''); // 숫자만 
@@ -59,84 +71,117 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ show, onClose, onRegister
     const formattedPhone = formatPhoneNumber(e.target.value);
     if (formattedPhone.length > 13) return; // 최대 길이 13자리 제한 
     setPhone(formattedPhone);
+    setForm(prev => ({ ...prev, phone: formattedPhone })); // form.phone 에 전화번호 업데이트
     setIsInvalid(null); // 수정 시 중복 상태 초기화하여 isInvalid 상태값 실시간 반영
   };
 
   // 디바운스 방식으로 중복 체크
   useEffect(() => {
     const timeout = setTimeout(() => {
-      
-      if (phone.length > 8) {
-        api.get(`/students/phone-check?phone=${phone}`)
+
+      if (phone === teacher.phone) return; // 자기 번호일 경우 중복 체크 생략
+      if (phone.length > 8 && phone !== teacher.phone)  {
+        api.get(`/teachers/phone-check?phone=${phone}`)
           .then((res) => setIsInvalid(res.data)) // true or false
           .catch((err) => console.error("중복 체크 오류:", err));
       }
     }, 500); // 0.5초 후 체크
 
-    return () => clearTimeout(timeout); // 초기화
+    return () => clearTimeout(timeout); // 타이머 초기화
   }, [phone]);
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setForm(prevForm => ({ ...prevForm, [name]: value }));
+    };
+    
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if(isInvalid === true || phone.length < 9) {
+        if(isInvalid === true || form.phone.length < 9) {
             alert("전화번호를 확인해 주십시오");
             return;
         }
         const formData = new FormData(e.currentTarget);
         const formObject = Object.fromEntries(formData.entries());
-        formObject.userId = userId;
-        
-        api.post('/students', formObject)
-            .then(() => {
-                onRegister();
-                alert("학생 정보를 등록하였습니다");
+
+        api.patch(`/teachers/${teacherId}`, formObject)
+            .then((res) => {
+                console.log(res.data);
+                onUpdate();
+                alert("강사 정보를 수정하였습니다");
                 onClose();
             })
             .catch(err => {
-                console.log(err);
-                alert("학생 정보 등록 실패했습니다.");
-            });
+               console.log(err);
+               alert("강사 정보 수정 실패했습니다");
+            }); 
     };
 
+  // 숫자 형식 포맷
+  const formatNumber = (num: string): string => {
+    const onlyNum = num.replace(/[^0-9]/g, ''); // 숫자만 추출
+    return Number(onlyNum).toLocaleString();
+  };
+
+  const handleSalaryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+    const formatted = formatNumber(input);
+    setSalary(formatted);
+  };
+
+    useEffect(()=>{
+        setForm({ ...teacher });        
+    }, [teacher]);
+    
     return (
         <Modal show={show} onHide={onClose}>
             <Modal.Header closeButton>
-                <Modal.Title>학생 정보 등록</Modal.Title>
+                <Modal.Title>강사 정보 수정</Modal.Title>
             </Modal.Header>
             <Form onSubmit={handleSubmit}>
                 <Modal.Body>
                     <Form.Group className="mb-3">
                         <Form.Label>지점명</Form.Label>
-                        <Form.Control name="storeName" value={storeName} readOnly />
+                        <Form.Control name="storeName" value={form.storeName} readOnly/>
                     </Form.Group>
 
                     <Form.Group className="mb-3">
                         <Form.Label>이름</Form.Label>
-                        <Form.Control name="name" placeholder="이름을 입력하세요" required />
+                        <Form.Control name="name" value={form.name} onChange={handleChange} required/>
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                        <Form.Label>생년월일</Form.Label>
+                        <Form.Control name="birth" value={form.birth} type="date" onChange={handleChange} required />
                     </Form.Group>
 
                     <Form.Group className="mb-3">
                         <Form.Label>전화번호</Form.Label>
-                        <Form.Control name="phone" value={phone} onChange={handlePhoneChange} placeholder="전화번호를 입력하세요(예: 010-1234-5678)" required /> {/* 포커스를 잃었을 때 유효성 체크 */}
+                        <Form.Control name="phone" value={form.phone} onChange={handlePhoneChange} maxLength={13} required />
                         {isInvalid === true && <span style={{ color: "red" }}>이미 사용 중인 번호입니다.</span>}
                         {isInvalid === false && <span style={{ color: "green" }}>사용 가능한 번호입니다.</span>}
                     </Form.Group>
+                    
+                    <Form.Group className="mb-3">
+                        <Form.Label>재직 여부</Form.Label>
+                        <Form.Select name="cdStatus" value={form.cdStatus} onChange={handleChange} required>
+                            <option value="WORK">재직</option>
+                            <option value="T_QUIT">퇴직</option>  
+                        </Form.Select>                        
+                    </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <Form.Label>상태</Form.Label>
-                        <Form.Select name="cdStatus" required>
-                            <option value="">상태를 선택하세요</option>
-                            <option value="STUDY">재원</option>
-                            <option value="S_QUIT">퇴원</option>
-                        </Form.Select>
+                        <Form.Label>급여</Form.Label>
+                        <Form.Control name="salary" value={form.salary} onChange={handleSalaryChange} required />
                     </Form.Group>
+
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button type="submit" variant="primary">등록</Button>
+                    <Button type="submit" variant="primary">수정</Button>
                 </Modal.Footer>
             </Form>
         </Modal>
     );
-};
+}
 
-export default RegisterModal;
+export default UpdateModal;

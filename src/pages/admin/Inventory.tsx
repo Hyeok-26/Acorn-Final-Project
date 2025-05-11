@@ -58,7 +58,6 @@ function Inventory() {
 
     return (
         <div className="flex">
-            <AdminNavbar></AdminNavbar>
             <div style={{ display: 'flex', gap: '20px', width: '100%' }}>
                 <div style={{ width: '50%' }}>
                     <InvList

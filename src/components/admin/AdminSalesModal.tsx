@@ -4,7 +4,7 @@ import { Button, CloseButton, Dropdown, FloatingLabel, Form, ListGroup, Modal } 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 
-function AdminSalesModal({show, title, btnTag, onBtn, onClose, initialData}) {
+function AdminSalesModal({show, title, btnTag, onBtn, onClose, initialData, userid}) {
     const [selectedBname, setSelectedBname] = useState('');
     const [selectedAname, setSelectedAname] = useState('');
     const [anamelist, setAnameList] = useState(["수입", "지출"])
@@ -14,7 +14,7 @@ function AdminSalesModal({show, title, btnTag, onBtn, onClose, initialData}) {
         { class: "지출", detail: "급여" },
         { class: "지출", detail: "발주" },
         { class: "지출", detail: "지출기타" }
-    ]);
+    ]); 
     const [adminSaleId, setAdminSaleId] = useState<number|null>(null);
     const [price, setPrice] = useState(0);
     const [saleName, setSaleName] = useState<string>('');
@@ -48,10 +48,6 @@ function AdminSalesModal({show, title, btnTag, onBtn, onClose, initialData}) {
         resetState();
         onClose();
     }
-    const isValidSaleName = (text: string): boolean => {
-        const regex = /^[가-힣]{0,5}$/;  // 한글만 5글자
-        return regex.test(text);
-    };
     return (
         <>
             <Modal show={show} size="lg" centered>
@@ -83,7 +79,7 @@ function AdminSalesModal({show, title, btnTag, onBtn, onClose, initialData}) {
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="saleName">
                             <Form.Label>항목 내용</Form.Label>
-                            <Form.Control value={saleName} type="text"  placeholder="수입/지출 항목 내용을 입력하세요" onChange={(e) => {setSaleName(e.target.value); setIsTooLong(!isValidSaleName(e.target.value))}} />
+                            <Form.Control value={saleName} type="text"  placeholder="수입/지출 항목 내용을 입력하세요" onChange={(e) => {setSaleName(e.target.value); }} />
                             <Form.Control.Feedback type="invalid">
                                 한글 5자만 입력 가능합니다.
                             </Form.Control.Feedback>
@@ -95,9 +91,9 @@ function AdminSalesModal({show, title, btnTag, onBtn, onClose, initialData}) {
                     </Form.Group>      
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button disabled={!isValidSaleName(saleName)} onClick={(e)=>{
+                    <Button onClick={(e)=>{
                         e.preventDefault()    
-                        onBtn({adminSaleId, selectedAname, selectedBname, saleName, price})
+                        onBtn({adminSaleId, selectedAname, selectedBname, saleName, price, userId:userid})
                     }}>{btnTag}</Button>
                 </Modal.Footer>
             </Modal>

@@ -1,26 +1,28 @@
 import { useEffect, useState } from 'react';
 import { Button, ButtonGroup, Form, Pagination, Table } from 'react-bootstrap';
-import RegisterModal from '../../components/admin/sRegisterModal';
-import UpdateModal from '../../components/admin/sUpdateModal';
-import HistoryModal from '../../components/admin/sHistoryModal';
+import RegisterModal from '../../components/admin/tRegisterModal';
+import UpdateModal from '../../components/admin/tUpdateModal';
+import HistoryModal from '../../components/admin/tHistoryModal';
 import api from '../../api';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-// 학생 타입
-interface Student {
-    studentId: number;
-    name: string;
+// 강사 정보 관리를 위한 강사 타입 
+interface Teacher{
+    teacherId: number;
+	name: string;
+    birth: string;
     phone: string;
-    userId: number;
+	userId: number;
     storeName: string;
+    salary: number;
     cdStatus: string;
     statusName: string;
-    classNames: string;
+    classNames: string; 
 }
 
-// pageInfo 타입
+// 해당 페이지의 모든 정보 관리를 위한 pageInfo 타입
 interface PageInfo {
-    list: Student[];
+    list: Teacher[];
     startPageNum: number;
     endPageNum: number;
     totalPageCount: number;
@@ -31,7 +33,7 @@ interface PageInfo {
     keyword: string;
 }
 
-function StudentList() {
+function TeacherList() {
     const [pageInfo, setPageInfo] = useState<PageInfo>({
         list: [],
         startPageNum: 0,
@@ -39,22 +41,22 @@ function StudentList() {
         totalPageCount: 0,
         pageNum: 1,
         totalRow: 0,
-        state: "STUDY",
+        state: "WORK",
         condition: "",
         keyword: ""
     });
 
-    // const [students, setStudents] = useState<Student[]>([]);
+    // const [teachers, setTeachers] = useState<Teacher[]>([]);
     const [showRegister, setShowRegister] = useState(false);
-    const [editStudent, setEditStudent] = useState<Student | null>(null);
-    const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
-    const navigate = useNavigate();
+    const [editTeacher, setEditTeacher] = useState<Teacher | null>(null);
+    const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
+
     const [params, setParams] = useSearchParams(); // URL 기준으로 상태 유지 및 변경
     const [pageArray, setPageArray] = useState<number[]>([]);
     
-    const userId = "2"; // TODO: 실제 로그인한 사용자 userId 데이터 가져오기
-
-    const state = params.get("state") || "STUDY";
+    const userId = "2"; // userId 데이터 가져오기
+    
+    const state = params.get("state") || "WORK";
     const condition = params.get("condition") || "";
     const keyword = params.get("keyword") || "";
     const pageNum = parseInt(params.get("pageNum") || "1");
@@ -62,7 +64,7 @@ function StudentList() {
     const [searchCondition, setSearchCondition] = useState(condition);
     const [searchKeyword, setSearchKeyword] = useState(keyword);    
 
-    // 페이징용 숫자 배열 생성
+   // 페이징용 숫자 배열 생성
     function range(start: number, end: number): number[] {
         const result: number[] = [];
         for (let i = start; i <= end; i++) {
@@ -74,7 +76,7 @@ function StudentList() {
     // 학생 목록 데이터 가져오기
     const fetchData = () => {
         console.log({ userId, pageNum, state, condition, keyword });
-        api.get('/students', {
+        api.get('/teachers', {
             params: {
                 userId,
                 pageNum,
@@ -115,7 +117,7 @@ function StudentList() {
 
     // 검색 버튼 클릭 시 condition, keyword 반영
     const handleSearch = (): void => {
-        console.log({ userId, state, condition, keyword });
+        console.log({ userId, pageNum, state, condition, keyword });
         setParams({
           userId,
           pageNum: "1",
@@ -129,7 +131,7 @@ function StudentList() {
     const handleReset = (): void => {
         setSearchCondition("");
         setSearchKeyword("");
-
+        
         setParams({
           userId,
           pageNum: "1",
@@ -137,13 +139,13 @@ function StudentList() {
           condition: "",
           keyword: "",
         });
-
+        
     };
 
     useEffect(() => {
         fetchData();
     }, [params]); // params 변화에 따라 fetchData
-    
+
     //전체 div에 적용될 css
     const centerStyle: React.CSSProperties ={
         maxWidth:"1600px",
@@ -151,78 +153,102 @@ function StudentList() {
         padding:"2rem",
         textAlign:"center"
     }
+	
+    
     return (
         <div style={centerStyle}>
-            <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>학생 목록</h1>
+            <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>강사 목록</h1>
             <div className="d-flex justify-content-between align-items-center">
-                <Form className="d-flex align-items-center gap-1">
-                    {/* 재원/퇴원/전체 버튼 */}
+                {/* 왼쪽: 검색 관련 폼 */}
+                <Form className="d-flex align-items-center gap-1">                
+                    {/* 재직/퇴직/전체 버튼 */}
                     <ButtonGroup>
-                        <Button variant={state === "STUDY" ? "primary" : "outline-primary"} onClick={() => changeState("STUDY")} style={{ whiteSpace: "nowrap" }}>재원</Button>
-                        <Button variant={state === "S_QUIT" ? "primary" : "outline-primary"} onClick={() => changeState("S_QUIT")} style={{ whiteSpace: "nowrap" }}>퇴원</Button>
-                        <Button variant={state === "WHOLE" ? "primary" : "outline-primary"} onClick={() => changeState("WHOLE")} style={{ whiteSpace: "nowrap" }}>전체</Button>
+                        <Button
+                        variant={state === "WORK" ? "primary" : "outline-primary"}
+                        onClick={() => changeState("WORK")}
+                        style={{ whiteSpace: "nowrap" }}
+                        >
+                        재직
+                        </Button>
+                        <Button
+                        variant={state === "T_QUIT" ? "primary" : "outline-primary"}
+                        onClick={() => changeState("T_QUIT")}
+                        style={{ whiteSpace: "nowrap" }}
+                        >
+                        퇴직
+                        </Button>
+                        <Button
+                        variant={state === "WHOLE" ? "primary" : "outline-primary"}
+                        onClick={() => changeState("WHOLE")}
+                        style={{ whiteSpace: "nowrap" }}
+                        >
+                        전체
+                        </Button>                        
                     </ButtonGroup>
 
-                    {/* 검색 조건 */}
+                    {/* 검색 조건 drop-down 선택 */}                
                     <Form.Select value={searchCondition} onChange={(e) => setSearchCondition(e.target.value)} style={{ maxWidth: "100px" }}>
                         <option value="">선택</option>
-                        <option value="STUDENT">학생명</option>
+                        <option value="TEACHER">강사명</option>
                         <option value="CLASS">수업명</option>
-                    </Form.Select>
+                    </Form.Select>                    
 
-                    {/* 검색어 */}
+                    {/* 검색어 keyword 입력 */}
                     <Form.Control
                         type="text"
                         placeholder={
-                            condition === "STUDENT"
-                                ? "학생명을 입력하세요"
-                                : condition === "CLASS"
-                                ? "수업명을 입력하세요"
-                                : "검색조건을 선택하세요"
+                            condition === "TEACHER" 
+                            ? "강사명을 입력하세요" 
+                            : condition === "CLASS"
+                            ? "수업명을 입력하세요"
+                            : "검색조건을 선택하세요"
                         }
                         value={searchKeyword}
                         onChange={(e) => setSearchKeyword(e.target.value)}
                         style={{ minWidth: "200px" }}
                     />
 
+                    {/* 검색 버튼 */}
                     <Button variant="success" onClick={handleSearch} style={{ whiteSpace: "nowrap" }}>검색</Button>
                     <Button variant="dark" onClick={handleReset} style={{ whiteSpace: "nowrap" }}>초기화</Button>
                 </Form>
 
-                {pageInfo.keyword && (
-                    <p><strong>{pageInfo.totalRow}</strong> 명의 학생이 검색되었습니다</p>
+                { pageInfo.keyword && (
+                    <p><strong>{pageInfo.totalRow}</strong> 명의 강사가 검색되었습니다</p>
                 )}
-
-                <Button variant="outline-dark" className="ms-auto" onClick={() => setShowRegister(true)}>학생 등록</Button>
+                {/* 오른쪽: 강사 등록 버튼 */}
+                <Button variant="outline-dark" className="ms-auto" onClick={() => setShowRegister(true)}>강사 등록</Button>
+                
             </div>
-
             <Table>
                 <thead className="table-dark">
                     <tr>
                         <th>번호</th>
                         <th>지점명</th>
                         <th>이름</th>
-                        <th>전화번호</th>
-                        <th>재원 여부</th>
-                        <th>현재 수강 수업</th>
-                        <th>수강 이력</th>
+                        <th>생년 월일</th>
+                        <th>전화 번호</th>
+                        <th>재직 여부</th>                         
+                        <th>현재 담당 수업</th>
+                        <th>수업 이력</th>
                         <th>정보 수정</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {pageInfo.list.map((student, index) => (
-                        <tr key={student.studentId}>
+                    { pageInfo.list.map((teacher, index) => (
+                        <tr key={teacher.teacherId}>
                             <td>{index + 1}</td>
-                            <td>{student.storeName}</td>
-                            <td>{student.name}</td>
-                            <td>{student.phone}</td>
-                            <td>{student.statusName}</td>
-                            <td>{student.cdStatus === "STUDY" ? student.classNames : "-"}</td>
+                            <td>{teacher.storeName}</td>
+                            <td>{teacher.name}</td>
+                            <td>{teacher.birth}</td>
+                            <td>{teacher.phone}</td>
+                            <td>{teacher.statusName}</td>
+                            <td>{teacher.cdStatus === "WORK" ? teacher.classNames : "-"}</td>
                             <td>
-                                <Button size="sm" onClick={() => setSelectedStudent(student)}>보기</Button>
+                                <Button size="sm" onClick={() => setSelectedTeacher(teacher)}>보기</Button>
                             </td>
                             <td>
-                                <Button size="sm" onClick={() => setEditStudent(student)}>수정</Button>
+                                <Button size="sm" onClick={() => setEditTeacher(teacher)}>수정</Button>
                             </td>
                         </tr>
                     ))}
@@ -257,24 +283,24 @@ function StudentList() {
                 />
             )}
 
-            {editStudent && (
+            {editTeacher && (
                 <UpdateModal
-                    student={editStudent}
+                    teacher={editTeacher}
                     show={true}
-                    onClose={() => setEditStudent(null)}
+                    onClose={() => setEditTeacher(null)}
                     onUpdate={fetchData}
                 />
             )}
 
-            {selectedStudent && (
+            {selectedTeacher && (
                 <HistoryModal
-                    student={selectedStudent}
+                    teacher={selectedTeacher}
                     show={true}
-                    onClose={() => setSelectedStudent(null)}
+                    onClose={() => setSelectedTeacher(null)}
                 />
             )}
         </div>
     );
 }
 
-export default StudentList;
+export default TeacherList;

@@ -106,7 +106,7 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ student, show, onClose, onUpd
             })
             .catch(err => {
                 console.log(err);
-                alert("수정 중 오류가 발생했습니다");
+                alert("학생 정보 수정 실패했습니다");
             });    
     };
 
