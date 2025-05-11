@@ -159,46 +159,34 @@
 		select * FROM tb_bcode WHERE ACODE = 'LECTURE'
 	</select>	
 	
-	<!-- 해당지점에서 개설한 수업리스트(페이징, 검색 조건 없이) -->
-	<select id="getClassList" parameterType="int" resultType="com.example.FinalProject.dto.HjClassDto">
-				SELECT 
-	                c.class_id,
-	                c.class_name,
-	                c.cd_lecture,
-	                t.name AS teacher_name,
-	                TO_CHAR(c.start_date, 'YYYY-MM-DD') AS start_date,
-	                TO_CHAR(c.end_date, 'YYYY-MM-DD') AS end_date,
-	                c.start_time,
-	                c.end_time,
-	                c.weekday,
-	                COUNT(sc.student_id) AS current_student, 
-	                c.max_student,
-	                c.price,
-	                TO_CHAR(c.apply_start_date, 'YYYY-MM-DD') AS apply_start_date,
-	                TO_CHAR(c.apply_end_date, 'YYYY-MM-DD') AS apply_end_date,
-	                c.cd_status
-	            FROM tb_class c
-	            JOIN tb_teacher t ON c.teacher_id = t.teacher_id 
-	            LEFT JOIN tb_student_class sc ON c.class_id = sc.class_id AND c.cd_status IN ('BEFORE', 'READY', 'START', 'END')
-	            WHERE c.user_id = #{userId}
+   
+   <!-- 해당지점에서 개설한 수업리스트(페이징, 검색 조건 없이) -->
+   <select id="getClassList" parameterType="int" resultType="com.example.FinalProject.dto.HjClassDto">
+            SELECT 
+                   c.class_id,
+                   c.class_name,
+                   c.cd_lecture,
+                   t.name AS teacher_name,
+                   TO_CHAR(c.start_date, 'YYYY-MM-DD') AS start_date,
+                   TO_CHAR(c.end_date, 'YYYY-MM-DD') AS end_date,
+                   c.start_time,
+                   c.end_time,
+                   c.weekday,
+                 
+                   c.max_student,
+                   c.price,
+                   TO_CHAR(c.apply_start_date, 'YYYY-MM-DD') AS apply_start_date,
+                   TO_CHAR(c.apply_end_date, 'YYYY-MM-DD') AS apply_end_date,
+                   c.cd_status
+               FROM tb_class c
+               JOIN tb_teacher t ON c.teacher_id = t.teacher_id 
+               LEFT JOIN tb_student_class sc ON c.class_id = sc.class_id AND c.cd_status IN ('BEFORE', 'READY', 'START', 'END')
+               WHERE c.user_id = #{userId}
 
-	            GROUP BY 
-					c.class_id,
-					c.class_name,
-					c.cd_lecture,
-					t.name,
-					c.start_date,
-					c.end_date,
-					c.start_time,
-					c.end_time,
-					c.weekday,
-					c.max_student,
-					c.price,
-					c.apply_start_date,
-					c.apply_end_date,
-					c.cd_status
-	            ORDER BY c.class_id ASC
-	</select>
+               
+               ORDER BY c.class_id ASC
+   </select>
+   
 	
 <!-- 학생의 다른 수업 시간 조회 -->
 <select id="getStudentSchedules" resultType="ConflictClassDto">
@@ -209,19 +197,19 @@
 	      TO_CHAR(c.end_date, 'YYYY-MM-DD') AS end_date,
         c.start_time AS start_time,
         c.end_time AS end_time,
-        c.weekday,
-    FROM student_class sc
-    JOIN class c ON sc.class_id = c.class_id
+        c.weekday
+    FROM tb_student_class sc
+    JOIN tb_class c ON sc.class_id = c.class_id
     WHERE sc.student_id = #{studentId}
     AND sc.class_id != #{classId}
 </select>
 
 <insert id="insertStudentClass" parameterType="map">
-  INSERT INTO tb_student_class (student_id, class_id)
-  VALUES
-  <foreach collection="studentIds" item="studentId" separator=",">
-    (#{studentId}, #{classId})
+  INSERT ALL
+  <foreach collection="studentIds" item="studentId">
+    INTO tb_student_class (student_id, class_id) VALUES (#{studentId}, #{classId})
   </foreach>
+  SELECT * FROM dual
 </insert>
 
   <delete id="deleteStudentClass" parameterType="map">
