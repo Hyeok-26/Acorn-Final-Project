@@ -133,7 +133,7 @@ function OrderList() {
                     </div>
 
                     <Table bordered className="text-center">
-                        <thead>
+                        <thead className="table-success">
                             <tr>
                                 <th style={{ width: '10%' }}>발주 번호</th>
                                 <th style={{ width: '20%' }}>발주 일자</th>

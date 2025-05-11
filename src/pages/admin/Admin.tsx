@@ -4,14 +4,6 @@ import PopularItemsSection from "@/components/PopularItemsSection";
 
 const overview = [
   {
-    title: "지점 매출수익",
-    value: "₩12,345,000",
-    diff: "+3.2%",
-    sub: "작년 대비 +₩380,000",
-    color: "text-green-600",
-    diffColor: "text-green-500"
-  },
-  {
     title: "현재 수강생 수",
     value: "320",
     diff: "+1.8%",
@@ -24,6 +16,14 @@ const overview = [
     value: "15",
     diff: "",
     sub: "현재 근무 중",
+    color: "text-indigo-600",
+    diffColor: ""
+  },
+  {
+    title: "현재 수업 개수",
+    value: "15",
+    diff: "",
+    sub: "현재 강의 중",
     color: "text-indigo-600",
     diffColor: ""
   }
@@ -51,8 +51,6 @@ const items = [
 ];
 
 function Admin() {
-
-
     
     return (
         <div className="flex flex-col gap-6 p-8 bg-gray-50 min-h-screen">

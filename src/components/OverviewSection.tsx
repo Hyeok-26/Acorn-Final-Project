@@ -19,7 +19,7 @@ const OverviewSection = ({ overview }: OverviewSectionProps) => (
         <div
           key={o.title}
           className="
-            bg-white rounded-lg shadow p-6 flex flex-col justify-center min-h-[180px]
+            bg-white rounded-3xl shadow p-6 flex flex-col justify-center min-h-[180px]
             transition-all duration-200
             hover:shadow-lg hover:scale-105 cursor-pointer
           "

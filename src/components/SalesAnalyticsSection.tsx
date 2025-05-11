@@ -11,7 +11,7 @@ interface SalesAnalyticsSectionProps {
 
 const SalesAnalyticsSection = ({ salesData }: SalesAnalyticsSectionProps) => (
   <section className="flex-1 bg-white rounded-lg shadow p-6 min-h-[600px] flex flex-col">
-    <div className="text-2xl font-bold mb-4">(1지점골라서)월 매출 현황</div>
+    <div className="text-2xl font-bold mb-4">작년 월 매출 현황</div>
     <div className="flex-1 flex items-center">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart

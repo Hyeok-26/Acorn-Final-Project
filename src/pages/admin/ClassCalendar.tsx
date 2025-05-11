@@ -47,6 +47,8 @@ interface CalendarEvent {
   start: Date;
   end: Date;
   resource: HjClassDto;
+  bgColor: string;
+  textColor: 'black' | 'white';
 }
 
 const ClassCalendar: React.FC = () => {
@@ -59,12 +61,48 @@ const ClassCalendar: React.FC = () => {
   const storeName = "스토어01"; // storeName 데이터 가져오기
   
 
-  // classId 기준 색상 고정하여 사용
-  const getFixedColor = (classId: number) => {
-    // 지정된 색상 중 랜덤 선택
-    const colors = ['#A0522D', '#CD5C5C	', '#BC8F8F', '#FA8072	', '#FF6347', '#CD853F	', '#FFA500', '#DEB887', '#FFD700', '#BDB76B', '#9ACD32', '#6B8E23', '#228B22', '#3CB371', '#008B8B', '#20B2AA', '#87CEEB', '#48D1CC', '#6495ED', '#4169E1', '#00008B', '#483D8B', '#6A5ACD', '#9370DB', '#DDA0DD', '#8B008B', '#DB7093', '#FFB6C1', '#778899' ,'#808080'];
-    return colors[classId % colors.length]; // 항상 같은 인덱스로 계산되어 같은 색상 선택됨
+  // classId 이용해서 HSL 방식으로 고정된 배경색 생성
+  function getBgColor(classId: number): string {
+    // 간단한 숫자를 기반으로 H(색상값)를 0~360 사이에서 생성
+    const hue = classId * 57 % 360; // 57은 소수로 충돌 최소화
+    const saturation = 70; // 선명도 (%)
+    const lightness = 60; // 밝기 (%)
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
   };
+
+  // 배경색에 따른 글자색 자동 설정
+  function getTextColor(bgColor: string): 'black' | 'white' {
+    // hsl → rgb → 밝기 계산
+    const rgb = hslToRgb(bgColor);
+    const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
+    return brightness > 150 ? 'black' : 'white';
+  }
+  
+  function hslToRgb(hsl: string): { r: number, g: number, b: number } {
+    const [_, h, s, l] = hsl.match(/hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)/)!.map(Number);
+  
+    const sRatio = s / 100;
+    const lRatio = l / 100;
+  
+    const c = (1 - Math.abs(2 * lRatio - 1)) * sRatio;
+    const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+    const m = lRatio - c / 2;
+  
+    let r = 0, g = 0, b = 0;
+  
+    if (h < 60) [r, g, b] = [c, x, 0];
+    else if (h < 120) [r, g, b] = [x, c, 0];
+    else if (h < 180) [r, g, b] = [0, c, x];
+    else if (h < 240) [r, g, b] = [0, x, c];
+    else if (h < 300) [r, g, b] = [x, 0, c];
+    else [r, g, b] = [c, 0, x];
+  
+    return {
+      r: Math.round((r + m) * 255),
+      g: Math.round((g + m) * 255),
+      b: Math.round((b + m) * 255),
+    };
+  }
  
   // Calendar 네비게이션 처리 함수
   const onNavigate = useCallback((action) => {
@@ -115,22 +153,27 @@ const ClassCalendar: React.FC = () => {
             // 시작(start)과 끝(end) 기준으로 연속된 이벤트 바 하나 생성
             // 반복되는 요일에 반복 이벤트를 생성하기 위해 여러 이벤트 객체로 분할해서 각 이벤트를 events 배열에 push
             // startDate 에서 currentDate 시작, endDate 까지, currentDate 의 날짜 하루씩 증가하면서 for 문 반복
-            // currentDate.getDay(); 0~6 (일~토) 리턴
+            
             for (let currentDate = new Date(startDate); currentDate <= endDate; currentDate.setDate(currentDate.getDate() + 1)) {
-              if (activeDays.includes(currentDate.getDay())) {
+              // getDay(); 0~6 (일~토) 리턴 → (월~일) 로 변환
+              const convertedDateIdx = currentDate.getDay() === 0 ? 6 : currentDate.getDay()-1; // 일요일이면 6, 그 외 -1
+              if (activeDays.includes(convertedDateIdx)) {
                 // 날짜 문자열 생성 : YYYY-MM-DD 형식
                 const currentDateStr = currentDate.toISOString().slice(0, 10); // 0부터 10번째 문자까지 
                 console.log('currentDateStr:', currentDateStr); // 현재 날짜 출력
                 console.log('startTime:', item.startTime, 'endTime:', item.endTime);
                 const startDateTime = new Date(`${currentDateStr}T${item.startTime}:00`); // 올바른 ISO 8601 형식(YYYY-MM-DDTHH:mm:ss)으로 변환
                 const endDateTime = new Date(`${currentDateStr}T${item.endTime}:00`);
-           
+                const bgColor = getBgColor(item.classId);
+
                 allEvents.push({
                   id: `${item.classId} ${currentDateStr}`,
                   title: item.className,
                   start: startDateTime,
                   end: endDateTime,
                   resource: item, // 전체 Dto 내용 저장
+                  bgColor,
+                  textColor: getTextColor(bgColor),
 
                 });
                 console.log('event added:', { title: item.className, startDateTime, endDateTime });
@@ -203,6 +246,8 @@ const CustomEvent = ({ event }) => {
       alignItems: 'center',
       justifyContent: 'center',
       fontSize: '10px',
+      backgroundColor: event.bgColor,
+      color: event.textColor,
     }}>
       <strong>{timeStr}</strong> &nbsp;- {event.title} {/* 문자열 내에서 HTML에서 공백을 의미하는 특수 문자(&nbsp;)를 사용 */}
     </span>
@@ -332,10 +377,19 @@ const CalendarToolbar = ({ label, onNavigate }) => {
     </Box>
   ); 
 }; 
+
+//전체 div에 적용될 css
+const centerStyle: React.CSSProperties ={
+    maxWidth:"1600px",
+    margin:"0 auto",
+    padding:"2rem",
+    textAlign:"center"
+}
+
   // 최종적으로 ClassCalendar 함수 자체의 리턴값 Calendar
   return (
-    <>
-      <h2>{storeName} 월간 수업 일정표</h2>
+    <div style={centerStyle}>
+      <h2 style={{ marginTop: '60px',marginBottom: '60px' }}>{storeName} 월간 수업 일정표</h2>
       <Calendar
         date={date} // 내부적으로 날짜 date 상태 관리하여
         onNavigate={onNavigate} // onNavigate 로 date 상태 갱신
@@ -345,7 +399,8 @@ const CalendarToolbar = ({ label, onNavigate }) => {
         endAccessor="end"  // 이벤트 객체에서 종료 시간 필드
         defaultView="month"
         views={['month']}
-        style={{ height: 700 }}  // 캘린더 크기
+        style={{ height: 800 }}  // 캘린더 크기
+        popup={true}
         onSelectEvent={handleEventClick}  // 이벤트 클릭 시 수행할 동작
         components={{
           event: CustomEvent, // 이벤트 셀 전달
@@ -353,8 +408,8 @@ const CalendarToolbar = ({ label, onNavigate }) => {
         }}
         eventPropGetter={(event) => ({
           style: {
-            backgroundColor: getFixedColor(event.resource.classId),
-            color: 'white',
+            backgroundColor: event.bgColor,
+            color: event.textColor,
             borderRadius: '4px',
             border: 'none',
           },
@@ -373,22 +428,22 @@ const CalendarToolbar = ({ label, onNavigate }) => {
           horizontal: 'center',
         }}
       >
-        <Box sx={{ p: 2, minWidth: 250 }} style= {{ backgroundColor: getFixedColor(selectedEvent?.classId || 0) }}> {/*Popover 에 보여줄 내용*/}
+        <Box sx={{ p: 2, minWidth: 250 }} style= {{ backgroundColor: getBgColor(selectedEvent?.classId || 0) }}> {/*Popover 에 보여줄 내용*/}
           {selectedEvent && (
             <>
-              <Typography variant="h6">[{selectedEvent.classId}] {selectedEvent.className}</Typography>
-              <Typography variant="body2">상태: {selectedEvent.cdStatus}</Typography>
-              <Typography variant="body2">강사: {selectedEvent.teacherName}</Typography>
-              <Typography variant="body2">요일: {getWeekdayNames(selectedEvent.weekday)}</Typography>
-              <Typography variant="body2">기간: {selectedEvent.startDate} ~ {selectedEvent.endDate}</Typography>
-              <Typography variant="body2">시간: {selectedEvent.startTime} ~ {selectedEvent.endTime}</Typography>
-              <Typography variant="body2">정원: {selectedEvent.currentStudent} / {selectedEvent.maxStudent}</Typography>
-              <Typography variant="body2">교습비: {formatNumber(selectedEvent.price)}원</Typography>
+              <Typography variant="h6" style={{ color: getTextColor(getBgColor(selectedEvent?.classId || 0)) }}>[{selectedEvent.classId}] {selectedEvent.className}</Typography>
+              <Typography variant="body2" style={{ color: getTextColor(getBgColor(selectedEvent?.classId || 0)) }}>상태: {selectedEvent.cdStatus}</Typography>
+              <Typography variant="body2" style={{ color: getTextColor(getBgColor(selectedEvent?.classId || 0)) }}>강사: {selectedEvent.teacherName}</Typography>
+              <Typography variant="body2" style={{ color: getTextColor(getBgColor(selectedEvent?.classId || 0)) }}>요일: {getWeekdayNames(selectedEvent.weekday)}</Typography>
+              <Typography variant="body2" style={{ color: getTextColor(getBgColor(selectedEvent?.classId || 0)) }}>기간: {selectedEvent.startDate} ~ {selectedEvent.endDate}</Typography>
+              <Typography variant="body2" style={{ color: getTextColor(getBgColor(selectedEvent?.classId || 0)) }}>시간: {selectedEvent.startTime} ~ {selectedEvent.endTime}</Typography>
+              <Typography variant="body2" style={{ color: getTextColor(getBgColor(selectedEvent?.classId || 0)) }}>정원: {selectedEvent.currentStudent} / {selectedEvent.maxStudent}</Typography>
+              <Typography variant="body2" style={{ color: getTextColor(getBgColor(selectedEvent?.classId || 0)) }}>교습비: {formatNumber(selectedEvent.price)}원</Typography>
             </>
           )}
         </Box>
       </Popover>
-    </>
+    </div>
   );
 };
 
