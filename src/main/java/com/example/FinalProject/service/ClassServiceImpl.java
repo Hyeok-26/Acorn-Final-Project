@@ -1,6 +1,8 @@
 package com.example.FinalProject.service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -8,9 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.FinalProject.dto.ClassCheckDto;
+import com.example.FinalProject.dto.ConflictClassDto;
 import com.example.FinalProject.dto.HjClassDto;
 import com.example.FinalProject.dto.HjClassListDto;
 import com.example.FinalProject.dto.HjLectureDto;
+import com.example.FinalProject.dto.SelectableStudentDto;
 import com.example.FinalProject.dto.StudentClassDto;
 import com.example.FinalProject.dto.StudentDto;
 import com.example.FinalProject.mapper.AdminSalesMapper;
@@ -159,33 +163,6 @@ public class ClassServiceImpl implements ClassService {
 		return classMapper.getClassList(userId);
 	}
 	
-	@Override
-	public List<StudentClassDto> checkClassOverlap(ClassCheckDto dto) {
-		// TODO Auto-generated method stub
-		return classMapper.checkClassStudent(dto);
-	}
-
-	@Override
-	public boolean insertStudentClass(StudentClassDto dto) {
-		try {
-			return classMapper.insertStudentClass(dto);
-		}catch(Exception e) {
-			return false;
-		}
-		
-	}
-
-
-	@Override
-	public boolean deleteStudentClass(StudentClassDto dto) {
-		try {
-			return classMapper.deleteStudentClass(dto);
-		}catch(Exception e) {
-			return false;
-		}
-		
-	}
-
 
 	@Override
 	public List<StudentDto> getClassStudentList(int classId) {
@@ -200,7 +177,57 @@ public class ClassServiceImpl implements ClassService {
 		return classMapper.getAllStudentList(userId);
 	}
 
+	@Override
+	public List<SelectableStudentDto> checkStudentsWithConflict(int classId, int userId) {
+	    HjClassDto targetClass = classMapper.getClassdetail(classId);
+	    List<StudentDto> allStudents = classMapper.getAllStudentList(userId);
 
+	    return allStudents.stream().map(student -> {
+	        SelectableStudentDto dto = new SelectableStudentDto();
+	        dto.setStudentId(student.getStudentId());
+	        dto.setName(student.getName());
+	        dto.setPhone(student.getPhone());
+
+	        List<ConflictClassDto> conflicts = classMapper.getStudentSchedules(student.getStudentId(), classId);
+
+	        // 1. 날짜가 겹치는 conflict 만 필터링
+	        List<ConflictClassDto> dateOverlaps = conflicts.stream()
+	            .filter(conflict -> !(conflict.getEndDate().compareTo(targetClass.getStartDate()) <= 0 ||
+	                                  conflict.getStartDate().compareTo(targetClass.getEndDate()) >= 0))
+	            .collect(Collectors.toList());
+
+	        // 2. 위에서 날짜가 겹치는 것들 중 요일/시간 겹침이 있는지 확인
+	        Optional<ConflictClassDto> conflictFound = dateOverlaps.stream()
+	            .filter(conflict -> conflict.getWeekday().equals(targetClass.getWeekday()) &&
+	                                !(conflict.getEndTime().compareTo(targetClass.getStartTime()) <= 0 ||
+	                                  conflict.getStartTime().compareTo(targetClass.getEndTime()) >= 0))
+	            .findFirst();
+
+	        if (conflictFound.isPresent()) {
+	            dto.setSelectable(false);
+	            ConflictClassDto conflict = conflictFound.get();
+	            String reason = String.format("%s %s~%s 수업과 중복됨",
+	                    conflict.getWeekday(), conflict.getStartTime(), conflict.getEndTime());
+	            dto.setConflictReason(reason);
+	        } else {
+	            dto.setSelectable(true);
+	        }
+
+	        return dto;
+	    }).collect(Collectors.toList());
+	}
+
+
+	    @Override
+	    public void addStudentsToClass(int classId, List<Integer> studentIds) {
+	        if (studentIds == null || studentIds.isEmpty()) return ;
+	        classMapper.insertStudentClass(studentIds, classId);
+	    }
+
+	    @Override
+	    public void removeStudentFromClass(int studentId, int classId) {
+	        classMapper.deleteStudentClass(studentId, classId);
+	    }
 
 	
 	

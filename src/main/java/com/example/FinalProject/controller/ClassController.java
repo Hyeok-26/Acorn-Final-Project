@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.FinalProject.dto.HjClassDto;
 import com.example.FinalProject.dto.HjClassListDto;
 import com.example.FinalProject.dto.HjLectureDto;
-import com.example.FinalProject.dto.StudentClassDto;
+import com.example.FinalProject.dto.SelectableStudentDto;
 import com.example.FinalProject.dto.StudentDto;
 import com.example.FinalProject.service.AdminSalesService;
 import com.example.FinalProject.service.ClassService;
@@ -120,9 +122,26 @@ public class ClassController {
 		return service.getAllStudentList(userId);
 	}
 	
-	@DeleteMapping("/class/delete-student")
-	public boolean deleteStudentClass(@RequestBody StudentClassDto dto) {
-		return service.deleteStudentClass(dto);
+	@GetMapping("/class/check-students")
+	public ResponseEntity<List<SelectableStudentDto>> getSelectableStudents(
+	        @RequestParam int classId,
+	        @RequestParam int userId) {
+	    List<SelectableStudentDto> students = service.checkStudentsWithConflict(classId, userId);
+	    return ResponseEntity.ok(students);
 	}
-	
+
+	 @PostMapping("/classes/{classId}/students")
+	    public ResponseEntity<String> addStudentsToClass(@PathVariable int classId,
+	        @RequestBody List<Integer> studentIds) {
+	        service.addStudentsToClass(classId, studentIds);
+	        return ResponseEntity.ok("학생들이 수업에 성공적으로 추가되었습니다.");
+	    }
+
+	    @DeleteMapping
+	    public ResponseEntity<Void> removeStudentFromClass(
+	       @PathVariable int classId,
+	        @PathVariable int studentId) {
+	        service.removeStudentFromClass(classId, studentId);
+	        return ResponseEntity.ok().build();
+	    }
 }
