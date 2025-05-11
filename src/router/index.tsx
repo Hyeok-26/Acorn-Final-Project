@@ -25,6 +25,7 @@ import StudentList from "@/pages/admin/StudentList";
 import ClassCalendar from "@/pages/admin/ClassCalendar";
 import SalesManage from "@/pages/admin/SalesManage";
 import SalesStatus from "@/pages/admin/SalesStatus";
+import TeacherList from "@/pages/admin/TeacherList";
 
 
 const routes = [
@@ -51,6 +52,7 @@ const routes = [
     {path:"/admin/class", element:<Class/>},
 
     {path: '/admin/students', element:<StudentList/>},
+    {path: '/admin/teachers', element:<TeacherList/>},
     {path: '/admin/calendar', element:<ClassCalendar/>},
     {path: '/admin/salesmanage', element:<SalesManage/>},
     {path: '/admin/salesstat', element:<SalesStatus/>}

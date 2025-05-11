@@ -18,7 +18,7 @@ const menuItems = [
         icon: User,
         subItems: [
             { name: "학생 관리", path: "/admin/students" },
-            { name: "강사 관리", path: "ㅍㅍ 강사관리 경로" }
+            { name: "강사 관리", path: "/admin/teachers" }
         ]
     },
     { 
