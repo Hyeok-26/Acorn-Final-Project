@@ -1,27 +1,26 @@
+import api from '@/api';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Home() {
     const navigate = useNavigate();
-    const [userId, setUserId] =useState('');
-
+    const [id, setId] =useState('');
+    const [pw, setUserPassword] =useState('');
+    
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log(userId)
-        if(userId==='9999'){
-            navigate('/ceo');
-        }else{
-            navigate('/admin');
-        }
-        
-        
-    };
-
-    const handleAdminLogin = (e: React.FormEvent) => {
-        e.preventDefault();
-
-        // 실제 로그인 로직은 없음 (가정)
-        
+        api.post('/login', {
+            id: id,
+            pw: pw
+        }).then((res) => {
+            if(res.data.cdRole === 'CEO'){
+                navigate('/ceo');
+            }else if(res.data.cdRole === 'ADMIN'){
+                navigate('/admin');
+            }else{
+                alert('아이디 또는 비밀번호가 틀렸습니다.');
+            }
+        });
     };
 
     return (
@@ -35,9 +34,9 @@ function Home() {
                             <input
                                 type="text"
                                 className="form-control"
-                                id="userId"
-                                value={userId}
-                                onChange={(e) => setUserId(e.target.value)}
+                                id="id"
+                                value={id}
+                                onChange={(e) => setId(e.target.value)}
                                 placeholder="아이디를 입력하세요"
                             />
                         </div>
@@ -46,11 +45,13 @@ function Home() {
                             <input
                                 type="password"
                                 className="form-control"
-                                id="userPassword"
+                                id="pw"
+                                value={pw}
+                                onChange={(e) => setUserPassword(e.target.value)}
                                 placeholder="비밀번호를 입력하세요"
                             />
                         </div>
-                        <button type="submit" className="btn btn-primary w-100">로그인</button>
+                        <button type="submit" className="btn btn-primary w-100" onClick={handleLogin}>로그인</button>
                     </form>
                 </div>
             </div>
