@@ -1,10 +1,9 @@
-import { Home, ShoppingCart, Percent, SpellCheck2, StickyNote, LogOut, User } from "lucide-react";
+import { Home, ShoppingCart, Percent, SpellCheck2, StickyNote, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const menuItems = [
     { name: "대시보드", icon: Home, path: "/ceo" },
-    { name: "마이페이지", icon: User, path: "ceo 마이페이지 경로" },
     {
         name: "기본 관리",
         icon: SpellCheck2,

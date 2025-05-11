@@ -18,7 +18,7 @@ const rankColors = [
 
 const PopularItemsSection = ({ items }: PopularItemsSectionProps) => (
   <section className="w-full lg:w-80 bg-white rounded-lg shadow p-6 min-h-[600px] flex flex-col justify-center">
-    <div className="text-2xl font-bold mb-4">누적 인기 강좌(수강생 기준)</div>
+    <div className="text-2xl font-bold mb-4">인기 강좌(수강생 기준)</div>
     <ul className="space-y-4 flex-1 flex flex-col justify-center">
       {items.map((item, idx) => (
         <li
