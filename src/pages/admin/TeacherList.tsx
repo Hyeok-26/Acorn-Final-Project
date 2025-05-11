@@ -146,9 +146,18 @@ function TeacherList() {
         fetchData();
     }, [params]); // params 변화에 따라 fetchData
 
+    //전체 div에 적용될 css
+    const centerStyle: React.CSSProperties ={
+        maxWidth:"1600px",
+        margin:"0 auto",
+        padding:"2rem",
+        textAlign:"center"
+    }
+	
+    
     return (
-        <div>
-            <h1>강사 목록</h1>
+        <div style={centerStyle}>
+            <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>강사 목록</h1>
             <div className="d-flex justify-content-between align-items-center">
                 {/* 왼쪽: 검색 관련 폼 */}
                 <Form className="d-flex align-items-center gap-1">                
@@ -246,7 +255,7 @@ function TeacherList() {
                 </tbody>
             </Table>
 
-            <Pagination className="mt-3">
+            <Pagination className="mt-3 justify-content-center">
                 <Pagination.Item onClick={() => move(pageInfo.startPageNum - 1)}
                     disabled={pageInfo.startPageNum === 1}>
                     Prev

@@ -267,7 +267,7 @@ function SalesStatus(props) {
         textAlign:"center"
     }
     return (
-        <div  >
+        <div style={centerStyle}>
             <div className="mb-3"> 
                 <div className="d-flex align-items-center justify-content-center">
                     <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>매출 통계</h1>
