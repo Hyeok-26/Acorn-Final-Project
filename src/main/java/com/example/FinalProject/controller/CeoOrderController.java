@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.FinalProject.dto.HUI_OrderDetailDto;
 import com.example.FinalProject.dto.HUI_OrderDto;
 import com.example.FinalProject.dto.HUI_OrderRequestDto;
+import com.example.FinalProject.service.AdminSalesService;
 import com.example.FinalProject.service.CeoOrderService;
 
 import lombok.Data;
@@ -25,6 +26,7 @@ import lombok.Data;
 public class CeoOrderController {
 	
 	@Autowired private CeoOrderService service;
+	@Autowired private AdminSalesService saleservice;
 	
 	// 테스트용 
 	@GetMapping("/ceo/sample")
@@ -72,6 +74,8 @@ public class CeoOrderController {
 	// 승인 처리하기 VV
 	@PatchMapping("/orders/app")
 	public int updateApp(@RequestBody HUI_OrderDetailDto detailDto) {
+		saleservice.insertOrderApprovedCost(detailDto.getOrderId());
+		System.out.println("인서트 성공!");
 		return service.updateApp(detailDto);
 	}
 		

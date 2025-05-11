@@ -90,7 +90,7 @@ public class CeoOrderServiceImpl implements CeoOrderService {
 		// 메모 저장하기
 		return mapper.updateReply(detailDto);
 	}
-
+	
 	@Override
 	public int updateApp(HUI_OrderDetailDto detailDto) {
 		// 승인 처리하기
@@ -104,6 +104,9 @@ public class CeoOrderServiceImpl implements CeoOrderService {
 				.build();
 		return ceoSaleMapper.insertEtcProfit(dto);
 	}
+	
+	
+	
 
 	@Override
 	public int updateRej(HUI_OrderDetailDto detailDto) {

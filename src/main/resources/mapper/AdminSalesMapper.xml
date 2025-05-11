@@ -130,7 +130,9 @@
 	      AND a.deleted = 'NO'
 	      AND b.deleted = 'NO'
 	      AND c.cd_status IN ('START', 'END')
-	      AND b.bcode IN ('JAVA', 'PYTHON', 'JAVASCRIPT')
+	      AND b.bcode IN (
+	              SELECT bcode FROM tb_bcode WHERE acode = 'LECTURE' AND deleted = 'NO'
+	          )
 	    ORDER BY sYear DESC
 	</select>
 	<select id="getSMonthList" parameterType="map" resultType="JsAdminSalesStatDto">
@@ -144,7 +146,9 @@
 	      AND a.deleted = 'NO'
 	      AND b.deleted = 'NO'
 	      AND c.cd_status IN ('START', 'END')
-	      AND b.bcode IN ('JAVA', 'PYTHON', 'JAVASCRIPT')
+	      AND  b.bcode IN (
+	              SELECT bcode FROM tb_bcode WHERE acode = 'LECTURE' AND deleted = 'NO'
+	          )
 	    ORDER BY sMonth ASC
 	</select>
 	<select id="getAdminSalesStatByLectYearly" parameterType="map" resultType="JsAdminSalesStatDto">
@@ -238,6 +242,6 @@
 	    (od.quantity * od.price) AS total
 	  FROM tb_order_detail od
 	  JOIN tb_product p ON od.product_id = p.product_id
-	  WHERE od.user_id=#{userId} and od.order_id = #{orderId}
+	  WHERE od.order_id = #{orderId}
 	</select>
 </mapper>
