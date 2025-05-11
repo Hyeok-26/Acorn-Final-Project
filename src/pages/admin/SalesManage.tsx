@@ -18,7 +18,7 @@ interface PageInfo {
     totalRow: number;
   }
 function SalesManage() {
-
+    const userId = '2'
     const [modalShow, setModalShow] = useState(false);
     const [title, setTitle] = useState("매출 추가");
     const [btnTag, setBtnTag] = useState("추가")
@@ -107,13 +107,14 @@ function SalesManage() {
         selectedBname: string;
         saleName:string;
         price:number;
+        userId:string;
     })=>{
         const requestBody = {
             aname:data.selectedAname,
             bname: data.selectedBname,
             saleName:data.saleName,
             price:data.price,
-            userId:1
+            userId:data.userId
         }
         api.post("/sales", requestBody)
         .then(res=>{
@@ -144,6 +145,7 @@ function SalesManage() {
             saleName: string;
             price: number;
             adminSaleId: number;
+            userId: number;
         },
         itemId?:number
     ) => {
@@ -156,7 +158,7 @@ function SalesManage() {
             saleName: data.saleName,
             price: data.price,
             adminSaleId: adminSaleId,
-            userId: 1
+            userId: data.userId
         };
         api.put(`/sales/${adminSaleId}`, requestBody)
         .then(res=>{
@@ -191,7 +193,7 @@ function SalesManage() {
     return (
         <div>
             <AdminSalesModal show={modalShow} title={title} btnTag={btnTag} onBtn={onBtn} 
-                                onClose={()=>setModalShow(false)} initialData={selectedItem}/>
+                                onClose={()=>setModalShow(false)} initialData={selectedItem} userid={userId}/>
         
             <div style={centerStyle}> 
                 <div className="d-flex align-items-center justify-content-center">

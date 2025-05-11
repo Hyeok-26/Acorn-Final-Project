@@ -1,5 +1,6 @@
 export interface AdminSalesDto {
     adminSaleId: number;
+    userId:string;
     storeName: string;
     saleName: string;
     creDate: string;
