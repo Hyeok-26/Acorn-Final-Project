@@ -16,7 +16,7 @@ import PostUpdateForm from "../pages/ceo/PostUpdateForm";
 import PostForm from "../pages/ceo/PostForm";
 
 import OrderDetail from "@/pages/ceo/OrderDetail";
-import Order from "@/pages/ceo/Order";
+import CeoOrder from "@/pages/ceo/Order";
 
 import OrderSale from "../pages/ceo/OrderSale";
 import ViewSale from "../pages/ceo/ViewSale";
@@ -43,7 +43,7 @@ const routes = [
     {path: '/posts/:postId', element:<PostDetail/>},
     {path: '/posts/:postId/edit', element:<PostUpdateForm/>},
 
-    {path: '/ceo/orders', element:<Order/>},
+    {path: '/ceo/orders', element:<CeoOrder/>},
     {path: '/ceo/orders/:orderId/detail', element:<OrderDetail/>},
 
     {path: '/ceo/ordersale', element:<OrderSale/>},

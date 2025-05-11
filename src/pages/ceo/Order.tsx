@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 
-function Order() {
+function CeoOrder() {
     // 동적 검색조건 상태(지점, 승인상태, 시작~끝 날짜)
     const [searchState, setSearchState] = useState({
         storeName: "",
@@ -218,4 +218,4 @@ function Order() {
     );
 }
 
-export default Order;
+export default CeoOrder;
