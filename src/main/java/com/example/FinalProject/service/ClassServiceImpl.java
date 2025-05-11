@@ -129,6 +129,9 @@ public class ClassServiceImpl implements ClassService {
 		
 		
 			String cdStatus = dto.getCdStatus();
+			int price = dto.getPrice()* dto.getCurrentStudent();
+			dto.setPrice(price);
+			
 	        if ("START".equals(cdStatus)) {
 	            // START일 경우: 상태 업데이트 + 매출 등록
 	    		boolean adminResult = salesmapper.insertClsProfitToAdmin(dto);
