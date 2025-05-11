@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const menuItems = [
     { name: "대시보드", icon: Home, path: "/admin" },
-    { name: "공지사항", icon: StickyNote, path: "admin 공지사항 경로" },
+    { name: "공지사항", icon: StickyNote, path: "/admin/notice" },
     { 
         name: "수업 관리", 
         icon: Calendar, 
