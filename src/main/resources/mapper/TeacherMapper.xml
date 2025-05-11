@@ -5,13 +5,13 @@
 	<insert id="insert" parameterType="TeacherDto">
 		INSERT INTO tb_teacher
 		(teacher_id, name, phone, user_id, salary, cd_status, birth)
-		VALUES(seq_teacher_id.NEXTVAL, #{name}, #{phone}, #{userId}, #{salary}, #{cdStatus}, #{birth})
+		VALUES(seq_teacher_id.NEXTVAL, #{name}, #{phone}, #{userId}, #{salary}, #{cdStatus}, TO_DATE(#{birth}, 'YYYY-MM-DD'))
 	</insert>	
 	
 	<!-- 강사 정보 수정 -->
 	<update id="update" parameterType="TeacherDto">
 		UPDATE tb_teacher
-		SET name=#{name}, phone=#{phone}, salary=#{salary}, cd_status=#{cdStatus}, birth=#{birth}
+		SET name=#{name}, phone=#{phone}, salary=#{salary}, cd_status=#{cdStatus}, TO_DATE(#{birth}, 'YYYY-MM-DD')
 		WHERE teacher_id=#{teacherId}
 	</update>
 
@@ -22,19 +22,19 @@
 	    t.name,
 	    c.class_id,
 	    c.class_name,
-	    c.start_date,
-	    c.end_date,
+		TO_CHAR(c.start_date, 'YYYY-MM-DD') AS startDate,
+	  	TO_CHAR(c.end_date, 'YYYY-MM-DD') AS endDate,
 	    c.start_time,
 	    c.end_time,
 	   	c.max_student,
 	   	c.weekday,
-	    SELECT COUNT(*)FROM tb_student_class sc WHERE sc.class_id = c.class_id AS currentStudent
+	   	COUNT(sc.student_id) AS currentStudent
 	  FROM tb_teacher t
-	  LEFT JOIN tb_class c ON t.teacher_id = c.teacher_id
+	  LEFT JOIN tb_class c ON t.teacher_id = c.teacher_id AND c.cd_status IN ('START','END') <!-- 진행중, 종강 -->
 	  LEFT JOIN tb_student_class sc ON sc.class_id = c.class_id
 	  WHERE 
 	  	t.teacher_id = #{teacherId}
-	  	AND c.cd_status IN ('START','END') <!-- 진행중, 종강 -->
+	  	
 	  GROUP BY t.teacher_id, t.name, c.class_id, c.class_name, c.start_date, c.end_date, c.start_time, c.end_time, c.max_student, c.weekday
 		
 	  ORDER BY c.end_date, c.end_time DESC
@@ -50,7 +50,7 @@
 				(SELECT 
 				    t.teacher_id,
 				    t.name,
-				    t.birth,
+				    TO_CHAR(t.birth, 'YYYY-MM-DD') AS birth,
 				    t.phone,
 				    t.user_id,
 				    u.store_name,
@@ -76,10 +76,10 @@
 				</choose>
 				<choose>
 					<when test="search.condition == 'TEACHER'">
-						AND t.name LIKE '%' || #{search.keyword} || '%'
+						AND LOWER(t.name) LIKE '%' || LOWER(#{search.keyword}) || '%'
 					</when>
 					<when test="search.condition == 'CLASS'">
-						AND c.class_name LIKE '%' || #{search.keyword} || '%'
+						AND LOWER(c.class_name) LIKE '%' || LOWER(#{search.keyword}) || '%'
 					</when>
 				</choose>   
 				GROUP BY
@@ -109,10 +109,10 @@
 			</choose>
 			<choose>
 				<when test="search.condition == 'TEACHER'">
-					AND t.name LIKE '%' || #{search.keyword} || '%'
+					AND LOWER(t.name) LIKE '%' || LOWER(#{search.keyword}) || '%'
 				</when>
 				<when test="search.condition == 'CLASS'">
-					AND c.class_name LIKE '%' || #{search.keyword} || '%'
+					AND LOWER(c.class_name) LIKE '%' || LOWER(#{search.keyword}) || '%'
 				</when>
 			</choose>   
 	</select>
