@@ -79,7 +79,18 @@ function AdminPostList() {
   return (
     <Container className="container mt-5">
       <h2 className="mb-4">공지 사항</h2>
+    <style>
+      {`
+        .pagination .page-link {
+          color:rgb(100, 131, 223);
+        }
 
+        .pagination .page-item.active .page-link {
+          background-color: rgb(71, 95, 168);
+          color: white;
+        }
+      `}
+    </style>
       <Row className="mb-3 align-items-center">
         <Col md="auto">
           <Form.Select name="condition" value={search.condition} onChange={handleSearchChange}>

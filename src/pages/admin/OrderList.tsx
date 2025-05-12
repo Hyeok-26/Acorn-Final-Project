@@ -111,6 +111,18 @@ function OrderList() {
             <div className="flex" >
                 {/* <div style={centerStyle}> */}
                 <div style={{ flex: 1, margin: '0 10rem' }} >
+                <style>
+                {`
+                    .pagination .page-link {
+                    color:rgb(100, 131, 223);
+                    }
+
+                    .pagination .page-item.active .page-link {
+                    background-color: rgb(71, 95, 168);
+                    color: white;
+                    }
+                `}
+                </style>                    
                     <Container fluid className="p-4">
                         <h2 style={{ marginTop: '60px', marginBottom: '60px' }} className="mb-4 text-center">발주 현황</h2>
                         <div className="d-flex justify-content-between align-items-center mb-3">

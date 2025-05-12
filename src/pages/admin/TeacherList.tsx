@@ -146,6 +146,18 @@ function TeacherList() {
     
     return (
         <div style={centerStyle}>
+    <style>
+      {`
+        .pagination .page-link {
+          color:rgb(100, 131, 223);
+        }
+
+        .pagination .page-item.active .page-link {
+          background-color: rgb(71, 95, 168);
+          color: white;
+        }
+      `}
+    </style>            
             <div className="d-flex align-items-center justify-content-center">
                 <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>{storeName} 강사 리스트</h1>
             </div>
