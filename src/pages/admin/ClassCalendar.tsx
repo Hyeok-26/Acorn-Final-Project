@@ -318,7 +318,7 @@ const CalendarToolbar = ({ label, onNavigate }) => {
       justifyContent="space-between" 
       mb={2} 
       px={2}
-      sx={{ backgroundColor: '#f5f5f5', borderRadius: 2, py: 1 }}
+      sx={{ borderRadius: 2, py: 1 }}
     >
       <Box>
         <Button 

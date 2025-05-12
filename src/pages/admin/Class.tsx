@@ -191,7 +191,19 @@ function Class(props) {
     const [showApplyStatModal, setShowApplyStatModal] = useState(false);
 
     return (
-        <div style={centerStyle}>            
+        <div style={centerStyle}>    
+        <style>
+        {`
+            .pagination .page-link {
+            color:rgb(100, 131, 223);
+            }
+
+            .pagination .page-item.active .page-link {
+            background-color: rgb(71, 95, 168);
+            color: white;
+            }
+        `}
+        </style>                
         <ClassDescModal show={showClassDescModal} onHide={() => setshowClassDescModal(false)} classId={selectedClassId} />
         <ClassStatusModal show={showClassStatusModal} onHide={() => {setshowClassStatusModal(false); refresh(searchState.pageNum);}} classId={selectedClassId} />
         <ClassAddModal show={showClassAddModal} userId={userId}
@@ -231,7 +243,8 @@ function Class(props) {
                     </Form.Select>
                     <Form.Control type="text" placeholder="검색어..." name="keyword" onChange={handleSearchChange}
                         value={searchState.keyword} className="me-2 w-auto"/>
-                    <Button variant="primary" onClick={()=>move(1)} className="me-2 w-auto">검색</Button>
+                    <Button style={{ backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }} 
+                    onClick={()=>move(1)} className="me-2 w-auto">검색</Button>
                     { clist.keyword && <p> <strong>{clist.totalRow}</strong> 개의 글이 검색 되었습니다 </p>}
                 </div>
             
@@ -241,7 +254,7 @@ function Class(props) {
             </div>
         
             <Table className="mx-auto text-center " style={{ tableLayout: 'fixed' }} bordered hover responsive>
-                <thead className="table-success">
+                <thead className="table-secondary">
                     <tr>
                         <th style={{ width: '130px', paddingLeft: '10px', paddingRight: '10px', textAlign: 'center', verticalAlign: 'middle' }}>[수업번호] <br />수업명</th>
                         <th style={{ width: '120px', paddingLeft: '10px', paddingRight: '10px', textAlign: 'center', verticalAlign: 'middle' }}>강의분류</th>

@@ -111,6 +111,18 @@ function OrderList() {
             <div className="flex" >
                 {/* <div style={centerStyle}> */}
                 <div style={{ flex: 1, margin: '0 10rem' }} >
+                <style>
+                {`
+                    .pagination .page-link {
+                    color:rgb(100, 131, 223);
+                    }
+
+                    .pagination .page-item.active .page-link {
+                    background-color: rgb(71, 95, 168);
+                    color: white;
+                    }
+                `}
+                </style>                    
                     <Container fluid className="p-4">
                         <h2 style={{ marginTop: '60px', marginBottom: '60px' }} className="mb-4 text-center">발주 현황</h2>
                         <div className="d-flex justify-content-between align-items-center mb-3">
@@ -152,7 +164,8 @@ function OrderList() {
                                     <option value="APP">승인</option>
                                     <option value="REJ">거절</option>
                                 </Form.Select>
-                                <Button variant="dark" onClick={() => {
+                                <Button style={{ backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}
+                                 onClick={() => {
                                     const num = 1;
                                     setFilterCon({...filterCon, pnum: num});
                                     navigate(`/admin/order-list?page=${num}&status=${filterCon.status}&strDate=${filterCon.strDate}&endDate=${filterCon.endDate}`);
@@ -162,7 +175,7 @@ function OrderList() {
                         </div>
 
                         <Table bordered className="text-center">
-                            <thead className="table-success">
+                            <thead className="table-secondary">
                                 <tr>
                                     <th style={{ width: '10%' }}>발주 번호</th>
                                     <th style={{ width: '20%' }}>발주 일자</th>

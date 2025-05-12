@@ -101,13 +101,13 @@ const RegisterModal:React.FC<RegisterModalProps> = ({ show, onClose, onRegister 
         api.post('/teachers', formObject)
             .then(res => {
                 console.log(res.data);
-                alert("강사 정보를 등록하였습니다");
+                alert("강사 정보를 등록했습니다");
                 onRegister();
                 onClose();
             })
             .catch(err => {
                 console.log(err);
-                alert("강사 정보 등록에 실패했습니다.");
+                alert("강사 정보 등록에 실패했습니다");
             });
     };
 

@@ -94,7 +94,7 @@ useEffect(() => {
           setSelectedStudents([]);
           setSearchKeyword('');
           console.log(res.data);
-          alert('수강생을 추가했습니다.'); // confirm 창
+          alert('수강생을 추가했습니다'); // confirm 창
           onHide(); 
         })
         .catch(error => {
@@ -173,18 +173,19 @@ useEffect(() => {
         <Modal.Body>
             <Form.Control
                 type="text"
-                placeholder="학생 이름 검색"
+                placeholder="학생 이름 검색..."
                 value={searchKeyword}
                 onChange={(e) => setSearchKeyword(e.target.value)}
                 className="mb-3"/>
-            <div style={{ maxHeight: 200, overflowY: 'auto' }}>
+            <div>
               <h6>학생 조회</h6>
-              <Table bordered size="sm" > 
+              <div style={{ maxHeight: 200, overflowY: 'auto' }}>
+              <Table size="sm" className="mx-auto text-center" bordered hover responsive> 
                   <thead>
                     <tr>
                         <th>선택</th>
-                        <th>학생코드</th>
-                        <th>학생이름</th>
+                        <th>학생번호</th>
+                        <th>학생명</th>
                         <th>연락처</th>
                         <th>비고</th>
                     </tr>
@@ -227,15 +228,16 @@ useEffect(() => {
                     ))}
                   </tbody>
               </Table>
+              </div>
             </div>
            
             <div>
-              <h6 className="mt-4">추가 대상 (현재 수업 {maxCount-(currentCount+selectedStudents.length)}명 추가 가능)</h6>
-              <Table bordered size="sm">
-                <thead>
+              <h6 className="mt-4">추가 대상 (현재 수업 <strong>{maxCount-(currentCount+selectedStudents.length)}</strong> 명 추가 가능)</h6>
+              <div style={{ maxHeight: 200, overflowY: 'auto' }}>
+              <Table size="sm" className="mx-auto text-center" bordered hover responsive>
+                <thead className="table-secondary">
                     <tr>
-
-                        <th>학생이름</th>
+                        <th>학생명</th>
                         <th>연락처</th>
                         <th>삭제</th>
                     </tr>
@@ -260,7 +262,8 @@ useEffect(() => {
                     ))}
                 </tbody>
               </Table>
-            </div>
+              </div>
+            </div>  
         </Modal.Body>
   
         <Modal.Footer>

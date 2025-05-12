@@ -40,13 +40,3 @@
   height: 60px;
   vertical-align: middle;
 }
-
-.pagination .page-link {
-  color: #198754; /* Bootstrap success 색상 */
-  border-color: #198754;
-}
-
-.pagination .page-item.active .page-link {
-  background-color: #198754;
-  border-color: #198754;
-}

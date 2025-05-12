@@ -142,8 +142,20 @@ function StudentList() {
     }
     return (
         <div style={centerStyle}>
+    <style>
+      {`
+        .pagination .page-link {
+          color:rgb(100, 131, 223);
+        }
+
+        .pagination .page-item.active .page-link {
+          background-color: rgb(71, 95, 168);
+          color: white;
+        }
+      `}
+    </style>            
             <div className="d-flex align-items-center justify-content-center">
-                <h1 style={{ marginTop: '60px', marginBottom: '60px' }}>{storeName} 학생 목록</h1>
+                <h1 style={{ marginTop: '60px', marginBottom: '60px' }}>{storeName} 학생 리스트</h1>
             </div>
             
             <div className="d-flex justify-content-between mb-3">
@@ -176,7 +188,8 @@ function StudentList() {
                         style={{ minWidth: "200px" }}
                     />
 
-                    <Button variant="success" onClick={handleSearch} style={{ whiteSpace: "nowrap" }}>검색</Button>
+                    <Button style={{ backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)', whiteSpace: "nowrap" }}
+                     onClick={handleSearch} >검색</Button>
                     </Form>
                     {pageInfo.keyword && (
                         <p><strong>{pageInfo.totalRow}</strong> 명의 학생이 검색되었습니다</p>
@@ -193,12 +206,12 @@ function StudentList() {
             </div>
 
             <Table className="mx-auto text-center" bordered hover responsive>
-                <thead className="table-success">
+                <thead className="table-secondary">
                     <tr>
-                        <th>번호</th>
+                        <th>학생번호</th>
                         <th>지점명</th>
-                        <th>이름</th>
-                        <th>전화번호</th>
+                        <th>학생명</th>
+                        <th>연락처</th>
                         <th>재원 여부</th>
                         <th>현재 수강 수업</th>
                         <th>수강 이력</th>
@@ -206,9 +219,9 @@ function StudentList() {
                     </tr>
                 </thead>
                 <tbody>
-                    {pageInfo.list.map((student, index) => (
+                    {pageInfo.list.map((student) => (
                         <tr key={student.studentId}>
-                            <td>{index + 1}</td>
+                            <td>{student.studentId}</td>
                             <td>{student.storeName}</td>
                             <td>{student.name}</td>
                             <td>{student.phone}</td>
