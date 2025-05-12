@@ -36,7 +36,7 @@ function Inventory() {
     // 사용 내역을 가져오는 함수
     const refreshDetail = () => {
         //첫 페이지 로딩시 선탣된 값 없으니 pId 0 일 경우 제외
-        if(pId==0)return;
+        if (pId == 0) return;
         api.get(`/inv/${pId}?strDate=${strDate}&endDate=${endDate}`)
             .then(res => {
                 console.log(res.data);
@@ -59,30 +59,32 @@ function Inventory() {
 
     return (
         <div className="flex">
-            <div style={{ display: 'flex', gap: '20px', width: '100%' }}>
-                <div style={{ width: '50%' }}>
-                    <InvList
-                        setPId={setPId}
-                        filterType={filterType}
-                        setFilterType={setFilterType}
-                        keyword={keyword}
-                        setKeyword={setKeyword}
-                        filteredData={filteredData}
-                        setFilteredData={setFilteredData}
-                        refreshList={refreshList}
-                        context="inventory"
-                    ></InvList>
-                </div>
-                <div style={{ width: '50%' }}>
-                    <InvDetail
-                        refreshDetail={refreshDetail}
-                        strDate={strDate}
-                        endDate={endDate}
-                        setStrDate={setStrDate}
-                        setEndDate={setEndDate}
-                        itemDetail={itemDetail}
-                        refreshList={refreshList}
-                    ></InvDetail>
+            <div style={{ flex: 1, margin: '5rem 10rem' }} >
+                <div style={{ display: 'flex', gap: '20px', width: '100%' }}>
+                    <div style={{ width: '50%' }}>
+                        <InvList
+                            setPId={setPId}
+                            filterType={filterType}
+                            setFilterType={setFilterType}
+                            keyword={keyword}
+                            setKeyword={setKeyword}
+                            filteredData={filteredData}
+                            setFilteredData={setFilteredData}
+                            refreshList={refreshList}
+                            context="inventory"
+                        ></InvList>
+                    </div>
+                    <div style={{ width: '50%' }}>
+                        <InvDetail
+                            refreshDetail={refreshDetail}
+                            strDate={strDate}
+                            endDate={endDate}
+                            setStrDate={setStrDate}
+                            setEndDate={setEndDate}
+                            itemDetail={itemDetail}
+                            refreshList={refreshList}
+                        ></InvDetail>
+                    </div>
                 </div>
             </div>
         </div>

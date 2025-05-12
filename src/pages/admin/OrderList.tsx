@@ -97,19 +97,20 @@ function OrderList() {
         }
     }
 
-    //전체 div에 적용될 css
-    const centerStyle: React.CSSProperties = {
-        maxWidth: "1600px",
-        margin: "0 auto",
-        padding: "2rem",
-        textAlign: "center"
-    }
+    // //전체 div에 적용될 css
+    // const centerStyle: React.CSSProperties = {
+    //     maxWidth: "1600px",
+    //     margin: "0 auto",
+    //     padding: "2rem",
+    //     textAlign: "center"
+    // }
 
     return (
         <>
             {/* <pre>{JSON.stringify(filterCon,null,4)}</pre> */}
-            <div className="flex">
-                <div style={centerStyle}>
+            <div className="flex" >
+                {/* <div style={centerStyle}> */}
+                <div style={{ flex: 1, margin: '0 10rem' }} >
                     <Container fluid className="p-4">
                         <h2 style={{ marginTop: '60px', marginBottom: '60px' }} className="mb-4 text-center">발주 현황</h2>
                         <div className="d-flex justify-content-between align-items-center mb-3">

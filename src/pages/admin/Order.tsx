@@ -51,7 +51,9 @@ function Order() {
 
     return (
         <><div className="flex">
+            {/* <div style={{ flex: 1, margin: '5rem 10rem' }} ></div> */}
             {/* <pre>{JSON.stringify(orderItem,null,4)}</pre> */}
+            <div style={{ flex: 1, margin: '5rem 5rem' }} >
             <Container fluid className="p-4" >
                 <Row>
                     <Col xs={4} >
@@ -87,6 +89,7 @@ function Order() {
                     </Col>
                 </Row>
             </Container>
+            </div>
         </div>
         </>
     );
