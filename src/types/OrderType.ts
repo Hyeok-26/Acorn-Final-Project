@@ -53,6 +53,7 @@ export interface FilterCondition {
     strDate: string;
     endDate: string;
     status: string;
+    pnum: number;
 }
 
 export interface OrderDetailProps {
