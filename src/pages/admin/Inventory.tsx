@@ -3,6 +3,7 @@ import InvList from '../../components/admin/InvList';
 import InvDetail from '../../components/admin/InvDetail';
 import api from '../../api';
 import type { InventoryItemDetail, InventoryItemList } from '../../types/InventoryType';
+import AdminNavbar from '@/components/AdminNavBar';
 
 
 function Inventory() {
@@ -56,30 +57,33 @@ function Inventory() {
     }, []);
 
     return (
-        <div style={{ display: 'flex', gap: '20px' }}>
-            <div style={{ width: '50%' }}>
-                <InvList
-                    setPId={setPId}
-                    filterType={filterType}
-                    setFilterType={setFilterType}
-                    keyword={keyword}
-                    setKeyword={setKeyword}
-                    filteredData={filteredData}
-                    setFilteredData={setFilteredData}
-                    refreshList={refreshList}
-                    context="inventory"
-                ></InvList>
-            </div>
-            <div style={{ width: '50%' }}>
-                <InvDetail
-                    refreshDetail={refreshDetail}
-                    strDate={strDate}
-                    endDate={endDate}
-                    setStrDate={setStrDate}
-                    setEndDate={setEndDate}
-                    itemDetail={itemDetail}
-                    refreshList={refreshList}
-                ></InvDetail>
+        <div className="flex">
+            <AdminNavbar></AdminNavbar>
+            <div style={{ display: 'flex', gap: '20px', width: '100%' }}>
+                <div style={{ width: '50%' }}>
+                    <InvList
+                        setPId={setPId}
+                        filterType={filterType}
+                        setFilterType={setFilterType}
+                        keyword={keyword}
+                        setKeyword={setKeyword}
+                        filteredData={filteredData}
+                        setFilteredData={setFilteredData}
+                        refreshList={refreshList}
+                        context="inventory"
+                    ></InvList>
+                </div>
+                <div style={{ width: '50%' }}>
+                    <InvDetail
+                        refreshDetail={refreshDetail}
+                        strDate={strDate}
+                        endDate={endDate}
+                        setStrDate={setStrDate}
+                        setEndDate={setEndDate}
+                        itemDetail={itemDetail}
+                        refreshList={refreshList}
+                    ></InvDetail>
+                </div>
             </div>
         </div>
     );

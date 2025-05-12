@@ -19,11 +19,11 @@ const menuItems = [
         icon: ShoppingCart,
         path: "admin 발주관리 경로",
         subItems: [
-            { name: "발주 현황", path: "admin 발주현황 경로" },
-            { name: "발주서 작성", path: "admin 발주서작성 경로" }
+            { name: "발주 현황", path: "/admin/order-list" },
+            { name: "발주서 작성", path: "/admin/order" }
         ] 
     },
-    { name: "재고 관리", icon: Boxes, path: "admin 재고관리 경로" },
+    { name: "재고 관리", icon: Boxes, path: "/admin/inventory" },
     { 
         name: "매출 관리", 
         icon: Percent,

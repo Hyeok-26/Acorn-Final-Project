@@ -182,11 +182,11 @@ function InvModal({
     const handleSubmit = () => {
         // 저장 전 빈 칸 확인
         if(invModalDetail.productId<1){
-            alert("품목 번호를 입력하세요.")
+            alert("❗품목 번호를 입력하세요.")
         } else if(invModalDetail.productName===''){
-            alert("품목명을 입력하세요.")   
+            alert("❗품목명을 입력하세요.")   
         } else if(invModalDetail.qty<1){
-            alert("올바른 수량을 입력하세요")   
+            alert("❗올바른 수량을 입력하세요")   
         } else {
             console.log("저장 버튼 클릭");
             api.post("/inv/add", invModalDetail)
