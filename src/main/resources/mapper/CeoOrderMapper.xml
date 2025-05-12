@@ -79,7 +79,7 @@
 		ON tb_order_detail.order_id=tb_order.order_id 
 		WHERE tb_order_detail.order_id = #{orderId}
 		<if test="searchProductName != null and searchProductName !=''">
-			AND tb_product.product_name LIKE #{searchProductName}
+			 AND LOWER(tb_product.product_name) LIKE '%' || LOWER(#{searchProductName}) || '%'
 		</if>
 		ORDER BY tb_product.product_name ASC		  
 	</select>
