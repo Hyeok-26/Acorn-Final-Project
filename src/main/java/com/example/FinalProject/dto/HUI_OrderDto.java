@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class HUI_OrderDto {
 	int orderId;
 	String orderName;
-	String userId;
+	int userId;
 	String creDate;
 	String editDate;
 	String rejDate;

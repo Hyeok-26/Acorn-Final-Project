@@ -15,29 +15,31 @@ import com.example.FinalProject.mapper.CeoOrderMapper;
 import com.example.FinalProject.mapper.CeoSaleMapper;
 
 import lombok.Data;
+
 @Service
 @Data
 public class CeoOrderServiceImpl implements CeoOrderService {
-	
+
 	// 한 페이지에 몇개씩 표시할 것인지
 	final int PAGE_ROW_COUNT = 10;
 	// 하단 페이지를 몇개씩 표시할 것인지
 	final int PAGE_DISPLAY_COUNT = 5;
-	
-	@Autowired private CeoOrderMapper mapper;
-	@Autowired private CeoSaleMapper ceoSaleMapper;
-	
+
+	@Autowired
+	private CeoOrderMapper mapper;
+	@Autowired
+	private CeoSaleMapper ceoSaleMapper;
 
 	@Override
 	public Map<String, Object> getOrderData(HUI_OrderRequestDto requestDto) {
 		// 본사 발주 내역 리스트 가져오기(검색조건 : 지점명 , 상태, 시작~끝날짜, 발주자)
-		int pageNum= requestDto.getPageNum();
-		
+		int pageNum = requestDto.getPageNum();
+
 		// 보여줄 페이지의 시작 ROWNUM
-		int startRowNum = 1 + (pageNum- 1) * PAGE_ROW_COUNT;
+		int startRowNum = 1 + (pageNum - 1) * PAGE_ROW_COUNT;
 		// 보여줄 페이지의 끝 ROWNUM
 		int endRowNum = pageNum * PAGE_ROW_COUNT;
-		
+
 		// 하단 시작 페이지 번호
 		int startPageNum = 1 + ((pageNum - 1) / PAGE_DISPLAY_COUNT) * PAGE_DISPLAY_COUNT;
 		// 하단 끝 페이지 번호
@@ -54,19 +56,19 @@ public class CeoOrderServiceImpl implements CeoOrderService {
 		// startRowNum 과 endRowNum 을 PostDto 객체에 담아서
 		requestDto.setStartRowNum(startRowNum);
 		requestDto.setEndRowNum(endRowNum);
-		
+
 		// 발주 목록 얻어오기
 		List<HUI_OrderDto> list = mapper.getOrderData(requestDto);
 		System.out.println(mapper.getOrderData(requestDto));
 		Map<String, Object> result = new HashMap<>();
 		result.put("list", list);
-	    result.put("pageNum", pageNum);
-	    result.put("startPageNum", startPageNum);
-	    result.put("endPageNum", endPageNum);
-	    result.put("totalPageCount", totalPageCount);
-	    result.put("totalRow", totalRow);
-	    
-	    System.out.println(requestDto);
+		result.put("pageNum", pageNum);
+		result.put("startPageNum", startPageNum);
+		result.put("endPageNum", endPageNum);
+		result.put("totalPageCount", totalPageCount);
+		result.put("totalRow", totalRow);
+
+		System.out.println(requestDto);
 		return result;
 	}
 
@@ -80,7 +82,7 @@ public class CeoOrderServiceImpl implements CeoOrderService {
 	public Map<String, Object> getOrderDetail(HUI_OrderDetailDto detailDto) {
 		// 발주 상세 보기 품목데이터 가져오기 + 상품명 검색
 		List<HUI_OrderDetailDto> list = mapper.getOrderDetail(detailDto);
-		Map<String, Object> result= new HashMap<>();
+		Map<String, Object> result = new HashMap<>();
 		result.put("list", list);
 		return result;
 	}
@@ -90,23 +92,17 @@ public class CeoOrderServiceImpl implements CeoOrderService {
 		// 메모 저장하기
 		return mapper.updateReply(detailDto);
 	}
-	
+
 	@Override
 	public int updateApp(HUI_OrderDetailDto detailDto) {
 		// 승인 처리하기
-		mapper.updateApp(detailDto);
+//		mapper.updateApp(detailDto);
 		int userId = 9999;
 		String saleName = detailDto.getOrderId() + "번 발주서";
-		TWCeoSaleDto dto = TWCeoSaleDto.builder()
-				.userId(userId)
-				.saleName(saleName)
-				.price(detailDto.getPrice())
-				.build();
-		return ceoSaleMapper.insertEtcProfit(dto);
+		TWCeoSaleDto dto = TWCeoSaleDto.builder().userId(userId).saleName(saleName).price(detailDto.getPrice()).build();
+//		ceoSaleMapper.insertEtcProfit(dto);
+		return mapper.updateApp(detailDto);
 	}
-	
-	
-	
 
 	@Override
 	public int updateRej(HUI_OrderDetailDto detailDto) {
@@ -119,7 +115,5 @@ public class CeoOrderServiceImpl implements CeoOrderService {
 		// 발주 내역 리스트 페이징 처리의 총 행의 개수 구하기
 		return mapper.getCount(requestDto);
 	}
-	
-	
-	
+
 }

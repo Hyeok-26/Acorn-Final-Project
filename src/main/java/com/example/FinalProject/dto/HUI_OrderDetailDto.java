@@ -34,6 +34,8 @@ public class HUI_OrderDetailDto {
 	
 	// 발주 내역에 포함된 품목 검색조건 
 	String searchProductName;
+	// 지점 ID
+	int userId;
 	
 	
 }
