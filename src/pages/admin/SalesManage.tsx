@@ -7,9 +7,6 @@ import ReactDOM from 'react-dom/client';
 import Layout from '../../Layout';
 import api from '../../api';
 import { AdminSalesDto } from '../../types/AdminSalesDto';
-import styles from "../../components/admin/admin.module.css"
-import binder from 'classnames/bind'
-const cx=binder.bind(styles)
 
 interface PageInfo {
     list: AdminSalesDto[];
