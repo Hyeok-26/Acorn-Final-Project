@@ -20,6 +20,7 @@ type LectureSalesData = {
 };
 
 function SalesStatus(props) {
+    const [storeName, setStoreName] = useState<string>('');
     const [userId, setUserId]=useState();
     const [thisYear, setThisYear]=useState<string>(new Date().getFullYear().toString());
     const [selected, setSelected] = useState("condition"); // 초기값 설정
@@ -41,6 +42,7 @@ function SalesStatus(props) {
     useEffect(() => {
         const userStr = localStorage.getItem('user');
         const user = userStr ? JSON.parse(userStr) : null;
+        setStoreName(user.storeName);
         console.log('localStorage user:', user);
         setUserId(user.userId)
 
@@ -280,12 +282,12 @@ function SalesStatus(props) {
         <div style={centerStyle}>
             <div className="mb-3"> 
                 <div className="d-flex align-items-center justify-content-center">
-                    <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>매출 통계</h1>
+                    <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>{storeName} 매출 통계</h1>
                 </div>
          
                 <div className="mb-3">
                     <div style={{ width: '100%', minWidth: '800px', margin: '0 auto' }}>
-                        <Form className="d-flex align-items-end" style={{ paddingLeft: '70px' }} >
+                        <Form className="d-flex align-items-end" style={{ paddingLeft: '100px' }} >
                             <Form.Select value={selected} onChange={handleSelect} size="sm" aria-label="yearorlecture" className='me-2 w-auto' >
                                 <option value="salesByYear">연별 매출</option>
                                 <option value="salesByLecture">과목별 매출</option>

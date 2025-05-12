@@ -18,6 +18,7 @@ interface PageInfo {
     totalRow: number;
   }
 function SalesManage() {
+    const [storeName, setStoreName] = useState<string>('');
     const [userId, setUserId]=useState<string>('');
     const [modalShow, setModalShow] = useState(false);
     const [title, setTitle] = useState("매출 추가");
@@ -25,7 +26,7 @@ function SalesManage() {
     const [onBtn, setOnBtn] = useState(()=>{ })
     //매출 수정/삭제 시 saleId읽어오기 위해 관리되는 값
     const [selectedItem, setSelectedItem]=useState<AdminSalesDto|null>(null)
-    //검색조건 체크박스 관리값값
+    //검색조건 체크박스 관리값
     const [checkedItems, setCheckedItems] = useState<string[]>([]);
     const [params, setParams] = useSearchParams({
         checkedItems:checkedItems,
@@ -35,6 +36,7 @@ function SalesManage() {
     useEffect(()=>{
         const userStr = localStorage.getItem('user');
         const user = userStr ? JSON.parse(userStr) : null;
+        setStoreName(user.storeName);
         console.log('localStorage user:', user);
         setUserId(user.userId)
    
@@ -204,7 +206,7 @@ function SalesManage() {
         
             <div style={centerStyle}> 
                 <div className="d-flex align-items-center justify-content-center">
-                    <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>매출 리스트</h1>
+                    <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>{storeName} 매출 리스트</h1>
                 </div>
                 <div className="d-flex justify-content-between mb-3">
                     <div className="col-md-8 col-12 d-flex justify-content-between align-items-center">
