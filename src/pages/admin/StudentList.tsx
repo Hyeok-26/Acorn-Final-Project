@@ -195,10 +195,10 @@ function StudentList() {
             <Table className="mx-auto text-center" bordered hover responsive>
                 <thead className="table-success">
                     <tr>
-                        <th>번호</th>
+                        <th>학생번호</th>
                         <th>지점명</th>
-                        <th>이름</th>
-                        <th>전화번호</th>
+                        <th>학생명</th>
+                        <th>연락처</th>
                         <th>재원 여부</th>
                         <th>현재 수강 수업</th>
                         <th>수강 이력</th>
@@ -206,9 +206,9 @@ function StudentList() {
                     </tr>
                 </thead>
                 <tbody>
-                    {pageInfo.list.map((student, index) => (
+                    {pageInfo.list.map((student) => (
                         <tr key={student.studentId}>
-                            <td>{index + 1}</td>
+                            <td>{student.studentId}</td>
                             <td>{student.storeName}</td>
                             <td>{student.name}</td>
                             <td>{student.phone}</td>
