@@ -74,7 +74,7 @@ function OrdDetail({
             // console.log(newOrderDetail);
             
             // 이미 있던 발주서를 임시 저장 하는 경우
-            if(newOrderDetail.infoDto.cdStatus === 'WAIT'
+            if(orderDetail.infoDto.cdStatus === 'WAIT'
             ){
                 api.patch("/ord/edit", newOrderDetail)
                 .then(() => {
@@ -86,6 +86,7 @@ function OrdDetail({
                     console.log(err);
                     alert("임시저장 실패");
                 });
+            // 새 발주서를 임시 저장 하는 경우
             } else {
                 api.post("/ord/add", newOrderDetail)
                 .then(() => {
@@ -98,8 +99,7 @@ function OrdDetail({
                     alert("임시저장 실패");
                 });
             }
-
-            
+                        
         }
     }
 
