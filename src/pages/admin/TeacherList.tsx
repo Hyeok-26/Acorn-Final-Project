@@ -58,7 +58,7 @@ function TeacherList() {
     const userStr = localStorage.getItem('user');
     const user = userStr ? JSON.parse(userStr) : null;
     const userId = user.userId; 
-
+    const storeName = user.storeName;
 
     const state = params.get("state") || "WORK";
     const condition = params.get("condition") || "";
@@ -131,21 +131,6 @@ function TeacherList() {
         });
     };
 
-    // 검색 초기화
-    const handleReset = (): void => {
-        setSearchCondition("");
-        setSearchKeyword("");
-        
-        setParams({
-          userId,
-          pageNum: "1",
-          state,
-          condition: "",
-          keyword: "",
-        });
-        
-    };
-
     useEffect(() => {
         fetchData();
     }, [params]); // params 변화에 따라 fetchData
@@ -161,70 +146,58 @@ function TeacherList() {
     
     return (
         <div style={centerStyle}>
-            <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>강사 목록</h1>
-            <div className="d-flex justify-content-between align-items-center">
-                {/* 왼쪽: 검색 관련 폼 */}
-                <Form className="d-flex align-items-center gap-1">                
-                    {/* 재직/퇴직/전체 버튼 */}
-                    <ButtonGroup>
-                        <Button
-                        variant={state === "WORK" ? "primary" : "outline-primary"}
-                        onClick={() => changeState("WORK")}
-                        style={{ whiteSpace: "nowrap" }}
-                        >
-                        재직
-                        </Button>
-                        <Button
-                        variant={state === "T_QUIT" ? "primary" : "outline-primary"}
-                        onClick={() => changeState("T_QUIT")}
-                        style={{ whiteSpace: "nowrap" }}
-                        >
-                        퇴직
-                        </Button>
-                        <Button
-                        variant={state === "WHOLE" ? "primary" : "outline-primary"}
-                        onClick={() => changeState("WHOLE")}
-                        style={{ whiteSpace: "nowrap" }}
-                        >
-                        전체
-                        </Button>                        
-                    </ButtonGroup>
-
-                    {/* 검색 조건 drop-down 선택 */}                
-                    <Form.Select value={searchCondition} onChange={(e) => setSearchCondition(e.target.value)} style={{ maxWidth: "100px" }}>
-                        <option value="">선택</option>
-                        <option value="TEACHER">강사명</option>
-                        <option value="CLASS">수업명</option>
-                    </Form.Select>                    
-
-                    {/* 검색어 keyword 입력 */}
-                    <Form.Control
-                        type="text"
-                        placeholder={
-                            condition === "TEACHER" 
-                            ? "강사명을 입력하세요" 
-                            : condition === "CLASS"
-                            ? "수업명을 입력하세요"
-                            : "검색조건을 선택하세요"
-                        }
-                        value={searchKeyword}
-                        onChange={(e) => setSearchKeyword(e.target.value)}
-                        style={{ minWidth: "200px" }}
-                    />
-
-                    {/* 검색 버튼 */}
-                    <Button variant="success" onClick={handleSearch} style={{ whiteSpace: "nowrap" }}>검색</Button>
-                    <Button variant="dark" onClick={handleReset} style={{ whiteSpace: "nowrap" }}>초기화</Button>
-                </Form>
-
-                { pageInfo.keyword && (
-                    <p><strong>{pageInfo.totalRow}</strong> 명의 강사가 검색되었습니다</p>
-                )}
-                {/* 오른쪽: 강사 등록 버튼 */}
-                <Button variant="outline-dark" className="ms-auto" onClick={() => setShowRegister(true)}>강사 등록</Button>
-                
+            <div className="d-flex align-items-center justify-content-center">
+                <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>{storeName} 강사 목록</h1>
             </div>
-            <Table>
+
+            <div className="d-flex justify-content-between mb-3">
+                <div className="d-flex align-items-end">
+                    <Form className="d-flex align-items-center gap-2">                
+                        {/* 상태 */}
+                        <Form.Select value={state} onChange={(e) => changeState(e.target.value)} style={{ maxWidth: "100px" }}>
+                            <option value="WHOLE">전체</option>
+                            <option value="WORK">재직</option>
+                            <option value="T_QUIT">퇴직</option>
+                        </Form.Select>
+
+                        {/* 검색 조건 drop-down 선택 */}                
+                        <Form.Select value={searchCondition} onChange={(e) => setSearchCondition(e.target.value)} style={{ minWidth: "100px" }}>
+                            <option value="">선택</option>
+                            <option value="TEACHER">강사명</option>
+                            <option value="CLASS">수업명</option>
+                        </Form.Select>                    
+
+                        {/* 검색어 keyword 입력 */}
+                        <Form.Control
+                            type="text"
+                            placeholder={
+                                searchCondition === "TEACHER" 
+                                ? "강사명을 입력하세요" 
+                                : searchCondition === "CLASS"
+                                ? "수업명을 입력하세요"
+                                : "검색조건을 선택하세요"
+                            }
+                            value={searchKeyword}
+                            onChange={(e) => setSearchKeyword(e.target.value)}
+                            style={{ minWidth: "200px" }}
+                        />
+
+                        {/* 검색 버튼 */}
+                        <Button variant="success" onClick={handleSearch} style={{ whiteSpace: "nowrap" }}>검색</Button>
+                    </Form>
+
+                    { pageInfo.keyword && (
+                        <p><strong>{pageInfo.totalRow}</strong> 명의 강사가 검색되었습니다</p>
+                    )}
+                </div>
+            
+                <div className="d-flex flex-column align-items-end">
+                    <Button variant="outline-dark" className="ms-auto" onClick={() => setShowRegister(true)}>강사 등록</Button>
+                </div>
+
+            </div>
+
+            <Table className="mx-auto text-center" bordered hover responsive>
                 <thead className="table-success">
                     <tr>
                         <th>번호</th>
@@ -249,10 +222,21 @@ function TeacherList() {
                             <td>{teacher.statusName}</td>
                             <td>{teacher.cdStatus === "WORK" ? teacher.classNames : "-"}</td>
                             <td>
-                                <Button size="sm" onClick={() => setSelectedTeacher(teacher)}>보기</Button>
+                                <Button variant="light" className="btn btn-sm btn-outline-dark" size="sm" onClick={() => setSelectedTeacher(teacher)}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-journal-text" viewBox="0 0 16 16">
+                                        <path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
+                                        <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2"/>
+                                        <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z"/>
+                                    </svg>
+                                </Button>
                             </td>
                             <td>
-                                <Button size="sm" onClick={() => setEditTeacher(teacher)}>수정</Button>
+                                <Button variant="light" className="btn btn-sm btn-outline-dark" size="sm" onClick={() => setEditTeacher(teacher)}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
+                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                        <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                                    </svg>
+                                </Button>
                             </td>
                         </tr>
                     ))}
