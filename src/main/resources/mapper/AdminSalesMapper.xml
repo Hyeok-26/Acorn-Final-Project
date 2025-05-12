@@ -152,11 +152,11 @@
 	    ORDER BY sMonth ASC
 	</select>
 	<select id="getAdminSalesStatByLectYearly" parameterType="map" resultType="JsAdminSalesStatDto">
-	    SELECT sYear, cd_lecture, SUM(total) total
+	    SELECT sYear, cd_lecture, SUM(total) total, lecture_name 
 	    FROM (
 	        SELECT 
 	            TO_CHAR(c.start_date, 'YYYY') AS sYear, 
-	            c.cd_lecture,
+	            c.cd_lecture, b.bname as lecture_name,
 	            COUNT(sc.student_id) AS student_count, 
 	            c.price price,
 	            COUNT(sc.student_id) * c.price AS total
@@ -171,10 +171,11 @@
 	              SELECT bcode FROM tb_bcode WHERE acode = 'LECTURE' AND deleted = 'NO'
 	          )
 	        GROUP BY 
-	            TO_CHAR(c.start_date, 'YYYY'), c.cd_lecture, c.price
+	            TO_CHAR(c.start_date, 'YYYY'), c.cd_lecture, c.price, b.bname
 	        ORDER BY sYear, c.cd_lecture
 	    )
-	    GROUP BY sYear, cd_lecture
+	    GROUP BY sYear, cd_lecture, lecture_name
+	    order by sYear desc
 	</select>
 	<select id="getAdminSalesStatByLectMonthly" parameterType="map" resultType="JsAdminSalesStatDto">
 	    SELECT 
@@ -198,7 +199,7 @@
 	      )
 	    GROUP BY 
 	        TO_CHAR(c.start_date, 'YYYY'), TO_CHAR(c.start_date, 'MM'), c.cd_lecture, b.bname, c.price, b.bcode
-	    ORDER BY sMonth, c.cd_lecture
+	    ORDER BY sMonth desc, c.cd_lecture
 	</select>
 	
 	

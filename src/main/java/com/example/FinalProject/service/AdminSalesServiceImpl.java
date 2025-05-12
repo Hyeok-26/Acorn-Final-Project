@@ -46,6 +46,7 @@ public class AdminSalesServiceImpl implements AdminSalesService {
 		// 검색 조건 및 페이징 정보를 Map에 담음
     	Map<String, Object> search = new HashMap<>();
     	search.put("userId", userId);
+    	System.out.println(userId);
     	search.put("checkedItems", checkedItems); // b_codes는 null일 수도 있음
     	//startRownum과 endrownum을담 아서 
     	search.put("startRowNum", startRowNum);
@@ -179,12 +180,12 @@ public class AdminSalesServiceImpl implements AdminSalesService {
 	    	yearDto.setLectSaleYearly(yearlyStats);
 	    	yearDto.setSMonthList(sMonthList);
 	    	for(JsAdminSalesStatDto monthDto : sMonthList) {
-	    	String targetMonth=monthDto.getSMonth();
-	    	//월별 매출
-	    	List<JsAdminSalesStatDto> monthlyStats= this.getAdminSalesStatByLectMonthly(targetYear, targetMonth, userId);
-	    	
-	    	//연도별 매출과 월별매출을 list에 담기
-	    	monthDto.setLectSaleMonthly(monthlyStats);
+		    	String targetMonth=monthDto.getSMonth();
+		    	//월별 매출
+		    	List<JsAdminSalesStatDto> monthlyStats= this.getAdminSalesStatByLectMonthly(targetYear, targetMonth, userId);
+		    	
+		    	//연도별 매출과 월별매출을 list에 담기
+		    	monthDto.setLectSaleMonthly(monthlyStats);
 	    	}
 	    	
 	    }
@@ -238,10 +239,12 @@ public class AdminSalesServiceImpl implements AdminSalesService {
 	    int totalInserted = 0;
 	
 		for (JsOrderToCostDto dto : list) {
+
 			// 위에서 가져온 userId 를 JsOrderToCostDto 에 담아서 지점 매출 데이터 넣기
 			dto.setUserId(userId);
 			dto.setSaleName(dto.getProductName());
 			dto.setPrice(dto.getTotal());
+
 			try {
 				int a = salesmapper.insertOrderApprovedCostToAdmin(dto);
 		        int b = salesmapper.insertOrderApprovedCostToCeo(dto);

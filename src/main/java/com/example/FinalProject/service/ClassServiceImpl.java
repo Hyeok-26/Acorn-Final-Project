@@ -106,11 +106,7 @@ public class ClassServiceImpl implements ClassService {
 
 	@Override
 	public boolean updateClass(HjClassDto dto) {
-		try {
-			return classMapper.updateClass(dto);
-		}catch(Exception e) {
-			return false;
-		}
+		return classMapper.updateClass(dto);
 		
 	}
 	
@@ -179,10 +175,20 @@ public class ClassServiceImpl implements ClassService {
 		// TODO Auto-generated method stub
 		return classMapper.getAllStudentList(userId);
 	}
+	
+    // 요일 문자열 비교 ("1010101")
+    private boolean hasWeekdayOverlap(String weekday1, String weekday2) {
+        for (int i = 0; i < 7; i++) {
+            if (weekday1.charAt(i) == '1' && weekday2.charAt(i) == '1') {
+                return true;
+            }
+        }
+        return false;
+    }
 
 	@Override
 	public List<SelectableStudentDto> checkStudentsWithConflict(int classId, int userId) {
-	    HjClassDto targetClass = classMapper.getClassdetail(classId);
+	    HjClassDto currentClass = classMapper.getClassdetail(classId);
 	    List<StudentDto> allStudents = classMapper.getAllStudentList(userId);
 
 	    return allStudents.stream().map(student -> {
@@ -193,25 +199,26 @@ public class ClassServiceImpl implements ClassService {
 
 	        List<ConflictClassDto> conflicts = classMapper.getStudentSchedules(student.getStudentId(), classId);
 
-	        // 1. 날짜가 겹치는 conflict 만 필터링
-	        List<ConflictClassDto> dateOverlaps = conflicts.stream()
-	            .filter(conflict -> !(conflict.getEndDate().compareTo(targetClass.getStartDate()) <= 0 ||
-	                                  conflict.getStartDate().compareTo(targetClass.getEndDate()) >= 0))
+	        // 1. 날짜가 겹침 필터링
+	        List<ConflictClassDto> dateConflicts = conflicts.stream()
+	            .filter(conflict -> !(conflict.getEndDate().compareTo(currentClass.getStartDate()) <= 0 ||
+	                                  conflict.getStartDate().compareTo(currentClass.getEndDate()) >= 0))
 	            .collect(Collectors.toList());
 
-	        // 2. 위에서 날짜가 겹치는 것들 중 요일/시간 겹침이 있는지 확인
-	        Optional<ConflictClassDto> conflictFound = dateOverlaps.stream()
-	            .filter(conflict -> conflict.getWeekday().equals(targetClass.getWeekday()) &&
-	                                !(conflict.getEndTime().compareTo(targetClass.getStartTime()) <= 0 ||
-	                                  conflict.getStartTime().compareTo(targetClass.getEndTime()) >= 0))
-	            .findFirst();
-
-	        if (conflictFound.isPresent()) {
+	       
+	        // 2. 위에서 날짜가 겹치는 것들 중 요일/시간 겹침 필터링
+	        List<ConflictClassDto> timeConflicts = dateConflicts.stream()
+		            .filter(conflict -> hasWeekdayOverlap(conflict.getWeekday(), currentClass.getWeekday()) &&
+		            					!(conflict.getEndTime().compareTo(currentClass.getStartTime()) <= 0 ||
+		                                  conflict.getStartTime().compareTo(currentClass.getEndTime()) >= 0))
+		            .collect(Collectors.toList());
+	        
+	        if (!timeConflicts.isEmpty()) {
 	            dto.setSelectable(false);
-	            ConflictClassDto conflict = conflictFound.get();
-	            String reason = String.format("%s %s~%s 수업과 중복됨",
-	                    conflict.getWeekday(), conflict.getStartTime(), conflict.getEndTime());
-	            dto.setConflictReason(reason);
+	            String reason = timeConflicts.stream()
+	                    .map(conflict -> "[" + conflict.getClassId() + "]") // 숫자 101 을 [ 101 ] 문자열로 변환
+	                    .collect(Collectors.joining(", ")); // 각 문자열을 , 로 연결
+	            dto.setConflictReason(reason + " 수업과 시간 겹침");
 	        } else {
 	            dto.setSelectable(true);
 	        }
@@ -219,6 +226,7 @@ public class ClassServiceImpl implements ClassService {
 	        return dto;
 	    }).collect(Collectors.toList());
 	}
+
 
 
 	    @Override
