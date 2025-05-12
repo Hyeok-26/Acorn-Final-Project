@@ -179,6 +179,9 @@ function SalesManage() {
         const item = pageInfo.list.find(item => item.adminSaleId === id);
         if (!item) return;
         const adminSaleId=item.adminSaleId
+        // confirm 창에서 '예'를 눌렀을 때만 삭제 요청 실행
+        const isConfirmed = confirm("정말 삭제하시겠습니까?");
+        if (!isConfirmed) return;  // '아니오'를 눌렀으면 종료
         api.delete(`/sales/${adminSaleId}`)
         .then(res=>{
             handleSearch();
