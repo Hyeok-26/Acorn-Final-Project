@@ -20,6 +20,7 @@ type LectureSalesData = {
 };
 
 function SalesStatus(props) {
+    const [userId, setUserId]=useState();
     const [thisYear, setThisYear]=useState<string>(new Date().getFullYear().toString());
     const [selected, setSelected] = useState("condition"); // 초기값 설정
     const [sYearList, setSYearList] = useState<string[]>([]);
@@ -38,10 +39,16 @@ function SalesStatus(props) {
         setSMonth(e.target.value);
     }
     useEffect(() => {
+        const userStr = localStorage.getItem('user');
+        const user = userStr ? JSON.parse(userStr) : null;
+        console.log('localStorage user:', user);
+        setUserId(user.userId)
+
         // 컴포넌트가 마운트될 때 연도별 매출 데이터 가져오기 
         fetchYearlySales();
         setSelected("salesByYear"); // 초기 선택값 설정
         setHideSubCondition(false)
+        
     },[])
     useEffect(() => {
         if (selected === "salesByLecture") {
@@ -78,10 +85,7 @@ function SalesStatus(props) {
                     if (item.smonth && item.price !== undefined) {
                         costMap.set(item.smonth, item.price);
                     }
-                });
-                console.log(profitMap, "profitMap")
-                console.log(costMap, "costMap")
-
+                })
                 const formatted = Array.from({ length: 12 }, (_, i) => {
                     const monthNum = i + 1;
                     const paddedMonth = monthNum.toString().padStart(2, '0'); // '01' ~ '12'
@@ -111,7 +115,7 @@ function SalesStatus(props) {
         }
     };
     const fetchYearlySales =() => {
-        api.get(`/sales/YearlySale/${sYear}`)
+        api.get(`/sales/YearlySale/${sYear}`, {params:{userId:userId}})
         .then((res) => {
             const allyearlist= res.data.syearList;
             setAllYearData(allyearlist);
@@ -137,7 +141,7 @@ function SalesStatus(props) {
     
     const fetchLectureSales =() => {
         console.log(sYear, "sYear")
-        api.get(`/sales/LectureSale/${sYear}`)
+        api.get(`/sales/LectureSale/${sYear}`, {params:{userId:userId}})
         .then((res) => {    
             console.log(res.data, "res.data")
             const yearData: AdminSalesStatDto[] = res.data.syearList || [];
@@ -160,12 +164,15 @@ function SalesStatus(props) {
             // ⬇️ 월 목록 드롭다운용
             const monthKeys = (foundYear.smonthList || []).map(month => month.smonth);
             setAvailableMonths(monthKeys);
+            console.log(monthKeys+"는 선택 가능한 달")
             // ⬇️ 기본 선택 월
-            const firstMonth = foundYear.smonthList?.[0];
-            if (firstMonth) {
-                setSMonth(firstMonth.smonth); // 현재 선택된 월 설정
-                const monthlySales = (firstMonth.lectSaleMonthly || []).map(item => ({
-                    subject: item.lectureName||null,
+            const firstMonth = monthKeys[0]
+            const selectedMonth=foundYear.smonthList?.[0]
+            console.log(firstMonth+"가 첫번째 달")
+            if (selectedMonth) {
+                setSMonth(firstMonth); // 현재 선택된 월 설정
+                const monthlySales = (selectedMonth.lectSaleMonthly || []).map(item => ({
+                    subject: item.lectureName,
                     sales: item.total || 0,
                 }));
                 setMonthlySalesByLecture(monthlySales);
@@ -180,12 +187,13 @@ function SalesStatus(props) {
 
     }
     const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setSMonth(e.target.value);  // 선택만 저장
-        api.get(`/sales/LectureSale/${sYear}`)
+        const selectedMonth= e.target.value
+        setSMonth(selectedMonth);  // 선택만 저장
+        api.get(`/sales/LectureSale/${sYear}`, {params:{userId:userId}})
         .then((res) => {
             const yearData: AdminSalesStatDto[] = res.data.syearList || [];
             const foundYear = yearData.find(item => item.syear === sYear);
-            const foundMonth = foundYear?.smonthList?.find(m => m.smonth === sMonth);
+            const foundMonth = foundYear?.smonthList?.find(m => m.smonth === selectedMonth);
             if (foundMonth) {
                 const monthlySales = (foundMonth.lectSaleMonthly || []).map(item => ({
                     subject: item.lectureName ?? "알 수 없음",
@@ -239,11 +247,20 @@ function SalesStatus(props) {
             monthlySalesByLecture.forEach(item => allSubjects.add(item.subject || "알 수 없음"));
 
             const newMap: { [key: string]: string } = {};
+            const usedColors = new Set<string>(Object.values(subjectColorMap)); // 이미 할당된 색상
             let colorIndex = 0;
 
             for (let subject of allSubjects) {
                 if (!subjectColorMap[subject]) {
-                    newMap[subject] = DEFAULT_COLORS[colorIndex % DEFAULT_COLORS.length];
+                    // 중복되지 않는 색상 찾기
+                    while (usedColors.has(DEFAULT_COLORS[colorIndex % DEFAULT_COLORS.length])) {
+                        colorIndex++;
+                        // 무한루프 방지 (색상이 부족한 경우), 임시 예외 처리
+                        if (colorIndex > DEFAULT_COLORS.length * 2) break;
+                    }
+                    const selectedColor = DEFAULT_COLORS[colorIndex % DEFAULT_COLORS.length];
+                    newMap[subject] = selectedColor;
+                    usedColors.add(selectedColor); // 사용한 색상으로 등록
                     colorIndex++;
                 }
             }
