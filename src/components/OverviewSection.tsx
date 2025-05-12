@@ -1,10 +1,7 @@
 type OverviewItem = {
   title: string;
   value: string;
-  diff: string;
-  sub: string;
   color: string;
-  diffColor: string;
 };
 
 interface OverviewSectionProps {
@@ -27,9 +24,7 @@ const OverviewSection = ({ overview }: OverviewSectionProps) => (
           <span className="text-gray-500 text-sm mb-1">{o.title}</span>
           <span className={`text-2xl font-bold ${o.color}`}>
             {o.value}
-            {o.diff && <span className={`text-sm ml-2 ${o.diffColor}`}>{o.diff}</span>}
           </span>
-          <span className="text-xs text-gray-400">{o.sub}</span>
         </div>
       ))}
     </section>
