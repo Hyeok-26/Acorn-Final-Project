@@ -298,7 +298,6 @@ function Class(props) {
                                         setSelectedClassId(item.classId); 
                                         setShowApplyStatModal(true)}
                                 }>{item.currentStudent}/{item.maxStudent}</Button>
-                                {item.currentStudent === item.maxStudent && (<Button variant="warning" className="ms-1">마감</Button>)}
                             </td>
                             <td><Button variant="light" 
                                 disabled={item.cdStatus === '종강' || item.cdStatus === '폐강'}
