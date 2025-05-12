@@ -43,8 +43,8 @@ const HistoryModal: React.FC<HistoryModalProps> = ({teacher, show, onClose}) => 
                 <Modal.Title><strong>{teacher.name}</strong> 강사 수업 이력</Modal.Title>
             </Modal.Header>
             <Modal.Body style={{ maxHeight: '400px', overflowY: 'auto' }}>
-                <Table striped bordered hover>
-                    <thead>
+                <Table bordered hover className="mx-auto text-center">
+                    <thead className="table-secondary">
                         <tr>
                             <th>번호</th>
                             <th>수업명</th>

@@ -147,7 +147,7 @@ function TeacherList() {
     return (
         <div style={centerStyle}>
             <div className="d-flex align-items-center justify-content-center">
-                <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>{storeName} 강사 목록</h1>
+                <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>{storeName} 강사 리스트</h1>
             </div>
 
             <div className="d-flex justify-content-between mb-3">
@@ -198,7 +198,7 @@ function TeacherList() {
             </div>
 
             <Table className="mx-auto text-center" bordered hover responsive>
-                <thead className="table-success">
+                <thead className="table-secondary">
                     <tr>
                         <th>강사번호</th>
                         <th>지점명</th>
