@@ -227,21 +227,24 @@
 		(seq_ceo_sale_id.nextval, #{userId}, sysdate, sysdate, #{saleName}, #{price}, 'PROFIT', 'ITEM', 'YES') 
 	</insert>
 	<select id="getApprovedOrderInfoByOrderId" parameterType="int" resultType="JsOrderToCostDto">
-	  SELECT order_id, user_id, ord_date, cd_status, order_name
-	  FROM tb_order 
-	  WHERE order_id=#{orderId}
+		  SELECT order_id, user_id, ord_date, cd_status, order_name
+		  FROM tb_order 
+		  WHERE user_id=#{userId} and order_id=#{orderId}
 	</select>
 	<select id="getOrderDetailInfoByOrderId" parameterType="map" resultType="JsOrderToCostDto">
-	  SELECT 
-	    od.order_detail_id, 
-	    od.product_id,
-	    p.product_name, 
-	    p.cd_category, 
-	    od.quantity, 
-	    od.price,
-	    (od.quantity * od.price) AS total
-	  FROM tb_order_detail od
-	  JOIN tb_product p ON od.product_id = p.product_id
-	  WHERE od.order_id = #{orderId}
+	  	  SELECT 
+		    od.order_detail_id, 
+		    od.product_id,
+		    p.product_name, 
+		    p.cd_category, 
+		    od.quantity, 
+		    od.price,
+		    (od.quantity * od.price) AS total,
+		    odr.user_id
+		  FROM tb_order_detail od
+		  JOIN tb_product p ON od.product_id = p.product_id
+		  JOIN tb_order odr ON od.order_id = odr.order_id
+		  WHERE odr.user_id = #{userId}
+		    AND odr.order_id = #{orderId}
 	</select>
 </mapper>
