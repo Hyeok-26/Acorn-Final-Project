@@ -25,12 +25,12 @@ public class DashBoardController {
 		return dashBoardService.getUserAll()-1;
 	}
 	
-	@GetMapping("/ceo/overviw/ceosale")
+	@GetMapping("/ceo/overview/ceosale")
 	public int getLastYearCeoOrderSale() {
 		return dashBoardService.getLastYearCeoOrderSale();
 	}
 	
-	@GetMapping("/ceo/overview/lastyeaersale")
+	@GetMapping("/ceo/overview/lastyearsale")
 	public List<Map<String, Object>> getLastYearMonthlySales(){
 		return dashBoardService.getLastYearMonthlySales();
 	}
