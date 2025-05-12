@@ -45,6 +45,8 @@ function InvModal({
 
     // 모달을 띄울 품목이름이 바뀌면 상태값에 반영 (단, 0번 제외)
     useEffect(() => {
+        //페이지 로딩 시 선택값 없으니 제외
+        if(!pname)return;
         // 품목 번호 가져와 셋팅
         api.get("/inv/getPid/" + pname)
             .then(res => {

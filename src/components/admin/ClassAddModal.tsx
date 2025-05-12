@@ -106,8 +106,7 @@ function ClassAddModal(props) {
             classAddInfo.endTime !== "" &&
             classAddInfo.weekday.includes('1') &&
             classAddInfo.maxStudent > 0 &&
-            classAddInfo.price > 0 &&
-            classAddInfo.description !== ""
+            classAddInfo.price > 0
         );
     };
 
