@@ -21,6 +21,14 @@ export default defineConfig({
       '/upload': {
         target: 'http://localhost:9000',
         changeOrigin: true
+      },
+      '/download': {
+        target: 'http://localhost:9000',
+        changeOrigin: true,
+      },
+      '/editor_upload': {
+        target: 'http://localhost:9000',
+        changeOrigin: true,
       }
     }
   }

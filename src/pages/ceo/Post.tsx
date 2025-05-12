@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../api';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Pagination } from 'react-bootstrap';
+import { Pagination, Table, Button, Form, Row, Col, Container } from 'react-bootstrap';
 
 interface Post {
   postId: number;
@@ -31,6 +31,7 @@ function PostList() {
     totalPageCount: 1,
     totalRow: 0,
   });
+
   const [pageArray, setPageArray] = useState<number[]>([]);
   const [search, setSearch] = useState({
     condition: '',
@@ -48,8 +49,9 @@ function PostList() {
   const refresh = (pageNum: number) => {
     const condition = params.get("condition") || "";
     const keyword = params.get("keyword") || "";
+    const query = `condition=${condition}&keyword=${keyword}`;
 
-    api.get(`/posts?pageNum=${pageNum}&condition=${condition}&keyword=${keyword}`)
+    api.get(`/posts?pageNum=${pageNum}&${query}`)
       .then(res => {
         setPostList(res.data);
         setPageArray(range(res.data.startPageNum, res.data.endPageNum));
@@ -75,21 +77,28 @@ function PostList() {
   };
 
   return (
-    <div className="container">
-      <h1>공지사항</h1>
-      <div>
-        <button onClick={() => navigate(`/posts/new`)}>공지 추가</button>
-        <select name="condition" onChange={handleSearchChange}>
-          <option value="">전체</option>
-          <option value="writer">작성자</option>
-          <option value="title">제목</option>
-        </select>
-        <input type="text" name="keyword" onChange={handleSearchChange} placeholder="검색어 입력" />
-        <button onClick={() => move(1)}>검색</button>
-      </div>
+    <Container className="container mt-5">
+      <h2 className="mb-4">공지 사항</h2>
 
-      <table>
-        <thead>
+      <Row className="mb-3 align-items-center">
+        <Col><Button onClick={() => navigate(`/posts/new`)}>공지 추가</Button></Col>
+        <Col md="auto">
+          <Form.Select name="condition" value={search.condition} onChange={handleSearchChange}>
+            <option value="all">전체</option>
+            <option value="writer">작성자</option>
+            <option value="title">제목</option>
+          </Form.Select>
+        </Col>
+        <Col>
+          <Form.Control type="text" name="keyword" value={search.keyword} onChange={handleSearchChange} placeholder="검색 명..." />
+        </Col>
+        <Col md="auto">
+          <Button variant="primary" onClick={() => move(1)}>검색</Button>
+        </Col>
+      </Row>
+
+      <Table striped bordered hover>
+        <thead className="table-secondary text-center">
           <tr>
             <th>번호</th>
             <th>제목</th>
@@ -99,24 +108,24 @@ function PostList() {
         </thead>
         <tbody>
           {postList.list.map(post => (
-            <tr key={post.postId} onClick={() => navigate(`/posts/${post.postId}`)} style={{ cursor: 'pointer' }}>
+            <tr key={post.postId}>
               <td>{post.postId}</td>
-              <td>{post.title}</td>
+              <td onClick={() => navigate(`/posts/${post.postId}`)} style={{ cursor: 'pointer' }}>{post.title}</td>
               <td>{post.writer}</td>
               <td>{post.creDate}</td>
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
 
-      <Pagination className="mt-3">
-        <Pagination.Item onClick={() => move(postList.startPageNum - 1)} disabled={postList.startPageNum === 1}>Prev</Pagination.Item>
+      <Pagination className="justify-content-center">
+        <Pagination.Item onClick={() => move(postList.startPageNum - 1)} disabled={postList.startPageNum === 1}>{'<'}</Pagination.Item>
         {pageArray.map(item => (
           <Pagination.Item key={item} onClick={() => move(item)} active={postList.pageNum === item}>{item}</Pagination.Item>
         ))}
-        <Pagination.Item onClick={() => move(postList.endPageNum + 1)} disabled={postList.endPageNum >= postList.totalPageCount}>Next</Pagination.Item>
+        <Pagination.Item onClick={() => move(postList.endPageNum + 1)} disabled={postList.endPageNum >= postList.totalPageCount}>{'>'}</Pagination.Item>
       </Pagination>
-    </div>
+    </Container>
   );
 }
 

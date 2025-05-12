@@ -1,35 +1,34 @@
-import { Home, ShoppingCart, Percent, SpellCheck2, StickyNote, LogOut, User } from "lucide-react";
+import { Home, ShoppingCart, Percent, SpellCheck2, StickyNote, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const menuItems = [
     { name: "대시보드", icon: Home, path: "/ceo" },
-    { name: "마이페이지", icon: User, path: "ceo 마이페이지 경로" },
     {
         name: "기본 관리",
         icon: SpellCheck2,
         subItems: [
-            { name: "코드 관리", path: "ceo 코드관리 경로" },
-            { name: "학원 관리", path: "ceo 학원관리 경로" }
+            { name: "코드 관리", path: "/ceo/code" },
+            { name: "학원 관리", path: "/ceo/store" }
         ]
     },
-    { name: "공지사항", icon: StickyNote, path: "ceo 공지사항 경로" },
+    { name: "공지사항", icon: StickyNote, path: "/posts" },
     { 
         name: "발주 관리", 
         icon: ShoppingCart,
         path: "ceo 발주관리 경로",
         subItems: [
-            { name: "발주 품목 관리", path: "ceo 발주품목관리 경로" },
-            { name: "발주 현황", path: "ceo 발주현황 경로" },
-            { name: "발주 승인/반려", path: "ceo 발주승인반려 경로" }
+            { name: "발주 품목 관리", path: "/ceo/product" },
+            { name: "발주 현황", path: "/ceo/orders" }
+            // { name: "발주 승인/반려", path: "ceo 발주승인반려 경로" }
         ] 
     },
     { 
         name: "매출 관리", 
         icon: Percent,
         subItems: [
-            { name: "발주 수익", path: "ceo 발주수익 경로" },
-            { name: "매출 수익", path: "ceo 매출수익 경로" }
+            { name: "발주 수익", path: "/ceo/ordersale" },
+            { name: "매출 수익", path: "/ceo/viewsale" }
         ] 
     }
 ];
@@ -72,7 +71,7 @@ export default function CeoNavbar() {
                   onClick={() => handleMenuClick(item)}
                   className={
                     `flex items-center gap-3 px-6 py-3 rounded-lg transition-colors ` +
-                    (selected === item.name
+                    (selected === item.name && !item.subItems
                       ? "bg-white text-[#2e8b57] font-semibold shadow"
                       : "text-white hover:bg-[#3fa97b] hover:text-white")
                   }
@@ -116,6 +115,7 @@ export default function CeoNavbar() {
           href="#"
           onClick={e => {
             e.preventDefault();
+            localStorage.removeItem('user');
             navigate("/");
           }}
           className="flex items-center gap-3 text-white opacity-70 hover:opacity-100 transition-opacity"

@@ -1,5 +1,6 @@
 export interface AdminSalesDto {
     adminSaleId: number;
+    userId:string;
     storeName: string;
     saleName: string;
     creDate: string;
@@ -17,4 +18,6 @@ export interface AdminSalesDto {
     endPageNum: number;
     totalPageCount: number;
     totalRow: number;
+    aname:string;
+    bname:string;
   }

@@ -20,6 +20,7 @@ type LectureSalesData = {
 };
 
 function SalesStatus(props) {
+    const [userId, setUserId]=useState();
     const [thisYear, setThisYear]=useState<string>(new Date().getFullYear().toString());
     const [selected, setSelected] = useState("condition"); // 초기값 설정
     const [sYearList, setSYearList] = useState<string[]>([]);
@@ -38,10 +39,16 @@ function SalesStatus(props) {
         setSMonth(e.target.value);
     }
     useEffect(() => {
+        const userStr = localStorage.getItem('user');
+        const user = userStr ? JSON.parse(userStr) : null;
+        console.log('localStorage user:', user);
+        setUserId(user.userId)
+
         // 컴포넌트가 마운트될 때 연도별 매출 데이터 가져오기 
         fetchYearlySales();
         setSelected("salesByYear"); // 초기 선택값 설정
         setHideSubCondition(false)
+        
     },[])
     useEffect(() => {
         if (selected === "salesByLecture") {
@@ -78,10 +85,7 @@ function SalesStatus(props) {
                     if (item.smonth && item.price !== undefined) {
                         costMap.set(item.smonth, item.price);
                     }
-                });
-                console.log(profitMap, "profitMap")
-                console.log(costMap, "costMap")
-
+                })
                 const formatted = Array.from({ length: 12 }, (_, i) => {
                     const monthNum = i + 1;
                     const paddedMonth = monthNum.toString().padStart(2, '0'); // '01' ~ '12'
@@ -111,7 +115,7 @@ function SalesStatus(props) {
         }
     };
     const fetchYearlySales =() => {
-        api.get(`/sales/YearlySale/${sYear}`)
+        api.get(`/sales/YearlySale/${sYear}`, {params:{userId:userId}})
         .then((res) => {
             const allyearlist= res.data.syearList;
             setAllYearData(allyearlist);
@@ -123,20 +127,21 @@ function SalesStatus(props) {
         });    
     };
 
-    
-    // const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042'];
-    const SUBJECT_COLORS: { [key: string]: string } = {
-        JAVA: '#8884d8',        // 보라
-        JAVASCRIPT: '#82ca9d',  // 초록
-        PYTHON: '#ffc658',      // 노랑
-        '알 수 없음': '#ff8042'  // 기타 (예외 처리용)
-    };
+    const DEFAULT_COLORS = [
+        '#8884d8', '#82ca9d', '#ffc658', '#ff8042', '#a28ee6',
+        '#00C49F', '#FFBB28', '#0088FE', '#FF6666', '#66CCFF',
+        '#CC66FF', '#FFCC66', '#66FF66', '#FF99CC', '#9966CC',
+        '#66FFFF', '#FF9933', '#6699FF', '#FF66B2', '#A3E4D7',
+        '#F1948A', '#BB8FCE', '#F7DC6F', '#48C9B0', '#F0B27A',
+        '#D7BDE2', '#AED6F1', '#F8C471', '#DC7633', '#5499C7'
+    ];
+
     const [yearlySalesByLecture, setYearlySalesByLecture] = useState<LectureSalesData[]>([]);
     const [monthlySalesByLecture, setMonthlySalesByLecture] = useState<LectureSalesData[]>([]);
     
     const fetchLectureSales =() => {
         console.log(sYear, "sYear")
-        api.get(`/sales/LectureSale/${sYear}`)
+        api.get(`/sales/LectureSale/${sYear}`, {params:{userId:userId}})
         .then((res) => {    
             console.log(res.data, "res.data")
             const yearData: AdminSalesStatDto[] = res.data.syearList || [];
@@ -152,19 +157,22 @@ function SalesStatus(props) {
             }
             // 연간 강의 매출
             const yearlySales = (foundYear.lectSaleYearly || []).map(item => ({
-                subject: item.cdLecture,
+                subject: item.lectureName,
                 sales: item.total || 0,
             }));
             setYearlySalesByLecture(yearlySales);
             // ⬇️ 월 목록 드롭다운용
             const monthKeys = (foundYear.smonthList || []).map(month => month.smonth);
             setAvailableMonths(monthKeys);
+            console.log(monthKeys+"는 선택 가능한 달")
             // ⬇️ 기본 선택 월
-            const firstMonth = foundYear.smonthList?.[0];
-            if (firstMonth) {
-                setSMonth(firstMonth.smonth); // 현재 선택된 월 설정
-                const monthlySales = (firstMonth.lectSaleMonthly || []).map(item => ({
-                    subject: item.cdLecture||null,
+            const firstMonth = monthKeys[0]
+            const selectedMonth=foundYear.smonthList?.[0]
+            console.log(firstMonth+"가 첫번째 달")
+            if (selectedMonth) {
+                setSMonth(firstMonth); // 현재 선택된 월 설정
+                const monthlySales = (selectedMonth.lectSaleMonthly || []).map(item => ({
+                    subject: item.lectureName,
                     sales: item.total || 0,
                 }));
                 setMonthlySalesByLecture(monthlySales);
@@ -179,15 +187,16 @@ function SalesStatus(props) {
 
     }
     const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setSMonth(e.target.value);  // 선택만 저장
-        api.get(`/sales/LectureSale/${sYear}`)
+        const selectedMonth= e.target.value
+        setSMonth(selectedMonth);  // 선택만 저장
+        api.get(`/sales/LectureSale/${sYear}`, {params:{userId:userId}})
         .then((res) => {
             const yearData: AdminSalesStatDto[] = res.data.syearList || [];
             const foundYear = yearData.find(item => item.syear === sYear);
-            const foundMonth = foundYear?.smonthList?.find(m => m.smonth === sMonth);
+            const foundMonth = foundYear?.smonthList?.find(m => m.smonth === selectedMonth);
             if (foundMonth) {
                 const monthlySales = (foundMonth.lectSaleMonthly || []).map(item => ({
-                    subject: item.cdLecture ?? "알 수 없음",
+                    subject: item.lectureName ?? "알 수 없음",
                     sales: item.total || 0,
                 }));
                 setMonthlySalesByLecture(monthlySales);
@@ -229,41 +238,71 @@ function SalesStatus(props) {
             setMonthlySalesByLecture([]);
         }
     }, [sMonth]);
+    const [subjectColorMap, setSubjectColorMap] = useState<{ [key: string]: string }>({});
+
+    useEffect(() => {
+        if (selected === "salesByLecture") {
+            const allSubjects = new Set<string>();
+            yearlySalesByLecture.forEach(item => allSubjects.add(item.subject || "알 수 없음"));
+            monthlySalesByLecture.forEach(item => allSubjects.add(item.subject || "알 수 없음"));
+
+            const newMap: { [key: string]: string } = {};
+            const usedColors = new Set<string>(Object.values(subjectColorMap)); // 이미 할당된 색상
+            let colorIndex = 0;
+
+            for (let subject of allSubjects) {
+                if (!subjectColorMap[subject]) {
+                    // 중복되지 않는 색상 찾기
+                    while (usedColors.has(DEFAULT_COLORS[colorIndex % DEFAULT_COLORS.length])) {
+                        colorIndex++;
+                        // 무한루프 방지 (색상이 부족한 경우), 임시 예외 처리
+                        if (colorIndex > DEFAULT_COLORS.length * 2) break;
+                    }
+                    const selectedColor = DEFAULT_COLORS[colorIndex % DEFAULT_COLORS.length];
+                    newMap[subject] = selectedColor;
+                    usedColors.add(selectedColor); // 사용한 색상으로 등록
+                    colorIndex++;
+                }
+            }
+
+            setSubjectColorMap(prev => ({ ...prev, ...newMap }));
+        }
+    }, [yearlySalesByLecture, monthlySalesByLecture, selected]);
+
+    //전체 div에 적용될 css
+    const centerStyle: React.CSSProperties ={
+        maxWidth:"1600px",
+        margin:"0 auto",
+        padding:"2rem",
+        textAlign:"center"
+    }
     return (
-        <div>
-            <button onClick={()=>{
-                api.get("/sales/ping")
-                .then(res=>{
-                    console.log(res.data)
-                    alert(res.data)
-                })
-                .catch(error=>{
-                    alert("응답하지 않음")
-                })
-            }}>ping 요청</button>
-            <div>
-                <h3>매출 확인 영역</h3>
-                <div className="d-flex justify-content-between align-items-center mb-3 row">
-                    <div className="col-md-8 col-12 d-flex justify-content-between align-items-center">
-                        <Form className='d-flex'>
-                            <Form.Select value={selected} onChange={handleSelect} size="sm" aria-label="yearorlecture" className='me-2' style={{ minWidth: "250px", maxWidth:"500px" }}>
+        <div style={centerStyle}>
+            <div className="mb-3"> 
+                <div className="d-flex align-items-center justify-content-center">
+                    <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>매출 통계</h1>
+                </div>
+         
+                <div className="mb-3">
+                    <div style={{ width: '100%', minWidth: '800px', margin: '0 auto' }}>
+                        <Form className="d-flex align-items-end" style={{ paddingLeft: '70px' }} >
+                            <Form.Select value={selected} onChange={handleSelect} size="sm" aria-label="yearorlecture" className='me-2 w-auto' >
                                 <option value="salesByYear">연별 매출</option>
                                 <option value="salesByLecture">과목별 매출</option>
                             </Form.Select>
-                            <Form.Select hidden={hideSubCondition} size="sm" aria-label="year" className='me-2' style={{ minWidth: "250px", maxWidth:"300px" }}  value={sYear} onChange={(e)=> {whenYearChange(e)}}>
+                            <Form.Select hidden={hideSubCondition} size="sm" aria-label="year" className='me-2 w-auto'   value={sYear} onChange={(e)=> {whenYearChange(e)}}>
                                 <option value="selectyearcondition">연도 선택</option>
                                 {sYearList.map((item, index) => (
                                     <option key={index}>{item}</option>
                                 ))}
                             </Form.Select>
-                            <Button className='btn btn-secondary' size="sm" style={{ width: "120px" }}>검색</Button>
+                            <Button className='btn btn-secondary me-2 w-auto' size="sm" style={{ width: "120px" }}>검색</Button>
                         </Form>
                     </div>
-                </div>
-                
+                    <div className="d-flex flex-wrap gap-2 justify-content-center">
                     {
                         selected==="salesByYear"?
-                        <LineChart width={1000} height={400} data={salesData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                        <LineChart width={1000} height={600} data={salesData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="sMonth" />
                             <Tooltip formatter={(value) => {
@@ -308,7 +347,7 @@ function SalesStatus(props) {
                                         {yearlySalesByLecture.map((entry, index) => (
                                         <Cell
                                             key={`cell-yearly-${index}`}
-                                            fill={SUBJECT_COLORS[entry.subject ?? '알 수 없음'] || '#ccc'}
+                                            fill={subjectColorMap[entry.subject ?? '알 수 없음'] || '#ccc'}
                                         />
                                         ))}
                                     </Pie>
@@ -348,7 +387,7 @@ function SalesStatus(props) {
                                         {monthlySalesByLecture.map((entry, index) => (
                                         <Cell
                                             key={`cell-monthly-${index}`}
-                                            fill={SUBJECT_COLORS[entry.subject ?? '알 수 없음'] || '#ccc'}
+                                            fill={subjectColorMap[entry.subject ?? '알 수 없음'] || '#ccc'}
                                         />
                                         ))}
                                     </Pie>
@@ -362,6 +401,10 @@ function SalesStatus(props) {
                         <div>
                         </div>
                     }
+                </div>
+                    
+                </div>
+
             </div>
 
         </div>

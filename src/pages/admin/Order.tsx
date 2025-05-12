@@ -7,7 +7,6 @@ import { InventoryItemList } from '../../types/InventoryType';
 import PrdList from '../../components/admin/PrdList';
 import { OrderItem } from '../../types/OrderType';
 import { useParams } from 'react-router-dom';
-import AdminNavbar from '@/components/AdminNavBar';
 
 function Order() {
     // 경로 파라미터의 :id 값 추출 (params.id)
@@ -52,7 +51,6 @@ function Order() {
 
     return (
         <><div className="flex">
-            <AdminNavbar></AdminNavbar>
             {/* <pre>{JSON.stringify(orderItem,null,4)}</pre> */}
             <Container fluid className="p-4" >
                 <Row>
