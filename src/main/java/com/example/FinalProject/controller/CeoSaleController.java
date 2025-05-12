@@ -18,7 +18,7 @@ public class CeoSaleController {
 	@Autowired private CeoSaleService ceoSaleService;
 	
 	@GetMapping("/ceosale")
-	public List<TWCeoSaleDto> getList(TWCeoSalePageDto dto) {
+	public TWCeoSalePageDto getList(TWCeoSalePageDto dto) {
 		return ceoSaleService.getList(dto);
 	}
 	
