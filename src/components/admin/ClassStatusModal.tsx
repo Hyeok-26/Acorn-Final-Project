@@ -62,7 +62,16 @@ function ClassStatusModal(props) {
         });
     };      
       
-
+    const isFormValid = () => {
+        return (
+            classDetail.cdStatus !== "" &&
+            classDetail.startDate !== "" &&
+            classDetail.endDate !== "" &&
+            classDetail.applyStartDate !== "" &&
+            classDetail.applyEndDate !== "" &&
+            classDetail.maxStudent > 0
+        );
+    };
     return (
         
         <Modal show={props.show} onHide={props.onHide} centered>
@@ -150,7 +159,7 @@ function ClassStatusModal(props) {
             </Modal.Body>
 
             <Modal.Footer>
-                <Button variant="success" onClick={handleSave} > 수정 </Button>			
+                <Button variant="success" onClick={handleSave} disabled={!isFormValid()}> 수정 </Button>			
             </Modal.Footer>
         </Modal>
     );

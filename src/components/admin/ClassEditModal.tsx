@@ -118,6 +118,23 @@ function ClassEditModal(props) {
     };
 
 
+    const isFormValid = () => {
+        return (
+            classDetail.cdLecture !== "" &&
+            classDetail.className.trim() !== "" &&
+            classDetail.teacherId !== 0 &&
+            classDetail.startDate !== "" &&
+            classDetail.endDate !== "" &&
+            classDetail.applyStartDate !== "" &&
+            classDetail.applyEndDate !== "" &&
+            classDetail.startTime !== "" &&
+            classDetail.endTime !== "" &&
+            classDetail.weekday.includes('1') &&
+            classDetail.maxStudent > 0 &&
+            classDetail.price > 0
+        );
+    };
+
     return (
         <Modal show={props.show} onHide={props.onHide} centered>
             <Modal.Header closeButton>
@@ -274,7 +291,7 @@ function ClassEditModal(props) {
             </Modal.Body>
 
             <Modal.Footer>
-                <Button variant="success" onClick={handleSave} > 저장 </Button>			
+                <Button variant="success" onClick={handleSave} disabled={!isFormValid()} > 저장 </Button>			
             </Modal.Footer>
         </Modal>
     );
