@@ -24,7 +24,7 @@ function AdminSalesModal({show, title, btnTag, onBtn, onClose, initialData, user
     const filteredBname = bnamelist.filter(item => item.class === selectedAname);
     useEffect(() => {
         resetState();
-    }, [initialData, btnTag]);
+    }, [initialData, show]);
     const resetState = () => {
         if (initialData) {
             setSelectedAname(initialData.aname);
