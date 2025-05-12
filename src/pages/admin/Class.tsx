@@ -243,7 +243,8 @@ function Class(props) {
                     </Form.Select>
                     <Form.Control type="text" placeholder="검색어..." name="keyword" onChange={handleSearchChange}
                         value={searchState.keyword} className="me-2 w-auto"/>
-                    <Button variant="primary" onClick={()=>move(1)} className="me-2 w-auto">검색</Button>
+                    <Button style={{ backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }} 
+                    onClick={()=>move(1)} className="me-2 w-auto">검색</Button>
                     { clist.keyword && <p> <strong>{clist.totalRow}</strong> 개의 글이 검색 되었습니다 </p>}
                 </div>
             

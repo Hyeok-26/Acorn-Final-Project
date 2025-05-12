@@ -188,7 +188,8 @@ function StudentList() {
                         style={{ minWidth: "200px" }}
                     />
 
-                    <Button variant="success" onClick={handleSearch} style={{ whiteSpace: "nowrap" }}>검색</Button>
+                    <Button style={{ backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)', whiteSpace: "nowrap" }}
+                     onClick={handleSearch} >검색</Button>
                     </Form>
                     {pageInfo.keyword && (
                         <p><strong>{pageInfo.totalRow}</strong> 명의 학생이 검색되었습니다</p>

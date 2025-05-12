@@ -103,12 +103,13 @@ function AdminPostList() {
           <Form.Control type="text" name="keyword" value={search.keyword} onChange={handleSearchChange} placeholder="검색 명..." />
         </Col>
         <Col md="auto">
-          <Button variant="primary" onClick={() => move(1)}>검색</Button>
+          <Button style={{ backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}
+          onClick={() => move(1)}>검색</Button>
         </Col>
       </Row>
 
       <Table bordered hover>
-        <thead className="text-center table-primary">
+        <thead className="text-center table-secondary">
           <tr>
             <th>번호</th>
             <th>제목</th>

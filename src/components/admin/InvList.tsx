@@ -46,7 +46,7 @@ function InvList({
                         />
                     </Col>
                     <Col xs="auto">
-                        <Button variant="dark" onClick={handleSearch}>검색</Button>
+                        <Button style={{ backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }} onClick={handleSearch}>검색</Button>
                     </Col>
                 </Row>
                 

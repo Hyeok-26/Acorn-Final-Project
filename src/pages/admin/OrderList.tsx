@@ -164,7 +164,8 @@ function OrderList() {
                                     <option value="APP">승인</option>
                                     <option value="REJ">거절</option>
                                 </Form.Select>
-                                <Button variant="dark" onClick={() => {
+                                <Button style={{ backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}
+                                 onClick={() => {
                                     const num = 1;
                                     setFilterCon({...filterCon, pnum: num});
                                     navigate(`/admin/order-list?page=${num}&status=${filterCon.status}&strDate=${filterCon.strDate}&endDate=${filterCon.endDate}`);
@@ -174,7 +175,7 @@ function OrderList() {
                         </div>
 
                         <Table bordered className="text-center">
-                            <thead className="table-success">
+                            <thead className="table-secondary">
                                 <tr>
                                     <th style={{ width: '10%' }}>발주 번호</th>
                                     <th style={{ width: '20%' }}>발주 일자</th>

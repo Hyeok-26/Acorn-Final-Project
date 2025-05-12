@@ -195,7 +195,8 @@ function TeacherList() {
                         />
 
                         {/* 검색 버튼 */}
-                        <Button variant="success" onClick={handleSearch} style={{ whiteSpace: "nowrap" }}>검색</Button>
+                        <Button style={{ backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)', whiteSpace: "nowrap" }}
+                         onClick={handleSearch} >검색</Button>
                     </Form>
 
                     { pageInfo.keyword && (
