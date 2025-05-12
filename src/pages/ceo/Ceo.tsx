@@ -2,10 +2,10 @@ import OverviewSection from "@/components/OverviewSection";
 import SalesAnalyticsSection from "@/components/SalesAnalyticsSection";
 import PopularItemsSection from "@/components/PopularItemsSection";
 import { useEffect } from "react";
-import { useStatistics } from "@/hooks/useStatistics";
+import { useCeoStatistics } from "@/hooks/useCeoStatistics";
 
 function Ceo() {
-    const { overview, salesData, popularItems, isLoading, error } = useStatistics();
+    const { overview, salesData, popularItems, isLoading, error } = useCeoStatistics();
 
     useEffect(() => {
         // localStorage에서

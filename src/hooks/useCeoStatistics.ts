@@ -11,6 +11,12 @@ export interface MonthlySales {
   sales: number;
 }
 
+// API 응답 타입 정의
+interface PopularLectureResponse {
+  CD_LECTURE: string;
+  LECTURE_COUNT: number;
+}
+
 export interface PopularLecture {
   cdLecture: string;    // 강의 코드
   lectureCount: number; // 수강생 수
@@ -22,7 +28,7 @@ export interface OverviewItem {
   color: string;
 }
 
-export const useStatistics = () => {
+export const useCeoStatistics = () => {
   // Overview 데이터
   const overviewQuery = useQuery({
     queryKey: ['statistics', 'overview'],
@@ -70,7 +76,7 @@ export const useStatistics = () => {
       const data = await response.json();
       console.log('Popular Lectures API Response:', data);
       // API 응답의 대문자 속성명을 소문자로 변환
-      return data.map((item: PopularLecture) => ({
+      return data.map((item: PopularLectureResponse) => ({
         cdLecture: item.CD_LECTURE,
         lectureCount: item.LECTURE_COUNT
       }));
