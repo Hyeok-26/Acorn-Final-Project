@@ -7,7 +7,9 @@ import ReactDOM from 'react-dom/client';
 import Layout from '../../Layout';
 import api from '../../api';
 import { AdminSalesDto } from '../../types/AdminSalesDto';
-
+import styles from "../../components/admin/admin.module.css"
+import binder from 'classnames/bind'
+const cx=binder.bind(styles)
 
 interface PageInfo {
     list: AdminSalesDto[];
@@ -199,6 +201,7 @@ function SalesManage() {
         padding:"2rem",
         textAlign:"center"
     }
+    
     return (
         <div>
             <AdminSalesModal show={modalShow} title={title} btnTag={btnTag} onBtn={onBtn} 
@@ -225,7 +228,7 @@ function SalesManage() {
                 </div>
                 <div>
                     <Table className="mx-auto text-center " style={{ tableLayout: 'fixed' }} bordered hover responsive>
-                        <thead className="table-success">
+                        <thead className="table-primary">
                             <tr>
                                 <th>매출등록일자</th>
                                 <th>매출수정일자</th>
@@ -268,7 +271,7 @@ function SalesManage() {
                             }                           
                         </tbody>
                     </Table>
-                    <Pagination className='mt-3 justify-content-center'>
+                    <Pagination className='mt-3 justify-content-center'  >
                         <Pagination.Item onClick={()=>move(pageInfo.startPageNum-1)} 
                             disabled={pageInfo.startPageNum === 1}>Prev</Pagination.Item>
                         {

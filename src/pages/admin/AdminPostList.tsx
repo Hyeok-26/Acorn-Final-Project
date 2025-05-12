@@ -96,8 +96,8 @@ function AdminPostList() {
         </Col>
       </Row>
 
-      <Table striped bordered hover>
-        <thead className="table-secondary text-center table-success">
+      <Table bordered hover>
+        <thead className="text-center table-primary">
           <tr>
             <th>번호</th>
             <th>제목</th>
