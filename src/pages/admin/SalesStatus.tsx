@@ -132,13 +132,6 @@ function SalesStatus(props) {
         '#D7BDE2', '#AED6F1', '#F8C471', '#DC7633', '#5499C7'
     ];
 
-    // const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042'];
-    // const SUBJECT_COLORS: { [key: string]: string } = {
-    //     JAVA: '#8884d8',        // 보라
-    //     JAVASCRIPT: '#82ca9d',  // 초록
-    //     PYTHON: '#ffc658',      // 노랑
-    //     '알 수 없음': '#ff8042'  // 기타 (예외 처리용)
-    // };
     const [yearlySalesByLecture, setYearlySalesByLecture] = useState<LectureSalesData[]>([]);
     const [monthlySalesByLecture, setMonthlySalesByLecture] = useState<LectureSalesData[]>([]);
     
@@ -160,7 +153,7 @@ function SalesStatus(props) {
             }
             // 연간 강의 매출
             const yearlySales = (foundYear.lectSaleYearly || []).map(item => ({
-                subject: item.cdLecture,
+                subject: item.lectureName,
                 sales: item.total || 0,
             }));
             setYearlySalesByLecture(yearlySales);
@@ -172,7 +165,7 @@ function SalesStatus(props) {
             if (firstMonth) {
                 setSMonth(firstMonth.smonth); // 현재 선택된 월 설정
                 const monthlySales = (firstMonth.lectSaleMonthly || []).map(item => ({
-                    subject: item.cdLecture||null,
+                    subject: item.lectureName||null,
                     sales: item.total || 0,
                 }));
                 setMonthlySalesByLecture(monthlySales);
@@ -195,7 +188,7 @@ function SalesStatus(props) {
             const foundMonth = foundYear?.smonthList?.find(m => m.smonth === sMonth);
             if (foundMonth) {
                 const monthlySales = (foundMonth.lectSaleMonthly || []).map(item => ({
-                    subject: item.cdLecture ?? "알 수 없음",
+                    subject: item.lectureName ?? "알 수 없음",
                     sales: item.total || 0,
                 }));
                 setMonthlySalesByLecture(monthlySales);

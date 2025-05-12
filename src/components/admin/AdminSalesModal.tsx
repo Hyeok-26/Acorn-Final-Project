@@ -17,6 +17,7 @@ function AdminSalesModal({show, title, btnTag, onBtn, onClose, initialData, user
     ]); 
     const [adminSaleId, setAdminSaleId] = useState<number|null>(null);
     const [price, setPrice] = useState(0);
+    const [displayPrice, setDisplayPrice] = useState("0");
     const [saleName, setSaleName] = useState<string>('');
     //SaleName의 길이가 20자 이상일 경우 true로 설정
     const [isTooLong, setIsTooLong] = useState(false);
@@ -30,6 +31,7 @@ function AdminSalesModal({show, title, btnTag, onBtn, onClose, initialData, user
             setSelectedBname(initialData.bname);
             setSaleName(initialData.saleName);
             setPrice(initialData.price);
+            setDisplayPrice(initialData.price.toLocaleString());
             // 👇 수정 버튼일 때만 adminSaleId 설정
             if (btnTag === "수정") {
                 setAdminSaleId(initialData.adminSaleId);
@@ -41,6 +43,7 @@ function AdminSalesModal({show, title, btnTag, onBtn, onClose, initialData, user
             setSelectedBname('');
             setSaleName('');
             setPrice(0);
+            setDisplayPrice("0");
             setAdminSaleId(null);
         }
     };
@@ -48,6 +51,18 @@ function AdminSalesModal({show, title, btnTag, onBtn, onClose, initialData, user
         resetState();
         onClose();
     }
+    const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const raw = e.target.value.replace(/,/g, '');
+        const number = parseInt(raw, 10);
+
+        if (!isNaN(number)) {
+            setPrice(number);
+            setDisplayPrice(number.toLocaleString());
+        } else {
+            setPrice(0);
+            setDisplayPrice("0");
+        }
+    };
     return (
         <>
             <Modal show={show} size="lg" centered>
@@ -86,7 +101,7 @@ function AdminSalesModal({show, title, btnTag, onBtn, onClose, initialData, user
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="price">
                             <Form.Label>매출 입력</Form.Label>
-                            <Form.Control value={price} type="number"  placeholder="숫자 입력" onChange={e => setPrice(Number(e.target.value))} />
+                            <Form.Control value={displayPrice} type="text"  placeholder="숫자 입력" onChange={handlePriceChange} />
                         </Form.Group>
                     </Form.Group>      
                 </Modal.Body>
