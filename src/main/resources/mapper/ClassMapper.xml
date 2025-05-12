@@ -179,8 +179,8 @@
                    bs.bname AS cd_status
                FROM tb_class c
                JOIN tb_teacher t ON c.teacher_id = t.teacher_id 
-               LEFT JOIN tb_student_class sc ON c.class_id = sc.class_id AND c.cd_status IN ('BEFORE', 'READY', 'START', 'END')
-               LEFT JOIN TB_BCODE bs ON bs.bcode=c.cd_status
+              
+               LEFT JOIN TB_BCODE bs ON bs.bcode=c.cd_status AND c.cd_status IN ('BEFORE', 'READY', 'START', 'END')
                WHERE c.user_id = #{userId}
 
                
