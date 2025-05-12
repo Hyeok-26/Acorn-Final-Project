@@ -106,11 +106,7 @@ public class ClassServiceImpl implements ClassService {
 
 	@Override
 	public boolean updateClass(HjClassDto dto) {
-		try {
-			return classMapper.updateClass(dto);
-		}catch(Exception e) {
-			return false;
-		}
+		return classMapper.updateClass(dto);
 		
 	}
 	
