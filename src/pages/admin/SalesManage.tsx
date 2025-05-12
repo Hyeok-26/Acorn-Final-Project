@@ -18,7 +18,7 @@ interface PageInfo {
     totalRow: number;
   }
 function SalesManage() {
-    const [userId, setUserId]=useState();
+    const [userId, setUserId]=useState<string>('');
     const [modalShow, setModalShow] = useState(false);
     const [title, setTitle] = useState("매출 추가");
     const [btnTag, setBtnTag] = useState("추가")
@@ -37,8 +37,12 @@ function SalesManage() {
         const user = userStr ? JSON.parse(userStr) : null;
         console.log('localStorage user:', user);
         setUserId(user.userId)
+   
         handleSearch();
     },[params.toString()])
+    useEffect(()=>{
+        params.set("userId", userId)
+    },[userId])
     
     const move = (page: number) => {
         const newParams = new URLSearchParams(params);
