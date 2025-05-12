@@ -38,8 +38,11 @@ public class SecurityConfig {
 	 */
 	@Bean //메소드에서 리턴되는 SecurityFilterChain 을 bean 으로 만들어준다.
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
-		String[] whiteList= {"/**","/auth","/upload/**","/editor_upload","/gemini/**", "/sales/**", "/students/**", "/teachers/**", "/class/**"};
-		 
+
+		String[] whiteList= {"/**","/auth","/upload/**","/editor_upload","/gemini/**", 
+				"/sales/**", "/students/**", "/teachers/**", "/class/**",
+				"/inv/**","/ord/**", "/pdt/**"};
+
 		httpSecurity
 		.headers(header->
 			//동일한 origin 에서 iframe 을 사용할수 있도록 설정(default 값은 사용불가)
