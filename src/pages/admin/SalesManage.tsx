@@ -18,7 +18,7 @@ interface PageInfo {
     totalRow: number;
   }
 function SalesManage() {
-    const userId = '2'
+    const [userId, setUserId]=useState();
     const [modalShow, setModalShow] = useState(false);
     const [title, setTitle] = useState("매출 추가");
     const [btnTag, setBtnTag] = useState("추가")
@@ -33,10 +33,10 @@ function SalesManage() {
         pageNum:"1"
     })
     useEffect(()=>{
-        //query 파라미터 값을 읽어와
-        //만일 존재 하지 않는다면 1 페이지로 설정
-        // let pageNumStr = params.get("pageNum");
-        // let pageNum = pageNumStr ? parseInt(pageNumStr) : 1;
+        const userStr = localStorage.getItem('user');
+        const user = userStr ? JSON.parse(userStr) : null;
+        console.log('localStorage user:', user);
+        setUserId(user.userId)
         handleSearch();
     },[params.toString()])
     
@@ -83,7 +83,7 @@ function SalesManage() {
         const query=listToQuery(checkedItems, "checkedItems");
         api.get(`/sales?${query}`,{
             params:{
-                userId:params.get("UserId"),
+                userId:userId,
                 pageNum:params.get("pageNum")
             }
         })

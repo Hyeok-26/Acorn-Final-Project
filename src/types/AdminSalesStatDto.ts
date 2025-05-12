@@ -6,6 +6,7 @@ export interface AdminSalesStatDto {
     total: number;                   // 총 매출
     studentCount: number;           // 수강생 수
     cdLecture: string | null;       // 과목 코드
+    lectureName:string|null;
 
     smonthList?: AdminSalesStatDto[]; // 월별 데이터 리스트
     syearList?: AdminSalesStatDto[];  // 연도별 데이터 리스트
