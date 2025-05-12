@@ -87,6 +87,32 @@ function CeoOrder() {
     // 페이지 숫자 버튼 클릭시 이동하기
     const navigate = useNavigate();
 
+    // 날짜 유효성 검사
+    const [dateError, setDateError] = useState(false);
+
+    // 날짜 변경 시 유효성 검사하기
+    const handleSearchChange1 = (e) => {
+        const { name, value } = e.target;
+
+        const newState = {
+            ...searchState,
+            [name]: value
+        };
+
+        // 유효성 검사: 시작날짜~ 끝날짜 비교
+        if (name === "startDate" || name === "endDate") {
+            const start = newState.startDate;
+            const end = newState.endDate;
+            if (start && end && start > end) {
+                setDateError(true);
+            } else {
+                setDateError(false);
+            }
+        }
+        setSearchState(newState);
+        setPageNum(1);
+    };
+
     return (
         <Container>
             <h2>전체 발주 목록</h2>
@@ -117,11 +143,28 @@ function CeoOrder() {
                                 <option value="REJ">반려</option>
                             </Form.Control>
                         </Col>
-                        <Col md={5}>
+                        <Col md={5} style={{ position: 'relative' }}>
+                            {dateError && (
+                                <Form.Text style={{
+                                    color: 'red',
+                                    fontWeight: 'bold',                                    
+                                    position: 'absolute',
+                                    top: '-28px', // 위치 조정 필요시 이 값 수정
+                                    left: '0',
+                                    zIndex: 10,
+                                    fontSize: '14px',
+                                    padding: '2px 4px',
+                                    borderRadius: '4px'
+                                }}>
+                                    ※ 날짜를 확인하세요.
+                                </Form.Text>
+
+                            )}
+
                             <InputGroup>
-                                <Form.Control type="date" onChange={handleSearchCnange} name='startDate' />
+                                <Form.Control type="date" onChange={handleSearchChange1} name='startDate' />
                                 <InputGroup.Text>~</InputGroup.Text>
-                                <Form.Control type="date" onChange={handleSearchCnange} name='endDate' />
+                                <Form.Control type="date" onChange={handleSearchChange1} name='endDate' />
                             </InputGroup>
                         </Col>
                     </Row>
@@ -208,7 +251,7 @@ function CeoOrder() {
                                         disabled
 
                                     > {
-                                            item.cdStatus === 'PEN' ? '대기중' :
+                                            item.cdStatus === 'PEN' ? '대기' :
                                                 item.cdStatus === 'APP' ? '승인' :
                                                     item.cdStatus === 'REJ' ? '반려' :
                                                         '미확인'
