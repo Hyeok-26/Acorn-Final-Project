@@ -17,5 +17,5 @@
 }
 
 .unlocked .lock-icon-svg {
-  transform: rotate(-20deg) translateY(-2px);
+  transform: translateY(-2px);
 }
