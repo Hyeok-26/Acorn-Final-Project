@@ -62,11 +62,11 @@ export default function AdminNavbar() {
   };
 
   return (
-    <aside className="h-screen w-64 bg-[#a8d5ba] flex flex-col justify-between rounded-2xl m-2 shadow-lg">
+    <aside className="h-screen w-64 bg-[#3b4d82] flex flex-col justify-between rounded-2xl m-2 shadow-lg">
       {/* 로고 */}
       <div>
         <div className="flex items-center gap-2 px-6 py-8">
-          <span className="bg-white rounded-full w-20 h-10 flex items-center justify-center text-[#2e8b57] font-bold text-xl shadow">Admin</span>
+          <span className="bg-white rounded-full w-20 h-10 flex items-center justify-center text-[#3b4d82] font-bold text-xl shadow">Admin</span>
           <span className="font-bold text-xl text-white">학원이름</span>
         </div>
         {/* 메뉴 */}
@@ -80,8 +80,8 @@ export default function AdminNavbar() {
                   className={
                     `flex items-center gap-3 px-6 py-3 rounded-lg transition-colors ` +
                     (selected === item.name
-                      ? "bg-white text-[#2e8b57] font-semibold shadow"
-                      : "text-white hover:bg-[#3fa97b] hover:text-white")
+                      ? "bg-white text-[#3b4d82] font-semibold shadow"
+                      : "text-white hover:bg-[#4c62a3] hover:text-white")
                   }
                 >
                   <item.icon className="w-5 h-5" />
@@ -102,8 +102,8 @@ export default function AdminNavbar() {
                           className={
                             `block px-3 py-2 rounded transition-colors text-sm ` +
                             (selected === sub.name
-                              ? "bg-[#e6f4ee] text-[#2e8b57] font-semibold"
-                              : "text-[#e6f4ee] hover:bg-[#3fa97b] hover:text-white")
+                              ? "bg-[#eef0f6] text-[#3b4d82] font-semibold"
+                              : "text-[#eef0f6] hover:bg-[#4c62a3] hover:text-white")
                           }
                         >
                           {sub.name}
