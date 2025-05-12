@@ -61,7 +61,12 @@ function ClassEditModal(props) {
         .then(res=>{
             console.log(' 클래스정보!!:', res.data);
             if (res.data){
-                setclassDetail(res.data);
+                delete res.data.description;
+                //setclassDetail(res.data);
+                setclassDetail(prev => ({
+                    ...prev,
+                    ...res.data
+                }));
             };
         })
         .catch(error=>{
@@ -96,6 +101,7 @@ function ClassEditModal(props) {
     const handleSave = () => {
         api.patch('/class/update', classDetail)
         .then(res => {
+            console.log("=================",classDetail)
             alert("수정 완료했습니다." );
             props.onHide();
         })
