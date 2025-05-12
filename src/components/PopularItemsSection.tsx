@@ -24,7 +24,7 @@ const PopularItemsSection = ({ items }: PopularItemsSectionProps) => {
 
   return (
     <section className="w-full lg:w-80 bg-white rounded-lg shadow p-6 min-h-[600px] flex flex-col justify-center">
-      <div className="text-2xl font-bold mb-4">인기 강좌(수강생 기준)</div>
+      <div className="text-2xl font-bold mb-4">제일 많이 생성된 강좌</div>
       <ul className="space-y-4 flex-1 flex flex-col justify-center">
         {displayItems.map((item, idx) => (
           <li
@@ -37,7 +37,7 @@ const PopularItemsSection = ({ items }: PopularItemsSectionProps) => {
             <div className="flex-1">
               <div className="font-semibold text-gray-800">{item.cdLecture}</div>
               <div className="text-xs text-gray-500 flex items-center gap-2">
-                <FaUserFriends className="inline" /> {item.lectureCount || 0}명
+                <FaUserFriends className="inline" /> {item.lectureCount || 0}강좌
               </div>
             </div>
           </li>

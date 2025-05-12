@@ -64,8 +64,17 @@ export const useCeoStatistics = () => {
   // 월별 매출 데이터
   const salesDataQuery = useQuery({
     queryKey: ['statistics', 'monthly-sales'],
-    queryFn: () => 
-      fetch('api/ceo/overview/lastyeaersale').then(res => res.json())
+    queryFn: async () => {
+      const response = await fetch('api/ceo/overview/lastyearsale');
+      const data = await response.json();
+      console.log('Monthly Sales API Response:', data);
+      // (0,0) 좌표 추가 + 필드명 변환
+      const salesData = data.map((item: { MONTH: string; TOTAL_PRICE: number }) => ({
+        month: `${Number(item.MONTH)}월`,
+        sales: item.TOTAL_PRICE
+      }));
+      return [{ month: "0월", sales: 0 }, ...salesData];
+    }
   });
 
   // 인기 강의 데이터
