@@ -36,6 +36,8 @@ function Inventory() {
 
     // 사용 내역을 가져오는 함수
     const refreshDetail = () => {
+        //첫 페이지 로딩시 선탣된 값 없으니 pId 0 일 경우 제외
+        if(pId==0)return;
         api.get(`/inv/${pId}?strDate=${strDate}&endDate=${endDate}`)
             .then(res => {
                 console.log(res.data);
