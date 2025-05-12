@@ -1,10 +1,13 @@
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import router from './router';
 import { legacy_createStore as createStore, Reducer } from 'redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
+
+const queryClient = new QueryClient();
 
 const initState: State = {
   userInfo: null,
@@ -21,7 +24,7 @@ interface State {
   isLogin: boolean;
 }
 
-interface Action {
+type Action = {
   type: 'LOGIN';
   payload: {
     userInfo: {
@@ -64,7 +67,9 @@ if (userStr) {
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
-  <Provider store={store}>
-    <RouterProvider router={router} />
-  </Provider>
-)
+  <QueryClientProvider client={queryClient}>
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  </QueryClientProvider>
+);

@@ -2,58 +2,10 @@ import OverviewSection from "@/components/OverviewSection";
 import SalesAnalyticsSection from "@/components/SalesAnalyticsSection";
 import PopularItemsSection from "@/components/PopularItemsSection";
 import { useEffect } from "react";
-
- // 예시 데이터
- const overview = [
-    {
-      title: "본사 발주수익",
-      value: "$35,485",
-      diff: "+2.8%",
-      sub: "작년 대비 +$2,450",
-      color: "text-green-600",
-      diffColor: "text-green-500"
-    },
-    {
-      title: "전체 누적 수강생",
-      value: "15,235",
-      diff: "+2.8%",
-      sub: "작년 대비 +2.8%",
-      color: "text-blue-600",
-      diffColor: "text-blue-500"
-    },
-    {
-      title: "운영중인 학원 수",
-      value: "120",
-      diff: "",
-      sub: "현재 운영중",
-      color: "text-indigo-600",
-      diffColor: ""
-    }
-  ];
-
-  const salesData = [
-    { month: "0", sales: 0 },
-    { month: "1월", sales: 1000000 },
-    { month: "2월", sales: 1200000 },
-    { month: "3월", sales: 1500000 },
-    { month: "4월", sales: 1800000 },
-    { month: "5월", sales: 2000000 },
-    { month: "6월", sales: 2100000 },
-    { month: "7월", sales: 2200000 },
-    { month: "8월", sales: 2500000 },
-    { month: "9월", sales: 2700000 },
-    { month: "10월", sales: 3000000 },
-    { month: "11월", sales: 3200000 },
-    { month: "12월", sales: 3500000 },
-  ];
-
-  const items = [
-    { name: "JAVA", count: 3251, earned: 12345 },
-    { name: "PYTHON", count: 2890, earned: 11200 },
-    { name: "JAVASCRIPT", count: 2100, earned: 9800 },
-  ];
+import { useStatistics } from "@/hooks/useStatistics";
 
 function Ceo() {
+    const { overview, salesData, popularItems, isLoading, error } = useStatistics();
 
     useEffect(() => {
         // localStorage에서
@@ -64,17 +16,24 @@ function Ceo() {
         // Redux에서
         // const user = useSelector((state) => state.userInfo);
         // console.log('redux user:', user);
-      }, []);
+    }, []);
 
-  return (
-    <div className="flex flex-col gap-6 p-8 bg-gray-50 min-h-screen">
-      <OverviewSection overview={overview} />
-      <div className="flex flex-col lg:flex-row gap-6">
-        <SalesAnalyticsSection salesData={salesData} />
-        <PopularItemsSection items={items} />
-      </div>
-    </div>
-  );
+    useEffect(() => {
+        console.log('popularItems:', popularItems);
+    }, [popularItems]);
+
+    if (isLoading) return <div>로딩중...</div>;
+    if (error) return <div>에러가 발생했습니다</div>;
+
+    return (
+        <div className="flex flex-col gap-6 p-8 bg-gray-50 min-h-screen">
+            <OverviewSection overview={overview ?? []} />
+            <div className="flex flex-col lg:flex-row gap-6">
+                <SalesAnalyticsSection salesData={salesData ?? []} />
+                <PopularItemsSection items={popularItems ?? []} />
+            </div>
+        </div>
+    );
 }
 
 export default Ceo;
