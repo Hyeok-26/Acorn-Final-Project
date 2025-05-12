@@ -37,4 +37,48 @@
 		where ROWNUM &lt;=3
 	</select>
 	
+	
+	
+	<select id="getStudentByUserId" parameterType="int">
+		select count(*)
+		from tb_student
+		where user_id = #{userId} and cd_status = 'STUDY'
+	</select>
+	
+	<select id="getTeacherByUserId" parameterType="int">
+		select count(*)
+		from tb_teacher
+		where user_id = #{userId} and cd_status = 'WORK'
+	</select>
+	
+	<select id="getClassByUserId" parameterType="int">
+		select count(*)
+		from tb_class
+		where user_id = #{userId} and cd_status in ('BEFORE', 'READY', 'START')
+	</select>
+	
+	<select id="getLastMonthlySalesByUserId" resultType="map" parameterType="map">
+		select
+			TO_CHAR(cre_date, 'MM') as month,
+			SUM(price) as total_price
+		from tb_admin_sale
+		where TO_CHAR(cre_date, 'YYYY') = #{lastYear}
+			and user_id = #{userId}
+			and cd_acode = 'PROFIT'
+		group by TO_CHAR(cre_date, 'MM')
+		order by month
+	</select> 
+	
+	<select id="getPopularLectureTop3ByUserId" resultType="map" parameterType="int">
+		select *
+		from
+			(select cd_lecture, count(*) as lecture_count
+			 from tb_class
+			 where user_id = #{userId}
+			 group by cd_lecture
+			 order by lecture_count desc
+			)
+		where ROWNUM &lt;=3
+	</select>
+	
 </mapper>

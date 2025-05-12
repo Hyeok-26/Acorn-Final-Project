@@ -40,5 +40,33 @@ public class DashBoardServiceImpl implements DashBoardService{
 	public List<Map<String, Object>> getPopularLectureTop3() {
 		return dashBoardMapper.getPopularLectureTop3();
 	}
+	
+	
+
+	@Override
+	public int getStudentByUserId(int userId) {
+		return dashBoardMapper.getStudentByUserId(userId);
+	}
+
+	@Override
+	public int getTeacherByUserId(int userId) {
+		return dashBoardMapper.getTeacherByUserId(userId);
+	}
+
+	@Override
+	public int getClassByUserId(int userId) {
+		return dashBoardMapper.getClassByUserId(userId);
+	}
+
+	@Override
+	public List<Map<String, Object>> getLastMonthlySalesByUserId(int userId) {
+		int lastYear = LocalDate.now().minusYears(1).getYear();
+		return dashBoardMapper.getLastMonthlySalesByUserId(lastYear, userId);
+	}
+
+	@Override
+	public List<Map<String, Object>> getPopularLectureTop3ByUserId(int userId) {
+		return dashBoardMapper.getPopularLectureTop3ByUserId(userId);
+	}
 
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.FinalProject.service.DashBoardService;
@@ -29,7 +30,7 @@ public class DashBoardController {
 		return dashBoardService.getLastYearCeoOrderSale();
 	}
 	
-	@GetMapping("ceo/overview/lastyeaersale")
+	@GetMapping("/ceo/overview/lastyeaersale")
 	public List<Map<String, Object>> getLastYearMonthlySales(){
 		return dashBoardService.getLastYearMonthlySales();
 	}
@@ -37,5 +38,32 @@ public class DashBoardController {
 	@GetMapping("/ceo/overview/popularlecture")
 	public List<Map<String, Object>> getPopularLectureTop3(){
 		return dashBoardService.getPopularLectureTop3();
+	}
+	
+	
+	
+	@GetMapping("/admin/overview/students")
+	public int getStudentByUserId(@RequestParam Integer userId) {
+		return dashBoardService.getStudentByUserId(userId);
+	}
+	
+	@GetMapping("/admin/overview/teachers")
+	public int getTeacherByUserId(@RequestParam Integer userId) {
+		return dashBoardService.getTeacherByUserId(userId);
+	}
+	
+	@GetMapping("/admin/overview/class")
+	public int getClassByUserId(@RequestParam Integer userId) {
+		return dashBoardService.getClassByUserId(userId);
+	}
+	
+	@GetMapping("/admin/overview/lastyearsale")
+	public List<Map<String, Object>> getLastMonthlySalesByUserId(@RequestParam Integer userId){
+		return dashBoardService.getLastMonthlySalesByUserId(userId);
+	}
+	
+	@GetMapping("/admin/overview/popularlecture")
+	public List<Map<String, Object>> getPopularLectureTop3ByUserId(@RequestParam Integer userId){
+		return dashBoardService.getPopularLectureTop3ByUserId(userId);
 	}
 }
