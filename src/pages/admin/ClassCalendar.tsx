@@ -393,7 +393,7 @@ const centerStyle: React.CSSProperties ={
   // 최종적으로 ClassCalendar 함수 자체의 리턴값 Calendar
   return (
     <div style={centerStyle}>
-      <h2 style={{ marginTop: '60px',marginBottom: '60px' }}>{storeName} 월간 수업 일정표</h2>
+      <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>{storeName} 월간 수업 일정표</h1>
       <Calendar
         date={date} // 내부적으로 날짜 date 상태 관리하여
         onNavigate={onNavigate} // onNavigate 로 date 상태 갱신

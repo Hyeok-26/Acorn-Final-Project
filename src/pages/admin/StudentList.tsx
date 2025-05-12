@@ -56,6 +56,7 @@ function StudentList() {
     const userStr = localStorage.getItem('user');
     const user = userStr ? JSON.parse(userStr) : null;
     const userId = user.userId; 
+    const storeName = user.storeName;
 
     const state = params.get("state") || "STUDY";
     const condition = params.get("condition") || "";
@@ -128,21 +129,6 @@ function StudentList() {
         });
     };
 
-    // 검색 초기화
-    const handleReset = (): void => {
-        setSearchCondition("");
-        setSearchKeyword("");
-
-        setParams({
-          userId,
-          pageNum: "1",
-          state,
-          condition: "",
-          keyword: "",
-        });
-
-    };
-
     useEffect(() => {
         fetchData();
     }, [params]); // params 변화에 따라 fetchData
@@ -156,30 +142,32 @@ function StudentList() {
     }
     return (
         <div style={centerStyle}>
-            <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>학생 목록</h1>
-            <div className="d-flex justify-content-between align-items-center">
-                <Form className="d-flex align-items-center gap-1">
-                    {/* 재원/퇴원/전체 버튼 */}
-                    <ButtonGroup>
-                        <Button variant={state === "STUDY" ? "primary" : "outline-primary"} onClick={() => changeState("STUDY")} style={{ whiteSpace: "nowrap" }}>재원</Button>
-                        <Button variant={state === "S_QUIT" ? "primary" : "outline-primary"} onClick={() => changeState("S_QUIT")} style={{ whiteSpace: "nowrap" }}>퇴원</Button>
-                        <Button variant={state === "WHOLE" ? "primary" : "outline-primary"} onClick={() => changeState("WHOLE")} style={{ whiteSpace: "nowrap" }}>전체</Button>
-                    </ButtonGroup>
-
+            <div className="d-flex align-items-center justify-content-center">
+                <h1 style={{ marginTop: '60px', marginBottom: '60px' }}>{storeName} 학생 목록</h1>
+            </div>
+            
+            <div className="d-flex justify-content-between mb-3">
+                <div className="d-flex align-items-end">
+                    <Form className="d-flex align-items-center gap-2">
+                    {/* 상태 */}
+                    <Form.Select value={state} onChange={(e) => changeState(e.target.value)} style={{ maxWidth: "100px" }}>
+                        <option value="WHOLE">전체</option>
+                        <option value="STUDY">재원</option>
+                        <option value="S_QUIT">퇴원</option>
+                    </Form.Select>
                     {/* 검색 조건 */}
-                    <Form.Select value={searchCondition} onChange={(e) => setSearchCondition(e.target.value)} style={{ maxWidth: "100px" }}>
+                    <Form.Select value={searchCondition} onChange={(e) => setSearchCondition(e.target.value)} style={{ minWidth: "100px" }}>
                         <option value="">선택</option>
                         <option value="STUDENT">학생명</option>
                         <option value="CLASS">수업명</option>
                     </Form.Select>
-
                     {/* 검색어 */}
                     <Form.Control
                         type="text"
                         placeholder={
-                            condition === "STUDENT"
+                            searchCondition === "STUDENT"
                                 ? "학생명을 입력하세요"
-                                : condition === "CLASS"
+                                : searchCondition === "CLASS"
                                 ? "수업명을 입력하세요"
                                 : "검색조건을 선택하세요"
                         }
@@ -189,17 +177,22 @@ function StudentList() {
                     />
 
                     <Button variant="success" onClick={handleSearch} style={{ whiteSpace: "nowrap" }}>검색</Button>
-                    <Button variant="dark" onClick={handleReset} style={{ whiteSpace: "nowrap" }}>초기화</Button>
-                </Form>
+                    </Form>
+                    {pageInfo.keyword && (
+                        <p><strong>{pageInfo.totalRow}</strong> 명의 학생이 검색되었습니다</p>
+                    )}
+                    
+                </div>
 
-                {pageInfo.keyword && (
-                    <p><strong>{pageInfo.totalRow}</strong> 명의 학생이 검색되었습니다</p>
-                )}
+                <div className="d-flex flex-column align-items-end">
+                    <Button variant="outline-dark" className="ms-auto" onClick={() => setShowRegister(true)}>학생 등록</Button>
+                </div>
+                
+                
 
-                <Button variant="outline-dark" className="ms-auto" onClick={() => setShowRegister(true)}>학생 등록</Button>
             </div>
 
-            <Table bordered hover>
+            <Table className="mx-auto text-center" bordered hover responsive>
                 <thead className="table-success">
                     <tr>
                         <th>번호</th>
@@ -222,12 +215,11 @@ function StudentList() {
                             <td>{student.statusName}</td>
                             <td>{student.cdStatus === "STUDY" ? student.classNames : "-"}</td>
                             <td>
-                                <Button variant="light" className="btn btn-sm btn-outline-dark" 
-                                onClick={() => setSelectedStudent(student)}>
+                                <Button variant="light" className="btn btn-sm btn-outline-dark" size="sm" onClick={() => setSelectedStudent(student)}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-journal-text" viewBox="0 0 16 16">
-                                    <path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
-                                    <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2"/>
-                                    <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z"/>
+                                        <path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
+                                        <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2"/>
+                                        <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z"/>
                                     </svg>
                                 </Button>
                             </td>
