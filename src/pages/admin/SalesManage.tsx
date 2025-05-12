@@ -234,7 +234,7 @@ function SalesManage() {
                                     <td>{item.creDate}</td>
                                     <td>{item.editDate}</td>
                                     <td>{item.saleName}</td>
-                                    <td>{item.price}</td>
+                                    <td>{item.price.toLocaleString()}</td>
                                     <td>{item.aname}</td>
                                     <td>{item.bname}</td>
                                     <td>
