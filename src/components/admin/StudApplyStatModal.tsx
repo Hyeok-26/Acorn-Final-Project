@@ -108,9 +108,10 @@ function StudApplyStatModal({ show, onHide, classId }) {
                     </div>
                     <div style={{ maxHeight: 300, width: '100%', maxWidth: 600, overflowY: 'auto' }}>
                         <Table bordered size="sm" className="text-center align-middle">
-                            <thead>
+                            <thead className="table-success">
                                 <tr>
-                                    <th>학생이름</th>
+                                    <th>학생번호</th>
+                                    <th>학생명</th>
                                     <th>연락처</th>
                                     <th>상태</th>
                                 </tr>
@@ -118,6 +119,7 @@ function StudApplyStatModal({ show, onHide, classId }) {
                             <tbody>
                                 {students.map((student) => (
                                     <tr key={student.studentId}>
+                                        <td>{student.studentId}</td>
                                         <td>{student.name}</td>
                                         <td>{student.phone}</td>
                                         <td>

@@ -200,11 +200,11 @@ function TeacherList() {
             <Table className="mx-auto text-center" bordered hover responsive>
                 <thead className="table-success">
                     <tr>
-                        <th>번호</th>
+                        <th>강사번호</th>
                         <th>지점명</th>
-                        <th>이름</th>
-                        <th>생년 월일</th>
-                        <th>전화 번호</th>
+                        <th>강사명</th>
+                        <th>생년월일</th>
+                        <th>연락처</th>
                         <th>재직 여부</th>                         
                         <th>현재 담당 수업</th>
                         <th>수업 이력</th>
@@ -212,9 +212,9 @@ function TeacherList() {
                     </tr>
                 </thead>
                 <tbody>
-                    { pageInfo.list.map((teacher, index) => (
+                    { pageInfo.list.map((teacher) => (
                         <tr key={teacher.teacherId}>
-                            <td>{index + 1}</td>
+                            <td>{teacher.teacherId}</td>
                             <td>{teacher.storeName}</td>
                             <td>{teacher.name}</td>
                             <td>{teacher.birth}</td>
