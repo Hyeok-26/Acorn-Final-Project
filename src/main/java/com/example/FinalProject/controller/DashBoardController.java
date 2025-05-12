@@ -1,0 +1,41 @@
+package com.example.FinalProject.controller;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.FinalProject.service.DashBoardService;
+
+@RestController
+public class DashBoardController {
+	
+	@Autowired private DashBoardService dashBoardService;
+	
+	@GetMapping("/ceo/overview/students")
+	public int getStudentsAll() {
+		return dashBoardService.getStudentsAll();
+	}
+	
+	@GetMapping("/ceo/overview/users")
+	public int getUserAll() {
+		return dashBoardService.getUserAll()-1;
+	}
+	
+	@GetMapping("/ceo/overviw/ceosale")
+	public int getLastYearCeoOrderSale() {
+		return dashBoardService.getLastYearCeoOrderSale();
+	}
+	
+	@GetMapping("ceo/overview/lastyeaersale")
+	public List<Map<String, Object>> getLastYearMonthlySales(){
+		return dashBoardService.getLastYearMonthlySales();
+	}
+	
+	@GetMapping("/ceo/overview/popularlecture")
+	public List<Map<String, Object>> getPopularLectureTop3(){
+		return dashBoardService.getPopularLectureTop3();
+	}
+}

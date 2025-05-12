@@ -9,12 +9,14 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.FinalProject.dto.HUI_OrderDetailDto;
 import com.example.FinalProject.dto.HjClassDto;
 import com.example.FinalProject.dto.JsAdminSalesDto;
 import com.example.FinalProject.dto.JsAdminSalesStatDto;
 import com.example.FinalProject.dto.JsClsToProfitDto;
 import com.example.FinalProject.dto.JsOrderToCostDto;
 import com.example.FinalProject.mapper.AdminSalesMapper;
+import com.example.FinalProject.mapper.CeoOrderMapper;
 
 @Service
 public class AdminSalesServiceImpl implements AdminSalesService {
@@ -26,6 +28,7 @@ public class AdminSalesServiceImpl implements AdminSalesService {
 	Integer userId;
 
 	@Autowired AdminSalesMapper salesmapper;
+	@Autowired CeoOrderMapper ordermapper;
 	
 	//매출 관리 리스트 : 검색 조건을 받아 리스트 불러오기
 	@Override
@@ -221,8 +224,12 @@ public class AdminSalesServiceImpl implements AdminSalesService {
 	//발주에서 실행할 메소드 : 발주 승인 시 매출 테이블에 자동 등록
 	@Override @Transactional
 	public int insertOrderApprovedCost(int orderId) {
-		JsOrderToCostDto costDto=salesmapper.getApprovedOrderInfoByOrderId(orderId);
-		int userId= costDto.getUserId();
+		// 본사 발주서 상세페이이 dto 이용해서 UserId 가져오기
+		HUI_OrderDetailDto orderDto = ordermapper.getOrderInfo(orderId);
+		int userId = orderDto.getUserId();
+		
+//		JsOrderToCostDto costDto=salesmapper.getApprovedOrderInfoByOrderId(orderId);
+//		int userId= costDto.getUserId();
 
 		Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("userId", userId);
@@ -232,7 +239,12 @@ public class AdminSalesServiceImpl implements AdminSalesService {
 	    int totalInserted = 0;
 	
 		for (JsOrderToCostDto dto : list) {
+
+			// 위에서 가져온 userId 를 JsOrderToCostDto 에 담아서 지점 매출 데이터 넣기
 			dto.setUserId(userId);
+			dto.setSaleName(dto.getProductName());
+			dto.setPrice(dto.getTotal());
+
 			try {
 				int a = salesmapper.insertOrderApprovedCostToAdmin(dto);
 		        int b = salesmapper.insertOrderApprovedCostToCeo(dto);

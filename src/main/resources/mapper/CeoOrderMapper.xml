@@ -26,6 +26,7 @@
 	<!-- 본사 발주 내역 리스트 조회열 -->
 	<sql id="orderColumn">
 		tb_user.store_name , tb_order.order_id, SUBSTR(tb_order.ord_date,1,10) AS ordDate ,cd_status, total_price , order_name
+		, tb_user.user_id
 	</sql>
 	
 
@@ -61,7 +62,7 @@
 	<!-- 발주 상세 보기 페이지의 기본정보 가지고 오기 + 지점 요청 메세지 가져오기 -->
 	<select id="getOrderInfo" resultType="HUI_OrderDetailDto" parameterType="int">
 		SELECT tb_order.order_id, SUBSTR(tb_order.ord_date,1,10) AS ordDate ,order_name, store_call,  total_price, cd_status,
-		tb_order.memo_request, tb_order.memo_reply
+		tb_order.memo_request, tb_order.memo_reply,tb_user.user_id
 		FROM tb_order 
 		JOIN tb_user 
 		ON tb_order.user_id = tb_user.user_id
