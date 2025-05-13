@@ -222,18 +222,18 @@ function SalesManage() {
                 </div>
                 <div className="d-flex justify-content-between mb-3">
                     <div className="col-md-8 col-12 d-flex justify-content-between align-items-center">
-                        <Form className='d-flex w-100'>
+                        <Form className='d-flex w-100 align-items-center'>
                             <Form.Check inline label="수업수입" value="CLS" type="checkbox" id="CLS"onChange={handleCheckboxChange}/>
                             <Form.Check inline label="나머지수입" value="ETC" type="checkbox" id="ETC" onChange={handleCheckboxChange}/>
                             <Form.Check inline label="급여" value="SALARY" type="checkbox" id="SALARY" onChange={handleCheckboxChange}/>
                             <Form.Check inline label="발주" value="ITEM" type="checkbox" id="ITEM" onChange={handleCheckboxChange}/>
                             <Form.Check inline label="지출기타" value="C_ETC" type="checkbox" id="C_ETC" onChange={handleCheckboxChange}/>
-                            <Button style={{ backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)', width: "50px"  }}
-                             size="sm" onClick={()=>{handleSearch(); move(1)}}>검색</Button>
+                            <Button style={{ backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)'  }}
+                              onClick={()=>{handleSearch(); move(1)}}>검색</Button>
                         </Form>
                     </div>
                     <div className='col-md-4 col-12 d-flex justify-content-end mt-3 mt-md-0'>
-                        <Button className="btn btn-primary me-2"  size="sm" onClick={handleAdd}  style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}>매출 추가</Button>
+                        <Button className="btn me-2"  onClick={handleAdd}  style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}>매출 추가</Button>
                     </div>
                 </div>
                 <div>

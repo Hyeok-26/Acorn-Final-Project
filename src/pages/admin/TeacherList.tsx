@@ -163,8 +163,8 @@ function TeacherList() {
             </div>
 
             <div className="d-flex justify-content-between mb-3">
-                <div className="d-flex align-items-end">
-                    <Form className="d-flex align-items-center gap-2">                
+                <div className="d-flex align-items-center">
+                    <div className="d-flex align-items-center gap-2">                
                         {/* 상태 */}
                         <Form.Select value={state} onChange={(e) => changeState(e.target.value)} style={{ maxWidth: "100px" }}>
                             <option value="WHOLE">전체</option>
@@ -197,10 +197,10 @@ function TeacherList() {
                         {/* 검색 버튼 */}
                         <Button style={{ backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)', whiteSpace: "nowrap" }}
                          onClick={handleSearch} >검색</Button>
-                    </Form>
+                    </div>
 
                     { pageInfo.keyword && (
-                        <p><strong>{pageInfo.totalRow}</strong> 명의 강사가 검색되었습니다</p>
+                        <p className="mb-0 ms-2"><strong>{pageInfo.totalRow}</strong> 명의 강사가 검색되었습니다</p>
                     )}
                 </div>
             

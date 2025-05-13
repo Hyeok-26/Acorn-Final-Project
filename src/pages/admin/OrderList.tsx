@@ -195,10 +195,10 @@ function OrderList() {
                                             <td>{invoice?.ordDate}</td>
                                             <td>{invoice?.orderName}</td>
                                             <td>{invoice?.totalPrice}</td>
-                                            <td>{invoice?.cdStatus === 'PEN' ? <Button variant="outline-primary" style={{ cursor: 'default' }}>발주중</Button> :
-                                                invoice?.cdStatus === 'APP' ? <Button variant="outline-success" style={{ cursor: 'default' }}>승인</Button> :
-                                                    invoice?.cdStatus === 'REJ' ? <Button variant="outline-danger" style={{ cursor: 'default' }}>거절</Button> :
-                                                        invoice?.cdStatus === 'WAIT' ? <Button variant="outline-secondary" style={{ cursor: 'default' }}>임시저장</Button> : ''}</td>
+                                            <td>{invoice?.cdStatus === 'PEN' ? <Button style={{backgroundColor: 'white', borderColor: 'white' , color: 'rgb(226, 176, 38)', cursor: 'default' }}>발주중</Button> :
+                                                invoice?.cdStatus === 'APP' ? <Button style={{backgroundColor: 'white', borderColor: 'white' , color: 'rgb(19, 32, 211)', cursor: 'default' }} >승인</Button> :
+                                                    invoice?.cdStatus === 'REJ' ? <Button style={{backgroundColor: 'white', borderColor: 'white' , color: 'rgb(233, 50, 18)', cursor: 'default' }}>거절</Button> :
+                                                        invoice?.cdStatus === 'WAIT' ? <Button  style={{backgroundColor: 'white', borderColor: 'white' , color: 'rgb(70, 70, 70)', cursor: 'default' }}>임시저장</Button> : ''}</td>
                                             <td>
                                                 {invoice ? <NavLink
                                                     to={`/admin/${invoice?.orderId}/order`}
