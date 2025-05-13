@@ -188,7 +188,7 @@ const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     }, [teacher]);
     
     return (
-        <Modal show={show} onHide={onClose}>
+        <Modal show={show} onHide={onClose} centered>
             <Modal.Header closeButton>
                 <Modal.Title>강사 정보 수정</Modal.Title>
             </Modal.Header>

@@ -126,7 +126,7 @@ const RegisterModal:React.FC<RegisterModalProps> = ({ show, onClose, onRegister 
     };
     
     return (
-        <Modal show={show} onHide={onClose}> {/* 모달 닫힐 때 부모 컴포넌트에서 실행될 함수 onClose */}
+        <Modal show={show} onHide={onClose} centered> {/* 모달 닫힐 때 부모 컴포넌트에서 실행될 함수 onClose */}
             <Modal.Header closeButton> {/* 닫기 버튼 누르면 onHide 호출 */}
                 <Modal.Title>강사 정보 등록</Modal.Title>
             </Modal.Header>

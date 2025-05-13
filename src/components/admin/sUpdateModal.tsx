@@ -145,7 +145,7 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ student, show, onClose, onUpd
     }, [student]);
 
     return (
-        <Modal show={show} onHide={onClose}>
+        <Modal show={show} onHide={onClose} centered>
             <Modal.Header closeButton>
                 <Modal.Title>학생 정보 수정</Modal.Title>
             </Modal.Header>

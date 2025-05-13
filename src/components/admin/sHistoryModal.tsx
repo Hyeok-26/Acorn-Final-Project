@@ -59,7 +59,7 @@ const HistoryModal: React.FC<HistoryModalProps> = ({ student, show, onClose }) =
       
     
     return (
-        <Modal show={show} onHide={onClose} size="xl">    
+        <Modal show={show} onHide={onClose} size="xl" centered>    
             <Modal.Header closeButton>
                 <Modal.Title><strong>{student.name}</strong> 학생 수강 이력</Modal.Title>
             </Modal.Header>

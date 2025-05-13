@@ -105,7 +105,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ show, onClose, onRegister
     };
 
     return (
-        <Modal show={show} onHide={onClose}>
+        <Modal show={show} onHide={onClose} centered>
             <Modal.Header closeButton>
                 <Modal.Title>학생 정보 등록</Modal.Title>
             </Modal.Header>
