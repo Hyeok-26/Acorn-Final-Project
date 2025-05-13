@@ -157,7 +157,7 @@ const RegisterModal:React.FC<RegisterModalProps> = ({ show, onClose, onRegister 
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <Form.Label>상태</Form.Label>
+                        <Form.Label>재직 여부</Form.Label>
                         <Form.Select name="cdStatus" value={cdStatus} onChange={(e) => setCdStatus(e.target.value)}>
                             <option value="">상태를 선택하세요</option>
                             <option value="WORK">재직</option>
