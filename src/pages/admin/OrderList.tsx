@@ -97,20 +97,15 @@ function OrderList() {
         }
     }
 
-    // //전체 div에 적용될 css
-    // const centerStyle: React.CSSProperties = {
-    //     maxWidth: "1600px",
-    //     margin: "0 auto",
-    //     padding: "2rem",
-    //     textAlign: "center"
-    // }
+
+
+    // <pre>{JSON.stringify(filterCon,null,4)}</pre>
 
     return (
         <>
-            {/* <pre>{JSON.stringify(filterCon,null,4)}</pre> */}
+            
             <div className="flex" >
-                {/* <div style={centerStyle}> */}
-                <div style={{ flex: 1, margin: '0 10rem' }} >
+                <div style={{ flex: 1, margin: '0 8rem' }} >
                 <style>
                 {`
                     .pagination .page-link {
@@ -124,7 +119,7 @@ function OrderList() {
                 `}
                 </style>                    
                     <Container fluid className="p-4">
-                        <h2 style={{ marginTop: '60px', marginBottom: '60px' }} className="mb-4 text-center">발주 현황</h2>
+                        <h2 style={{ marginTop: '60px', marginBottom: '60px' }} className="mb-4 text-center fw-bold">발주 현황</h2>
                         <div className="d-flex justify-content-between align-items-center mb-3">
                             <NavLink to="/admin/order"><Button  style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}>발주서 작성</Button></NavLink>
                             <div className="d-flex gap-2 align-items-center">
