@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Button, ButtonGroup, Form, Pagination, Table } from 'react-bootstrap';
+import { Button, Form, Pagination, Table } from 'react-bootstrap';
 import RegisterModal from '../../components/admin/tRegisterModal';
 import UpdateModal from '../../components/admin/tUpdateModal';
 import HistoryModal from '../../components/admin/tHistoryModal';
 import api from '../../api';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 // 강사 정보 관리를 위한 강사 타입 
 interface Teacher{

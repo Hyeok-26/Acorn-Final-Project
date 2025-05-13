@@ -150,7 +150,7 @@ const RegisterModal:React.FC<RegisterModalProps> = ({ show, onClose, onRegister 
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <Form.Label>연락처 (예: 01012345678)</Form.Label>
+                        <Form.Label>연락처(예: 01012345678)</Form.Label>
                         <Form.Control name="phone" value={phone} onChange={handlePhoneChange} placeholder="연락처를 입력하세요" /> {/* 포커스를 잃었을 때 유효성 체크 */}
                         {isInvalid === true && <span style={{ color: "red" }}>이미 사용 중인 번호입니다.</span>}
                         {isInvalid === false && <span style={{ color: "green" }}>사용 가능한 번호입니다.</span>}
