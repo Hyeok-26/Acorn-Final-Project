@@ -107,6 +107,18 @@ function Store() {
   return (
     <Container className="mt-4">
       <h2 className="mb-3">지점 관리</h2>
+      <style>
+        {
+          `
+            .pagination .page-item.active .page-link {
+            background-color: #28a745;   /* 초록색 */
+            border-color: #28a745;
+            color: white;
+          }
+
+          `
+        }
+      </style>
 
       <Row className="mb-3 align-items-center">
         <Col><Button onClick={openAdd}>지점 등록</Button></Col>

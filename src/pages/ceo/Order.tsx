@@ -116,6 +116,18 @@ function CeoOrder() {
     return (
         <Container>
             <h2 className='my-3'>전체 발주 목록</h2>
+            <style>
+        {
+          `
+            .pagination .page-item.active .page-link {
+            background-color: #28a745;   /* 초록색 */
+            border-color: #28a745;
+            color: white;
+          }
+
+          `
+        }
+      </style>
             {/* 검색 필터 */}
             <Row className="align-items-center mb-3">
                 {/* 왼쪽: 검색 조건 */}

@@ -79,7 +79,18 @@ function PostList() {
   return (
     <Container className="container mt-5">
       <h2 className="mb-4">공지 사항</h2>
+        <style>
+        {
+          `
+            .pagination .page-item.active .page-link {
+            background-color: #28a745;   /* 초록색 */
+            border-color: #28a745;
+            color: white;
+          }
 
+          `
+        }
+      </style>
       <Row className="mb-3 align-items-center">
         <Col><Button onClick={() => navigate(`/posts/new`)}>공지 추가</Button></Col>
         <Col md="auto">
