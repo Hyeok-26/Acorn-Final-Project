@@ -233,7 +233,7 @@ function SalesManage() {
                         </Form>
                     </div>
                     <div className='col-md-4 col-12 d-flex justify-content-end mt-3 mt-md-0'>
-                        <Button className="btn btn-primary me-2"  size="sm" onClick={handleAdd}>매출 추가</Button>
+                        <Button className="btn btn-primary me-2"  size="sm" onClick={handleAdd}  style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}>매출 추가</Button>
                     </div>
                 </div>
                 <div>

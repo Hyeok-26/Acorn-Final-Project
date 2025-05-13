@@ -205,7 +205,8 @@ function TeacherList() {
                 </div>
             
                 <div className="d-flex flex-column align-items-end">
-                    <Button variant="outline-dark" className="ms-auto" onClick={() => setShowRegister(true)}>강사 등록</Button>
+                    <Button  style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}
+                    className="ms-auto" onClick={() => setShowRegister(true)}>강사 등록</Button>
                 </div>
 
             </div>

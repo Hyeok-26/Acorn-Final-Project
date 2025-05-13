@@ -179,7 +179,7 @@ useEffect(() => {
                 className="mb-3"/>
             <div>
               <h6>학생 조회</h6>
-              <div style={{ maxHeight: 200, overflowY: 'auto' }}>
+              <div style={{ maxHeight: 250,minHeight: 350, overflowY: 'auto' }}>
               <Table size="sm" className="mx-auto text-center" bordered hover responsive> 
                   <thead>
                     <tr>
@@ -233,7 +233,7 @@ useEffect(() => {
            
             <div>
               <h6 className="mt-4">추가 대상 (현재 수업 <strong>{maxCount-(currentCount+selectedStudents.length)}</strong> 명 추가 가능)</h6>
-              <div style={{ maxHeight: 200, overflowY: 'auto' }}>
+              <div style={{  maxHeight: 250,minHeight: 200, overflowY: 'auto' }}>
               <Table size="sm" className="mx-auto text-center" bordered hover responsive>
                 <thead className="table-secondary">
                     <tr>
@@ -249,7 +249,7 @@ useEffect(() => {
                         <td>{s.phone}</td>
                         <td>
                         <Button
-                            variant="danger"
+                            variant="outline-danger"
                             size="sm"
                             onClick={() =>
                             setSelectedStudents((prev) => prev.filter((student) => student.studentId !== s.studentId))
@@ -268,7 +268,7 @@ useEffect(() => {
   
         <Modal.Footer>
           <Button
-            variant="primary"
+            style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}
             onClick={handleConfirm}
             disabled={selectedStudents.length === 0}
           >

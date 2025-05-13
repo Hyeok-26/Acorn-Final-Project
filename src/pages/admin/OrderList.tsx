@@ -126,7 +126,7 @@ function OrderList() {
                     <Container fluid className="p-4">
                         <h2 style={{ marginTop: '60px', marginBottom: '60px' }} className="mb-4 text-center">발주 현황</h2>
                         <div className="d-flex justify-content-between align-items-center mb-3">
-                            <NavLink to="/admin/order"><Button variant="success">발주서 작성</Button></NavLink>
+                            <NavLink to="/admin/order"><Button  style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}>발주서 작성</Button></NavLink>
                             <div className="d-flex gap-2 align-items-center">
                                 <Form.Label className="mb-0">날짜</Form.Label>
                                 <Form.Control
@@ -174,7 +174,7 @@ function OrderList() {
                             </div>
                         </div>
 
-                        <Table bordered className="text-center">
+                        <Table bordered className="text-center" hover>
                             <thead className="table-secondary">
                                 <tr>
                                     <th style={{ width: '10%' }}>발주 번호</th>
@@ -195,10 +195,10 @@ function OrderList() {
                                             <td>{invoice?.ordDate}</td>
                                             <td>{invoice?.orderName}</td>
                                             <td>{invoice?.totalPrice}</td>
-                                            <td>{invoice?.cdStatus === 'PEN' ? <Button variant="warning" style={{ cursor: 'default' }}>발주중</Button> :
-                                                invoice?.cdStatus === 'APP' ? <Button variant="primary" style={{ cursor: 'default' }}>승인</Button> :
-                                                    invoice?.cdStatus === 'REJ' ? <Button variant="danger" style={{ cursor: 'default' }}>거절</Button> :
-                                                        invoice?.cdStatus === 'WAIT' ? <Button variant="secondary" style={{ cursor: 'default' }}>임시저장</Button> : ''}</td>
+                                            <td>{invoice?.cdStatus === 'PEN' ? <Button variant="outline-primary" style={{ cursor: 'default' }}>발주중</Button> :
+                                                invoice?.cdStatus === 'APP' ? <Button variant="outline-success" style={{ cursor: 'default' }}>승인</Button> :
+                                                    invoice?.cdStatus === 'REJ' ? <Button variant="outline-danger" style={{ cursor: 'default' }}>거절</Button> :
+                                                        invoice?.cdStatus === 'WAIT' ? <Button variant="outline-secondary" style={{ cursor: 'default' }}>임시저장</Button> : ''}</td>
                                             <td>
                                                 {invoice ? <NavLink
                                                     to={`/admin/${invoice?.orderId}/order`}

@@ -151,6 +151,7 @@ function StudentList() {
         .pagination .page-item.active .page-link {
           background-color: rgb(71, 95, 168);
           color: white;
+        
         }
       `}
     </style>            
@@ -198,7 +199,9 @@ function StudentList() {
                 </div>
 
                 <div className="d-flex flex-column align-items-end">
-                    <Button variant="outline-dark" className="ms-auto" onClick={() => setShowRegister(true)}>학생 등록</Button>
+                    <Button  className="ms-auto" 
+                    style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}
+                    onClick={() => setShowRegister(true)}>학생 등록</Button>
                 </div>
                 
                 

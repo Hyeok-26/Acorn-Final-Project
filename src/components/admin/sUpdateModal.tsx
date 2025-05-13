@@ -147,7 +147,7 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ student, show, onClose, onUpd
                     </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button type="submit" variant="primary">수정</Button>
+                    <Button type="submit" style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}>수정</Button>
                 </Modal.Footer>
             </Form>
         </Modal>

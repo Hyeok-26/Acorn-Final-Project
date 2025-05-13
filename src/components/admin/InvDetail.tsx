@@ -129,12 +129,12 @@ function InvDetail({
                         />
                     </Col>
                     <Col sm="auto">
-                        <Button variant="dark" onClick={handleSearch}>
+                        <Button variant="secondary" onClick={handleSearch}>
                             조회
                         </Button>
                     </Col>
                     <Col sm="auto">
-                        <Button variant="success" onClick={handleAdd}>
+                        <Button  style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }} onClick={handleAdd}>
                             추가
                         </Button>
                     </Col>
