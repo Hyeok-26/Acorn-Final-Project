@@ -1,11 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { Button, CloseButton, Form, Modal, Table } from 'react-bootstrap';
+import { Button, CloseButton, Modal, Table } from 'react-bootstrap';
 import StudApplyAddModal from './StudApplyAddModal';
 import { ClassItem } from '@/types/ClassType';
 import api from '@/api';
-import { StuItem } from '@/types/StuType';
 
-function StudApplyStatModal({ show, onHide, classId }) {
+type SelectableStudent = {
+  studentId: number;
+  name: string;
+  phone: string;
+  selectable: boolean; // 수강 가능 여부
+  conflictReason?: string; // 중복 이유(optional)
+};
+
+// Props 인터페이스 정의
+interface StudApplyStatModalProps {
+  show: boolean;
+  onHide: () => void;
+  classId: number;
+}
+
+function StudApplyStatModal({ show, onHide, classId }: StudApplyStatModalProps) {
 
     //해당 수업정보 상태값으로 관리
     const [classDetail, setclassDetail] = useState<ClassItem>({
@@ -29,8 +43,8 @@ function StudApplyStatModal({ show, onHide, classId }) {
         description: ""
     });
 
-    const [students, setStudents] = useState<StuItem[]>([]);
-    const [allStudents, setAllStudents] = useState<StuItem[]>([]);
+    const [students, setStudents] = useState<SelectableStudent[]>([]);
+    // const [allStudents, setAllStudents] = useState<StuItem[]>([]);
 
     //수업정보 불러오기
     const classinfo = (classId: number) => {
@@ -41,7 +55,7 @@ function StudApplyStatModal({ show, onHide, classId }) {
         })
         .catch(error => console.log(error));
     };
-
+/*
     //모든 학생 리스트 불러오기
     const stuall = (userId: number) => {
         api.get(`class/all-student?userId=${classDetail.userId}`)
@@ -50,7 +64,7 @@ function StudApplyStatModal({ show, onHide, classId }) {
         })
         .catch(error => console.log(error));
     };
-
+*/
     //해당 수업 듣는 학생 리스트 불러오기
     const stuclass = (classId:number) => {
         api.get(`class/student?classId=${classId}`)
@@ -64,12 +78,12 @@ function StudApplyStatModal({ show, onHide, classId }) {
         if (show) {
             classinfo(classId);
             stuclass(classId);
-            stuall(classDetail.userId);
+            // stuall(classDetail.userId);
         }
     }, [show]);
 
     // 학생 추가(StudApplyAddModal 에서 필요)
-    const handleAddStudents = (newStudents: StuItem[]) => {
+    const handleAddStudents = (newStudents: SelectableStudent[]): void => {
         const newIds = new Set(students.map(s => s.studentId));
         const filtered = newStudents.filter(s => !newIds.has(s.studentId));
         setStudents(prev => [...prev, ...filtered]);
@@ -146,9 +160,7 @@ function StudApplyStatModal({ show, onHide, classId }) {
                 show={showApplyAddModal}
                 onHide={() => setShowApplyAddModal(false)}
                 onAddStudents={handleAddStudents}
-       
-                alreadyAddedIds={students.map(s => s.studentId)}
-            
+                alreadyAddedIds={students.map(s => s.studentId)}            
                 currentCount={students.length}
                 maxCount={classDetail.maxStudent}
                 classId={classDetail.classId}
