@@ -177,7 +177,7 @@ function Product() {
           </Col>
           <Col><Form.Control type="text" name="keyword" value={searchState.keyword} onChange={handleSearchChange} placeholder="품목명 검색" /></Col>
           <Col md="auto">
-            <Button variant="primary" onClick={() => move(1)} variant="success">검색</Button>{' '}
+            <Button onClick={() => move(1)} variant="success">검색</Button>{' '}
           </Col>
         </Row>
 
