@@ -218,7 +218,7 @@ function SalesManage() {
             `}
             </style>                
                 <div className="d-flex align-items-center justify-content-center">
-                    <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>{storeName} 매출 리스트</h1>
+                    <h1 className = "fw-bold" style={{ marginTop: '60px',marginBottom: '60px' }}>{storeName} 매출 리스트</h1>
                 </div>
                 <div className="d-flex justify-content-between mb-3">
                     <div className="col-md-8 col-12 d-flex justify-content-between align-items-center">

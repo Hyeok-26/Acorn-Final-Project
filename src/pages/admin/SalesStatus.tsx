@@ -282,7 +282,7 @@ function SalesStatus(props) {
         <div style={centerStyle}>
             <div className="mb-3"> 
                 <div className="d-flex align-items-center justify-content-center">
-                    <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>{storeName} 매출 통계</h1>
+                    <h1 className = "fw-bold" style={{ marginTop: '60px',marginBottom: '60px' }}>{storeName} 매출 통계</h1>
                 </div>
          
                 <div className="mb-3">
