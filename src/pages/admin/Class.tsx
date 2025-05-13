@@ -218,7 +218,7 @@ function Class(props) {
         <StudApplyStatModal show={showApplyStatModal} onHide={()=>{setShowApplyStatModal(false); refresh(searchState.pageNum);}} classId={selectedClassId} />
 
             <div className="d-flex align-items-center justify-content-center">    
-                <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>  {storeName} 수업리스트  </h1>
+                <h2 className = "fw-bold" style={{ marginTop: '60px',marginBottom: '60px' }}>  {storeName} 수업리스트  </h2>
                 {/* <pre>{JSON.stringify(clist, null, 2)}</pre> */}
             </div>
 
