@@ -149,7 +149,7 @@ function Code() {
                 <strong>A코드</strong>
                 <Button size="sm" onClick={() => setShowAcodeModal(true)}>코드 등록</Button>
               </div>
-              <Table bordered>
+              <Table bordered className="text-center">
                 <thead className="table-secondary text-center">
                   <tr>
                     <th>그룹</th>
@@ -186,7 +186,7 @@ function Code() {
                 <strong>B코드</strong>
                 <Button size="sm" variant="success" onClick={() => setShowBcodeModal(true)}>코드 등록</Button>
               </div>
-              <Table bordered>
+              <Table bordered className="text-center">
                 <thead className="table-secondary text-center">
                   <tr>
                     <th>소그룹</th>

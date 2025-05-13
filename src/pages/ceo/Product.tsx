@@ -149,6 +149,18 @@ function Product() {
   return (
       <Container className="mt-4">
         <h2 className="mb-4">품목 관리</h2>
+        <style>
+        {
+          `
+            .pagination .page-item.active .page-link {
+            background-color: #28a745;   /* 초록색 */
+            border-color: #28a745;
+            color: white;
+          }
+
+          `
+        }
+      </style>
         <Row className="mb-3 align-items-center">
           <Col><Button onClick={() => {
             setShowModal(true);
@@ -165,11 +177,11 @@ function Product() {
           </Col>
           <Col><Form.Control type="text" name="keyword" value={searchState.keyword} onChange={handleSearchChange} placeholder="품목명 검색" /></Col>
           <Col md="auto">
-            <Button variant="primary" onClick={() => move(1)}>검색</Button>{' '}
+            <Button variant="primary" onClick={() => move(1)} variant="success">검색</Button>{' '}
           </Col>
         </Row>
 
-        <Table striped bordered hover>
+        <Table bordered hover className="text-center">
           <thead className="table-secondary text-center">
             <tr>
               <th>품목 코드</th>
