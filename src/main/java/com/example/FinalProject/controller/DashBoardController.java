@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -57,8 +58,8 @@ public class DashBoardController {
 		return dashBoardService.getClassByUserId(userId);
 	}
 	
-	@GetMapping("/admin/overview/lastyearsale")
-	public List<Map<String, Object>> getLastMonthlySalesByUserId(@RequestParam Integer userId){
+	@GetMapping("/admin/overview/lastyearsale/{userId}")
+	public List<Map<String, Object>> getLastMonthlySalesByUserId(@PathVariable Integer userId){
 		return dashBoardService.getLastMonthlySalesByUserId(userId);
 	}
 	
