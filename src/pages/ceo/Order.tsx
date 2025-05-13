@@ -125,12 +125,12 @@ function CeoOrder() {
                             <Form.Control placeholder="지점 입력" onChange={handleSearchCnange} value={searchState.storeName} name='storeName' />
                         </Col>
                         <Col md={2}>
-                            <Form.Control as="select" onChange={handleSearchCnange} name='cdStatus'>
+                            <Form.Select onChange={handleSearchCnange} name='cdStatus'>
                                 <option value="">전체</option>
                                 <option value="PEN">대기</option>
                                 <option value="APP">승인</option>
                                 <option value="REJ">반려</option>
-                            </Form.Control>
+                            </Form.Select>
                         </Col>
                         <Col md={5} style={{ position: 'relative' }}>
                             {dateError && (
@@ -177,8 +177,8 @@ function CeoOrder() {
                         }}
                     />
                     <Button
-                        variant="dark"
-                        size='sm'
+                        variant="success"
+                        
                         onClick={() => {
                             setPageNum(1);
                             fetchOrderList({ ...searchState, orderName }, 1);
@@ -190,7 +190,7 @@ function CeoOrder() {
 
             {/* 발주 주문 테이블 */}
             <Table bordered hover className="text-center">
-                <thead>
+                <thead className='table-secondary'>
                     <tr>
                         {/* 테이블열 */}
                         <th>지점명</th>
