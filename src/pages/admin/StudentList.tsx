@@ -142,8 +142,21 @@ function StudentList() {
     }
     return (
         <div style={centerStyle}>
+    <style>
+      {`
+        .pagination .page-link {
+          color:rgb(100, 131, 223);
+        }
+
+        .pagination .page-item.active .page-link {
+          background-color: rgb(71, 95, 168);
+          color: white;
+        
+        }
+      `}
+    </style>            
             <div className="d-flex align-items-center justify-content-center">
-                <h1 style={{ marginTop: '60px', marginBottom: '60px' }}>{storeName} 학생 목록</h1>
+                <h1 style={{ marginTop: '60px', marginBottom: '60px' }}>{storeName} 학생 리스트</h1>
             </div>
             
             <div className="d-flex justify-content-between mb-3">
@@ -176,7 +189,8 @@ function StudentList() {
                         style={{ minWidth: "200px" }}
                     />
 
-                    <Button variant="success" onClick={handleSearch} style={{ whiteSpace: "nowrap" }}>검색</Button>
+                    <Button style={{ backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)', whiteSpace: "nowrap" }}
+                     onClick={handleSearch} >검색</Button>
                     </Form>
                     {pageInfo.keyword && (
                         <p><strong>{pageInfo.totalRow}</strong> 명의 학생이 검색되었습니다</p>
@@ -185,7 +199,9 @@ function StudentList() {
                 </div>
 
                 <div className="d-flex flex-column align-items-end">
-                    <Button variant="outline-dark" className="ms-auto" onClick={() => setShowRegister(true)}>학생 등록</Button>
+                    <Button  className="ms-auto" 
+                    style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}
+                    onClick={() => setShowRegister(true)}>학생 등록</Button>
                 </div>
                 
                 
@@ -193,7 +209,7 @@ function StudentList() {
             </div>
 
             <Table className="mx-auto text-center" bordered hover responsive>
-                <thead className="table-success">
+                <thead className="table-secondary">
                     <tr>
                         <th>학생번호</th>
                         <th>지점명</th>

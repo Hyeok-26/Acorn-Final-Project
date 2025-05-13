@@ -8,7 +8,6 @@ import Layout from '../../Layout';
 import api from '../../api';
 import { AdminSalesDto } from '../../types/AdminSalesDto';
 
-
 interface PageInfo {
     list: AdminSalesDto[];
     pageNum: number;
@@ -199,12 +198,25 @@ function SalesManage() {
         padding:"2rem",
         textAlign:"center"
     }
+    
     return (
         <div>
             <AdminSalesModal show={modalShow} title={title} btnTag={btnTag} onBtn={onBtn} 
                                 onClose={()=>setModalShow(false)} initialData={selectedItem} userid={userId}/>
         
             <div style={centerStyle}> 
+            <style>
+            {`
+                .pagination .page-link {
+                color:rgb(100, 131, 223);
+                }
+
+                .pagination .page-item.active .page-link {
+                background-color: rgb(71, 95, 168);
+                color: white;
+                }
+            `}
+            </style>                
                 <div className="d-flex align-items-center justify-content-center">
                     <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>{storeName} 매출 리스트</h1>
                 </div>
@@ -216,16 +228,17 @@ function SalesManage() {
                             <Form.Check inline label="급여" value="SALARY" type="checkbox" id="SALARY" onChange={handleCheckboxChange}/>
                             <Form.Check inline label="발주" value="ITEM" type="checkbox" id="ITEM" onChange={handleCheckboxChange}/>
                             <Form.Check inline label="지출기타" value="C_ETC" type="checkbox" id="C_ETC" onChange={handleCheckboxChange}/>
-                            <Button className='btn btn-secondary' size="sm" style={{ width: "50px" }} onClick={()=>{handleSearch(); move(1)}}>검색</Button>
+                            <Button style={{ backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)', width: "50px"  }}
+                             size="sm" onClick={()=>{handleSearch(); move(1)}}>검색</Button>
                         </Form>
                     </div>
                     <div className='col-md-4 col-12 d-flex justify-content-end mt-3 mt-md-0'>
-                        <Button className="btn btn-primary me-2"  size="sm" onClick={handleAdd}>매출 추가</Button>
+                        <Button className="btn btn-primary me-2"  size="sm" onClick={handleAdd}  style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}>매출 추가</Button>
                     </div>
                 </div>
                 <div>
                     <Table className="mx-auto text-center " style={{ tableLayout: 'fixed' }} bordered hover responsive>
-                        <thead className="table-success">
+                        <thead className="table-secondary">
                             <tr>
                                 <th>매출등록일자</th>
                                 <th>매출수정일자</th>
@@ -268,7 +281,7 @@ function SalesManage() {
                             }                           
                         </tbody>
                     </Table>
-                    <Pagination className='mt-3 justify-content-center'>
+                    <Pagination className='mt-3 justify-content-center'  >
                         <Pagination.Item onClick={()=>move(pageInfo.startPageNum-1)} 
                             disabled={pageInfo.startPageNum === 1}>Prev</Pagination.Item>
                         {

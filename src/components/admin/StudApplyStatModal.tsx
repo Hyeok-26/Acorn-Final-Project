@@ -78,11 +78,12 @@ function StudApplyStatModal({ show, onHide, classId }) {
 
     // 학생 수강 수업 DB 에서 삭제
     const handleRemoveStudent = (studentId: number) => {
-        if (!window.confirm("수강을 취소하시겠습니까?")) return;
+        if (!window.confirm("수강생을 삭제하시겠습니까?")) return;
     
         api.delete(`/class/${classId}/student/${studentId}`)
         .then(() => {
             setStudents(prev => prev.filter(s => s.studentId !== studentId)); // 해당 학생 수강생 리스트에서 필터링
+            alert("수강생을 삭제했습니다")
         })
         .catch(error => {
             console.error('수강 취소 실패:', error);
@@ -104,11 +105,11 @@ function StudApplyStatModal({ show, onHide, classId }) {
                 <Modal.Body style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <div className="d-flex justify-content-between mb-3 w-100" style={{ maxWidth: 600 }}>
                         <h5>수업 신청현황 : {students.length}/{classDetail.maxStudent}</h5>
-                        <Button onClick={() => setShowApplyAddModal(true)}>수강생 추가</Button>
+                        <Button style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }} onClick={() => setShowApplyAddModal(true)}>수강생 추가</Button>
                     </div>
-                    <div style={{ maxHeight: 300, width: '100%', maxWidth: 600, overflowY: 'auto' }}>
+                    <div style={{ maxHeight: 400, width: '100%', maxWidth: 800, overflowY: 'auto' }}>
                         <Table bordered size="sm" className="text-center align-middle">
-                            <thead className="table-success">
+                            <thead className="table-secondary">
                                 <tr>
                                     <th>학생번호</th>
                                     <th>학생명</th>
@@ -124,7 +125,7 @@ function StudApplyStatModal({ show, onHide, classId }) {
                                         <td>{student.phone}</td>
                                         <td>
                                             <Button
-                                                variant="secondary"
+                                                variant="outline-danger"
                                                 size="sm"
                                                 onClick={() => handleRemoveStudent(student.studentId)}                      
                                             >
@@ -138,7 +139,6 @@ function StudApplyStatModal({ show, onHide, classId }) {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={onHide}>닫기</Button>
                 </Modal.Footer>
             </Modal>
 

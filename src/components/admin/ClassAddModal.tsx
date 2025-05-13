@@ -265,7 +265,7 @@ function ClassAddModal(props) {
             </Modal.Body>
 
             <Modal.Footer>
-                <Button variant="success" onClick={handleSave} disabled={!isFormValid()}> 저장 </Button>			
+                <Button style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }} onClick={handleSave} disabled={!isFormValid()}> 저장 </Button>			
             </Modal.Footer>
         </Modal>
     );

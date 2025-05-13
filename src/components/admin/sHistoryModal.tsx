@@ -44,8 +44,8 @@ const HistoryModal: React.FC<HistoryModalProps> = ({ student, show, onClose }) =
             </Modal.Header>
             {/* Modal Body 의 높이 고정 + 스크롤 적용 */}
             <Modal.Body style={{ maxHeight: '400px', overflowY: 'auto' }}>
-                <Table striped bordered hover>
-                    <thead>
+                <Table bordered hover className="mx-auto text-center">
+                    <thead className="table-secondary">
                         <tr>
                             <th>번호</th>
                             <th>수업명</th>

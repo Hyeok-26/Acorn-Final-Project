@@ -93,12 +93,12 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ show, onClose, onRegister
         api.post('/students', formObject)
             .then(() => {
                 onRegister();
-                alert("학생 정보를 등록하였습니다");
+                alert("학생 정보를 등록했습니다");
                 onClose();
             })
             .catch(err => {
                 console.log(err);
-                alert("학생 정보 등록 실패했습니다.");
+                alert("학생 정보 등록 실패했습니다");
             });
     };
 
@@ -136,7 +136,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ show, onClose, onRegister
                     </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button type="submit" variant="primary">등록</Button>
+                    <Button type="submit" style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}>등록</Button>
                 </Modal.Footer>
             </Form>
         </Modal>

@@ -146,8 +146,20 @@ function TeacherList() {
     
     return (
         <div style={centerStyle}>
+    <style>
+      {`
+        .pagination .page-link {
+          color:rgb(100, 131, 223);
+        }
+
+        .pagination .page-item.active .page-link {
+          background-color: rgb(71, 95, 168);
+          color: white;
+        }
+      `}
+    </style>            
             <div className="d-flex align-items-center justify-content-center">
-                <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>{storeName} 강사 목록</h1>
+                <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>{storeName} 강사 리스트</h1>
             </div>
 
             <div className="d-flex justify-content-between mb-3">
@@ -183,7 +195,8 @@ function TeacherList() {
                         />
 
                         {/* 검색 버튼 */}
-                        <Button variant="success" onClick={handleSearch} style={{ whiteSpace: "nowrap" }}>검색</Button>
+                        <Button style={{ backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)', whiteSpace: "nowrap" }}
+                         onClick={handleSearch} >검색</Button>
                     </Form>
 
                     { pageInfo.keyword && (
@@ -192,13 +205,14 @@ function TeacherList() {
                 </div>
             
                 <div className="d-flex flex-column align-items-end">
-                    <Button variant="outline-dark" className="ms-auto" onClick={() => setShowRegister(true)}>강사 등록</Button>
+                    <Button  style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}
+                    className="ms-auto" onClick={() => setShowRegister(true)}>강사 등록</Button>
                 </div>
 
             </div>
 
             <Table className="mx-auto text-center" bordered hover responsive>
-                <thead className="table-success">
+                <thead className="table-secondary">
                     <tr>
                         <th>강사번호</th>
                         <th>지점명</th>

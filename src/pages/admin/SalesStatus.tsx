@@ -298,7 +298,7 @@ function SalesStatus(props) {
                                     <option key={index}>{item}</option>
                                 ))}
                             </Form.Select>
-                            <Button className='btn btn-secondary me-2 w-auto' size="sm" style={{ width: "120px" }}>검색</Button>
+                            <Button className='btn btn-secondary me-2 w-auto' size="sm" style={{ width: "120px", backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}>검색</Button>
                         </Form>
                     </div>
                     <div className="d-flex flex-wrap gap-2 justify-content-center">

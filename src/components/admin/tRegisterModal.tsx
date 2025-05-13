@@ -101,13 +101,13 @@ const RegisterModal:React.FC<RegisterModalProps> = ({ show, onClose, onRegister 
         api.post('/teachers', formObject)
             .then(res => {
                 console.log(res.data);
-                alert("강사 정보를 등록하였습니다");
+                alert("강사 정보를 등록했습니다");
                 onRegister();
                 onClose();
             })
             .catch(err => {
                 console.log(err);
-                alert("강사 정보 등록에 실패했습니다.");
+                alert("강사 정보 등록에 실패했습니다");
             });
     };
 
@@ -170,7 +170,7 @@ const RegisterModal:React.FC<RegisterModalProps> = ({ show, onClose, onRegister 
 
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button type="submit" variant="primary">등록</Button> {/* 등록 버튼에 onClick 등록하지 않음 */}
+                    <Button type="submit" style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}>등록</Button> {/* 등록 버튼에 onClick 등록하지 않음 */}
                 </Modal.Footer> {/* 폼 안에 버튼 포함 */}
             </Form>
         </Modal>

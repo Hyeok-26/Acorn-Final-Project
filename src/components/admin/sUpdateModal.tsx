@@ -101,7 +101,7 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ student, show, onClose, onUpd
             .then((res) => {
                 console.log(res.data);
                 onUpdate();
-                alert("학생 정보를 수정하였습니다");
+                alert("학생 정보를 수정했습니다");
                 onClose();
             })
             .catch(err => {
@@ -147,7 +147,7 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ student, show, onClose, onUpd
                     </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button type="submit" variant="primary">수정</Button>
+                    <Button type="submit" style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}>수정</Button>
                 </Modal.Footer>
             </Form>
         </Modal>
