@@ -32,7 +32,7 @@
 		                #{cd_bcode}
 		            </foreach>
 		        </if>
-		        ORDER BY s.admin_sale_id
+		        ORDER BY cre_date desc
 		    ) result1
 		)
 		WHERE rnum BETWEEN #{startRowNum} AND #{endRowNum}
