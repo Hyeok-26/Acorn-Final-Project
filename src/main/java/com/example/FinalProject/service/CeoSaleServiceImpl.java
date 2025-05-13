@@ -76,4 +76,19 @@ public class CeoSaleServiceImpl implements CeoSaleService{
 		return ceoSaleMapper.getAvailableYears();
 	}
 
+	@Override
+	public List<Map<String, Object>> getListAdminSale(int year, int userId) {
+		return ceoSaleMapper.getListAdminSale(year, userId);
+	}
+
+	@Override
+	public List<Integer> getViewAvailableYears(int userId) {
+		return ceoSaleMapper.getViewAvailableYears(userId);
+	}
+
+	@Override
+	public List<Map<String, Object>> getUserList() {
+		return ceoSaleMapper.getUserList();
+	}
+
 }

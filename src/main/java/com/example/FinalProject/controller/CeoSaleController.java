@@ -49,4 +49,18 @@ public class CeoSaleController {
 		return ceoSaleService.insertEtcProfitSelf(dto);
 	}
 	
+	@GetMapping("/viewsale/{userId}/{year}")
+	public List<Map<String, Object>> getListAdminSale(@PathVariable int userId, @PathVariable int year){
+		return ceoSaleService.getListAdminSale(year, userId);
+	}
+	
+	@GetMapping("viewyear/{userId}")
+	public List<Integer> getViewAvailableYears(@PathVariable int userId){
+		return ceoSaleService.getViewAvailableYears(userId);
+	}
+	
+	 @GetMapping("/viewusers")
+	 public List<Map<String, Object>> getUserList() {
+	    return ceoSaleService.getUserList(); // user_id, user_name을 포함하는 리스트 반환
+	 }
 }
