@@ -106,7 +106,9 @@ function AdminSalesModal({show, title, btnTag, onBtn, onClose, initialData, user
                     </Form.Group>      
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={(e)=>{
+                    <Button 
+                    style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}
+                    onClick={(e)=>{
                         e.preventDefault()    
                         onBtn({adminSaleId, selectedAname, selectedBname, saleName, price, userId:userid})
                     }}>{btnTag}</Button>

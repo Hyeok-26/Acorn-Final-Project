@@ -136,7 +136,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ show, onClose, onRegister
                     </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button type="submit" variant="primary">등록</Button>
+                    <Button type="submit" style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}>등록</Button>
                 </Modal.Footer>
             </Form>
         </Modal>

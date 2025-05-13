@@ -103,7 +103,7 @@ function CeoOrder() {
         if (name === "startDate" || name === "endDate") {
             const start = newState.startDate;
             const end = newState.endDate;
-            if (start && end && start > end) {
+            if (start && end && start >= end) {
                 setDateError(true);
             } else {
                 setDateError(false);
@@ -115,18 +115,7 @@ function CeoOrder() {
 
     return (
         <Container>
-            <h2>전체 발주 목록</h2>
-            {/* 서버 응답 테스트 */}
-            <button onClick={() => {
-                api.get("/ceo/sample")
-                    .then(res => {
-                        alert(res.data);
-                    })
-                    .catch(() => {
-                        alert("응답 안함!");
-                    })
-            }}>서버 테스트</button>
-
+            <h2 className='my-3'>전체 발주 목록</h2>
             {/* 검색 필터 */}
             <Row className="align-items-center mb-3">
                 {/* 왼쪽: 검색 조건 */}
@@ -147,7 +136,7 @@ function CeoOrder() {
                             {dateError && (
                                 <Form.Text style={{
                                     color: 'red',
-                                    fontWeight: 'bold',                                    
+                                    fontWeight: 'bold',
                                     position: 'absolute',
                                     top: '-28px', // 위치 조정 필요시 이 값 수정
                                     left: '0',
@@ -203,62 +192,56 @@ function CeoOrder() {
             <Table bordered hover className="text-center">
                 <thead>
                     <tr>
+                        {/* 테이블열 */}
                         <th>지점명</th>
                         <th>발주번호</th>
-                        <th>주문등록일</th>
-                        <th>상태</th>
-                        <th>총액</th>
+                        <th>발주일자</th>
                         <th>발주자</th>
+                        <th>총액</th>
+                        <th>상태</th>
                         <th>상세보기</th>
+
                     </tr>
                 </thead>
                 <tbody>
-                    {/* <tr>
-                        <td>강남점</td>
-                        <td>1</td>
-                        <td>2025.04.17</td>
-                        <td><Badge bg="warning" text="dark" >대기</Badge></td>
-                        <td>60,000원</td>
-                        <td>강민수</td>
-                        
-                        <td><button>상세보기</button></td>
-                    </tr> */}
-                    {
+
+                    {                    
                         orderList.list.map(item => (
                             <tr key={item.orderId}>
-                                <td>{item.storeName}</td>
-                                <td>{item.orderId}</td>
-                                <td>{item.ordDate}</td>
+                                <td>{item.storeName}</td> {/* 지점명 */}
+                                <td>{item.orderId}</td> {/* 발주번호 */}
+                                <td>{item.ordDate}</td> {/* 발주일자 */}
+                                <td>{item.orderName}</td> {/* 발주자 */}
+                                <td>{item.totalPrice.toLocaleString()}</td> {/* 총액 */}
                                 <td>
                                     <Button
                                         variant={
                                             item.cdStatus === 'PEN' ? 'warning'
                                                 : item.cdStatus === 'APP' ? 'success'
                                                     : item.cdStatus === 'REJ' ? 'danger'
-                                                        : 'secondary' // 예외 처리 
+                                                        : 'secondary'
                                         }
                                         style={{
                                             fontSize: '15px',
                                             fontWeight: 'bold',
                                             backgroundColor:
-                                                item.cdStatus === 'PEN' ? '#FFA500' :    // 진한 주황 (PEN)
-                                                    item.cdStatus === 'APP' ? '#28a745' :    // 진한 초록 (APP)
-                                                        item.cdStatus === 'REJ' ? '#dc3545' :    // 진한 빨강 (REJ)
-                                                            '#6c757d',                                    // 예외: 회색
+                                                item.cdStatus === 'PEN' ? '#FFA500' :
+                                                    item.cdStatus === 'APP' ? '#28a745' :
+                                                        item.cdStatus === 'REJ' ? '#dc3545' :
+                                                            '#6c757d',
                                             color: 'white'
                                         }}
                                         size="sm"
                                         disabled
-
-                                    > {
+                                    >
+                                        {
                                             item.cdStatus === 'PEN' ? '대기' :
                                                 item.cdStatus === 'APP' ? '승인' :
                                                     item.cdStatus === 'REJ' ? '반려' :
                                                         '미확인'
-                                        }</Button>
+                                        }
+                                    </Button>
                                 </td>
-                                <td>{item.totalPrice.toLocaleString()}</td>
-                                <td>{item.orderName}</td>
                                 <td>
                                     <Button
                                         as={Link}
@@ -270,13 +253,15 @@ function CeoOrder() {
                                             fontSize: '14px',
                                             padding: '4px 12px',
                                             borderRadius: '6px',
-                                            textDecoration: 'none' // 밑줄 제거
+                                            textDecoration: 'none'
                                         }}
-                                    >상세보기</Button>
-                                    {/* <Link to={`/ceo/orders/${item.orderId}/detail`}>상세보기</Link> */}
+                                    >
+                                        상세보기
+                                    </Button>
                                 </td>
                             </tr>
                         ))
+
                     }
                 </tbody>
             </Table>

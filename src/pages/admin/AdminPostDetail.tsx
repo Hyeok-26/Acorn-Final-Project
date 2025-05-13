@@ -44,7 +44,8 @@ function AdminPostDetail() {
               download
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-success btn-sm"
+              className="btn btn-sm"
+              style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' , color: 'white'}}
             >
               다운로드
             </a>

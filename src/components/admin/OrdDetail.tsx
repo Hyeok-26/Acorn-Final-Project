@@ -371,7 +371,7 @@ function OrdDetail({
                             <Button variant="secondary"
                                 disabled={orderDetail.infoDto.cdStatus === 'APP' || orderDetail.infoDto.cdStatus === 'PEN'}
                                 onClick={saveBtnHandle}>임시저장</Button>
-                            <Button variant="success"
+                            <Button style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}
                                 disabled={orderDetail.infoDto.cdStatus === 'APP' || orderDetail.infoDto.cdStatus === 'PEN'}
                                 onClick={requestBtnHandle}>발주 요청</Button>
                         </div>

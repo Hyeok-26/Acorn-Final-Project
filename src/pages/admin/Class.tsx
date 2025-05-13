@@ -249,7 +249,8 @@ function Class(props) {
                 </div>
             
                 <div className="d-flex flex-column align-items-end">
-                    <Button variant="success" onClick={() => setshowClassAddModal(true)}>수업 개설</Button>
+                    <Button  style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}
+                    onClick={() => setshowClassAddModal(true)}>수업 개설</Button>
                 </div>
             </div>
         

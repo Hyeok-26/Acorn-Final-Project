@@ -105,7 +105,7 @@ function StudApplyStatModal({ show, onHide, classId }) {
                 <Modal.Body style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <div className="d-flex justify-content-between mb-3 w-100" style={{ maxWidth: 600 }}>
                         <h5>수업 신청현황 : {students.length}/{classDetail.maxStudent}</h5>
-                        <Button onClick={() => setShowApplyAddModal(true)}>수강생 추가</Button>
+                        <Button style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }} onClick={() => setShowApplyAddModal(true)}>수강생 추가</Button>
                     </div>
                     <div style={{ maxHeight: 400, width: '100%', maxWidth: 800, overflowY: 'auto' }}>
                         <Table bordered size="sm" className="text-center align-middle">
@@ -125,7 +125,7 @@ function StudApplyStatModal({ show, onHide, classId }) {
                                         <td>{student.phone}</td>
                                         <td>
                                             <Button
-                                                variant="secondary"
+                                                variant="outline-danger"
                                                 size="sm"
                                                 onClick={() => handleRemoveStudent(student.studentId)}                      
                                             >
@@ -139,7 +139,6 @@ function StudApplyStatModal({ show, onHide, classId }) {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={onHide}>닫기</Button>
                 </Modal.Footer>
             </Modal>
 
