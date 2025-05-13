@@ -41,8 +41,9 @@ function InvDetail({
         // 모달 띄우기
         setInvModal({
             ...invModal,
+            invId: 0,
             isShow: true,
-            proId: productId,
+            proId: productId
         })
     };
 
@@ -106,6 +107,7 @@ function InvDetail({
 
     return (
         <><div className='div-inv-detail'>
+            {/* <pre>{JSON.stringify(invModal,null,4)}</pre> */}
             <div className="p-4">
                 <h3 className="mb-4 fw-bold text-center">입고 및 사용 내역 : {pname}</h3>
                 
