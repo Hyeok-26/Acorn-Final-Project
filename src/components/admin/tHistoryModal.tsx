@@ -80,7 +80,7 @@ const HistoryModal: React.FC<HistoryModalProps> = ({ teacher, show, onClose }) =
                             {histories.map((history, index) => (
                                 <tr key={history.classId}>
                                     <td>{index + 1}</td>
-                                    <td>{history.className}</td>
+                                    <td>[{history.classId}] {history.className}</td>
                                     <td>{history.currentStudent}/{history.maxStudent}</td>
                                     <td>{history.startDate} ~ {history.endDate}</td>
                                     <td>[{weekdayName(history.weekday)}] {history.startTime} ~ {history.endTime}</td>

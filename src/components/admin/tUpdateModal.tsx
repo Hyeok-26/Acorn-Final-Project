@@ -142,10 +142,12 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ teacher, show, onClose, onUpd
 const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
   const value = e.target.value;
   setForm(prev => ({ ...prev, cdStatus: value }));
+  /*
   if (value === "T_QUIT" && !isActive) {
     setSalary("0");
     setForm(prev => ({ ...prev, salary: 0 }));
   }
+  */
 };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -229,12 +231,7 @@ const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 
                     <Form.Group className="mb-3">
                         <Form.Label>급여</Form.Label>
-                        <Form.Control name="salary" value={salary} onChange={handleSalaryChange} readOnly={form.cdStatus === "T_QUIT"}/>
-                        {form.cdStatus === "T_QUIT" && (
-                        <span style={{ color: "gray", fontSize: "0.9em" }}>
-                          퇴직 처리된 강사의 급여는 자동 0원으로 설정됩니다.
-                        </span>
-                        )}          
+                        <Form.Control name="salary" value={salary} onChange={handleSalaryChange} />  
                     </Form.Group>
 
                 </Modal.Body>
