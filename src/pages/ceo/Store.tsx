@@ -118,7 +118,7 @@ function Store() {
           </Form.Select>
         </Col>
         <Col><Form.Control name="keyword" placeholder="검색어" onChange={(e) => setSearchState({ ...searchState, keyword: e.target.value })} /></Col>
-        <Col md="auto"><Button onClick={() => move(1)}>검색</Button></Col>
+        <Col md="auto"><Button onClick={() => move(1)} variant="success">검색</Button></Col>
       </Row>
 
       <Table bordered hover className="text-center">

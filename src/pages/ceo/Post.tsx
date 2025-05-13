@@ -93,11 +93,11 @@ function PostList() {
           <Form.Control type="text" name="keyword" value={search.keyword} onChange={handleSearchChange} placeholder="검색 명..." />
         </Col>
         <Col md="auto">
-          <Button variant="primary" onClick={() => move(1)}>검색</Button>
+          <Button variant="primary" onClick={() => move(1)} variant="success">검색</Button>
         </Col>
       </Row>
 
-      <Table striped bordered hover>
+      <Table bordered hover>
         <thead className="table-secondary text-center">
           <tr>
             <th>번호</th>

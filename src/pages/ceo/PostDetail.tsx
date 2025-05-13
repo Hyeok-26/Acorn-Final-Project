@@ -67,8 +67,8 @@ function PostDetail() {
         style={{height:300}}
       ></div>
       <div className="text-end">
-        <Button variant="outline-danger" className="me-2" onClick={handleDelete}>삭제</Button>
-        <Button variant="outline-primary" className="me-2" onClick={() => navigate(`/posts/${postId}/edit`)}>수정</Button>
+        <Button variant="danger" className="me-2" onClick={handleDelete}>삭제</Button>
+        <Button variant="primary" className="me-2" onClick={() => navigate(`/posts/${postId}/edit`)}>수정</Button>
         <Button variant="secondary" onClick={() => navigate('/posts')}>목록</Button>
       </div>
     </Container>
