@@ -190,10 +190,10 @@ function OrderList() {
                                             <td>{invoice?.ordDate}</td>
                                             <td>{invoice?.orderName}</td>
                                             <td>{invoice?.totalPrice}</td>
-                                            <td>{invoice?.cdStatus === 'PEN' ? <Button style={{backgroundColor: 'white', borderColor: 'white' , color: 'rgb(226, 176, 38)', cursor: 'default' }}>발주중</Button> :
-                                                invoice?.cdStatus === 'APP' ? <Button style={{backgroundColor: 'white', borderColor: 'white' , color: 'rgb(19, 32, 211)', cursor: 'default' }} >승인</Button> :
-                                                    invoice?.cdStatus === 'REJ' ? <Button style={{backgroundColor: 'white', borderColor: 'white' , color: 'rgb(233, 50, 18)', cursor: 'default' }}>거절</Button> :
-                                                        invoice?.cdStatus === 'WAIT' ? <Button  style={{backgroundColor: 'white', borderColor: 'white' , color: 'rgb(70, 70, 70)', cursor: 'default' }}>임시저장</Button> : ''}</td>
+                                            <td>{invoice?.cdStatus === 'PEN' ? <Button style={{backgroundColor: '#FFA500', borderColor: '#FFA500' , color: 'white'}} disabled>발주중</Button> :
+                                                invoice?.cdStatus === 'APP' ? <Button style={{backgroundColor: '#28a745', borderColor: '#28a745' , color: 'white' }} disabled>승인</Button> :
+                                                    invoice?.cdStatus === 'REJ' ? <Button style={{backgroundColor: '#dc3545', borderColor: '#dc3545' , color: 'white' }} disabled>거절</Button> :
+                                                        invoice?.cdStatus === 'WAIT' ? <Button  style={{backgroundColor: '#6c757d', borderColor: '#6c757d' , color: 'white' }} disabled>임시저장</Button> : ''}</td>
                                             <td>
                                                 {invoice ? <NavLink
                                                     to={`/admin/${invoice?.orderId}/order`}
