@@ -85,7 +85,6 @@ function OrdDetail({
                     cdStatus: 'WAIT'
                 }
             };
-            // console.log(newOrderDetail);
 
             // 이미 있던 발주서를 임시 저장 하는 경우
             if (orderDetail.infoDto.cdStatus === 'WAIT'
