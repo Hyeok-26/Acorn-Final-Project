@@ -18,7 +18,7 @@ function Inventory() {
     const refreshList = () => {
         api.get(`/inv?condition=${filterType}&keyword=${keyword}`)
             .then(res => {
-                console.log(res.data);
+                console.log(res.data);  
                 setFilteredData(res.data.list)
             })
             .catch(err => console.log(err));
@@ -39,7 +39,7 @@ function Inventory() {
         if (pId == 0) return;
         api.get(`/inv/${pId}?strDate=${strDate}&endDate=${endDate}`)
             .then(res => {
-                console.log(res.data);
+                // console.log(res.data);
                 setItemDetail(res.data.list)
             })
             .catch(err => console.log(err));
@@ -59,7 +59,7 @@ function Inventory() {
 
     return (
         <div className="flex">
-            <div style={{ flex: 1, margin: '5rem 10rem' }} >
+            <div style={{ flex: 1, margin: '1rem 3rem' }} >
                 <div style={{ display: 'flex', gap: '20px', width: '100%' }}>
                     <div style={{ width: '50%' }}>
                         <InvList

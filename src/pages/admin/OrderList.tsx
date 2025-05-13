@@ -97,20 +97,15 @@ function OrderList() {
         }
     }
 
-    // //전체 div에 적용될 css
-    // const centerStyle: React.CSSProperties = {
-    //     maxWidth: "1600px",
-    //     margin: "0 auto",
-    //     padding: "2rem",
-    //     textAlign: "center"
-    // }
+
+
+    // <pre>{JSON.stringify(filterCon,null,4)}</pre>
 
     return (
         <>
-            {/* <pre>{JSON.stringify(filterCon,null,4)}</pre> */}
+            
             <div className="flex" >
-                {/* <div style={centerStyle}> */}
-                <div style={{ flex: 1, margin: '0 10rem' }} >
+                <div style={{ flex: 1, margin: '0 8rem' }} >
                 <style>
                 {`
                     .pagination .page-link {
@@ -124,7 +119,7 @@ function OrderList() {
                 `}
                 </style>                    
                     <Container fluid className="p-4">
-                        <h2 style={{ marginTop: '60px', marginBottom: '60px' }} className="mb-4 text-center">발주 현황</h2>
+                        <h2 style={{ marginTop: '60px', marginBottom: '60px' }} className="mb-4 text-center fw-bold">발주 현황</h2>
                         <div className="d-flex justify-content-between align-items-center mb-3">
                             <NavLink to="/admin/order"><Button  style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}>발주서 작성</Button></NavLink>
                             <div className="d-flex gap-2 align-items-center">
@@ -195,24 +190,26 @@ function OrderList() {
                                             <td>{invoice?.ordDate}</td>
                                             <td>{invoice?.orderName}</td>
                                             <td>{invoice?.totalPrice}</td>
-                                            <td>{invoice?.cdStatus === 'PEN' ? <Button variant="outline-primary" style={{ cursor: 'default' }}>발주중</Button> :
-                                                invoice?.cdStatus === 'APP' ? <Button variant="outline-success" style={{ cursor: 'default' }}>승인</Button> :
-                                                    invoice?.cdStatus === 'REJ' ? <Button variant="outline-danger" style={{ cursor: 'default' }}>거절</Button> :
-                                                        invoice?.cdStatus === 'WAIT' ? <Button variant="outline-secondary" style={{ cursor: 'default' }}>임시저장</Button> : ''}</td>
+                                            <td>{invoice?.cdStatus === 'PEN' ? <Button style={{backgroundColor: '#FFA500', borderColor: '#FFA500' , color: 'white'}} disabled>발주중</Button> :
+                                                invoice?.cdStatus === 'APP' ? <Button style={{backgroundColor: '#28a745', borderColor: '#28a745' , color: 'white' }} disabled>승인</Button> :
+                                                    invoice?.cdStatus === 'REJ' ? <Button style={{backgroundColor: '#dc3545', borderColor: '#dc3545' , color: 'white' }} disabled>거절</Button> :
+                                                        invoice?.cdStatus === 'WAIT' ? <Button  style={{backgroundColor: '#6c757d', borderColor: '#6c757d' , color: 'white' }} disabled>임시저장</Button> : ''}</td>
                                             <td>
                                                 {invoice ? <NavLink
                                                     to={`/admin/${invoice?.orderId}/order`}
-                                                    style={{ cursor: 'pointer', color: 'green' }}>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
-                                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                                        <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                                    className="btn btn-light"
+                                                    >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-journal-text" viewBox="0 0 16 16">
+                                                        <path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
+                                                        <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2"/>
+                                                        <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z"/>
                                                     </svg>
                                                 </NavLink> : null}
                                             </td>
                                             <td>{invoice?.orderId > 0 ?
-                                                <a style={{ cursor: 'pointer', color: 'red' }}
+                                                <a className="btn btn-outline-danger" style={{ border: 'none' }}
                                                     onClick={() => delBtnHandle(invoice?.cdStatus, invoice?.orderId)}>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
                                                         <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
                                                         <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
                                                     </svg>

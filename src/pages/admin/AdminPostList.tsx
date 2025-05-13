@@ -78,7 +78,7 @@ function AdminPostList() {
 
   return (
     <Container className="container mt-5">
-      <h2 className="mb-4">공지 사항</h2>
+      <h2 className="mb-4 fw-bold">공지 사항</h2>
     <style>
       {`
         .pagination .page-link {
