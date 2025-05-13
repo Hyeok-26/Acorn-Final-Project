@@ -105,12 +105,12 @@ function InvDetail({
         }
     }, [itemDetail]);
 
+    //<pre>{JSON.stringify(invModal,null,4)}</pre>
     return (
         <><div className='div-inv-detail'>
-            {/* <pre>{JSON.stringify(invModal,null,4)}</pre> */}
+            
             <div className="p-4">
                 <h3 className="mb-4 fw-bold text-center">입고 및 사용 내역 : {pname}</h3>
-                
                 <Row className="mb-3">
                     <Col sm="auto" className="d-flex align-items-center fw-semibold">
                         날짜

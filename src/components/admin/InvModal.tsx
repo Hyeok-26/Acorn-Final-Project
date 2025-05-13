@@ -236,11 +236,12 @@ function InvModal({
     // 모달 창 닫기 함수
     const handleClose = () => setInvModal({ ...invModal, isShow: false });
 
+
+    // <pre>{JSON.stringify(invModalDetail,null,4)}</pre>
     return (
         <>
             <Modal show={invModal.isShow} onHide={handleClose} size="lg" centered>
                 <Modal.Header closeButton>{invModal.invId > 0 ? '수정하기' : '추가하기'}</Modal.Header>
-                {/* <pre>{JSON.stringify(invModalDetail,null,4)}</pre> */}
                 <Modal.Body>
                     <Form>
                         <Form.Group className="mb-3">
