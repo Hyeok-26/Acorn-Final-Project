@@ -272,7 +272,7 @@ function InvModal({
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={handleSubmit} variant="success">
+                    <Button onClick={handleSubmit} style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}>
                         저장
                     </Button>
                 </Modal.Footer>
