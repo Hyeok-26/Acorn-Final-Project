@@ -68,8 +68,8 @@ if (userStr) {
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
   <QueryClientProvider client={queryClient}>
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
   </QueryClientProvider>
 );

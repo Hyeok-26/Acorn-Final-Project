@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
     Table,
@@ -10,14 +10,15 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import {
-    LineChart,
     Line,
     XAxis,
     YAxis,
     CartesianGrid,
     Tooltip,
     Legend,
-    ResponsiveContainer
+    ResponsiveContainer,
+    Area,
+    ComposedChart
 } from 'recharts';
 
 interface CeoSaleDto {
@@ -30,11 +31,6 @@ interface CeoSaleDto {
     cdAcode: string;
     cdBcode: string;
     auto: string;
-}
-
-interface GraphDataItem {
-    name: string;
-    매출: number;
 }
 
 interface CeoSalePageDto {
@@ -51,59 +47,99 @@ interface CeoSalePageDto {
 function OrderSale() {
     const [viewMode, setViewMode] = useState<'table' | 'graph'>('table');
     const [currentPage, setCurrentPage] = useState(1);
+    const [selectedYear, setSelectedYear] = useState<number>(0);
 
-    // API 호출
+    // 사용 가능한 년도 목록 가져오기
+    const { data: availableYears = [] } = useQuery<number[]>({
+        queryKey: ['ceo-sales-years'],
+        queryFn: async () => {
+            const response = await fetch('/api/ceosalegraph/years');
+            if (!response.ok) {
+                throw new Error('Failed to fetch available years');
+            }
+            return response.json();
+        }
+    });
+
+    // availableYears가 변경될 때 selectedYear 업데이트
+    useEffect(() => {
+        if (availableYears.length > 0 && selectedYear === 0) {
+            setSelectedYear(availableYears[0]);
+        }
+    }, [availableYears, selectedYear]);
+
+    // 테이블 데이터 API 호출
     const { data: response, isLoading, error } = useQuery<CeoSalePageDto>({
         queryKey: ['ceo-sales', currentPage],
         queryFn: async () => {
-            console.log('API 호출 시작');
             const params = new URLSearchParams({
                 pageNum: currentPage.toString()
             });
             
             const response = await fetch(`/api/ceosale?${params.toString()}`);
-            console.log('API 응답:', response);
             if (!response.ok) {
                 throw new Error('Failed to fetch sales data');
             }
-            const data = await response.json();
-            console.log('받아온 데이터:', data);
-            return data;
+            return response.json();
         }
     });
 
     // response가 dto 자체이므로 content를 직접 사용
     const salesData = response?.content || [];
 
-    // 그래프 데이터 변환
-    const graphData = salesData?.reduce((acc: GraphDataItem[], sale) => {
-        const month = new Date(sale.creDate).getMonth() + 1;
-        const existingMonth = acc.find(item => item.name === `${month}월`);
-        
-        if (existingMonth) {
-            existingMonth.매출 += sale.price;
-        } else {
-            acc.push({
-                name: `${month}월`,
-                매출: sale.price
-            });
-        }
-        return acc;
-    }, []).sort((a, b) => parseInt(a.name) - parseInt(b.name)) || [];
+    // 그래프 데이터 API 호출
+    const { data: graphData, isLoading: isGraphLoading } = useQuery({
+        queryKey: ['ceo-sales-graph', selectedYear],
+        queryFn: async () => {
+            console.log('그래프 데이터 API 호출 시작:', selectedYear);
+            const response = await fetch(`/api/ceosalegraph/${selectedYear}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch graph data');
+            }
+            const data = await response.json();
+            console.log('받아온 그래프 데이터:', data);
+            
+            // 0월 추가 및 데이터 포맷팅
+            const formattedData = [
+                { name: '0', 매출: 0 },
+                ...data.map((item: { MONTH: string; TOTAL_PRICE: number }) => ({
+                    name: `${item.MONTH}월`,
+                    매출: item.TOTAL_PRICE
+                }))
+            ];
+            
+            console.log('포맷팅된 그래프 데이터:', formattedData);
+            return formattedData;
+        },
+        enabled: viewMode === 'graph'
+    });
 
-    if (isLoading) return <div>로딩중...</div>;
+    if (isLoading || isGraphLoading) return <div>로딩중...</div>;
     if (error) return <div>에러가 발생했습니다</div>;
 
     return (
         <div className="flex flex-col h-[calc(100vh-64px)]">
             <div className="flex justify-between items-center p-6 bg-white border-b">
                 <h1 className="text-2xl font-bold">발주 수익 보는 페이지</h1>
-                <Button 
-                    onClick={() => setViewMode(viewMode === 'table' ? 'graph' : 'table')}
-                    variant="default"
-                >
-                    {viewMode === 'table' ? '그래프로 보기' : '표로 보기'}
-                </Button>
+                <div className="flex gap-4">
+                    {viewMode === 'graph' && (
+                        <select 
+                            value={selectedYear} 
+                            onChange={(e) => setSelectedYear(Number(e.target.value))}
+                            className="border rounded-md px-3 py-2"
+                        >
+                            {availableYears.map((year: number) => (
+                                <option key={year} value={year}>{year}년</option>
+                            ))}
+                        </select>
+                    )}
+                    <Button 
+                        onClick={() => setViewMode(viewMode === 'table' ? 'graph' : 'table')}
+                        variant="default"
+                    >
+                        {viewMode === 'table' ? '그래프로 보기' : '표로 보기'}
+                    </Button>
+                </div>
             </div>
 
             <div className="flex-1 overflow-auto">
@@ -176,7 +212,7 @@ function OrderSale() {
                     <div className="w-full h-full bg-white p-8 flex items-center justify-center">
                         <div className="w-[70%] h-[70%]">
                             <ResponsiveContainer width="100%" height="100%">
-                                <LineChart data={graphData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                                <ComposedChart data={graphData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="name" />
                                     <YAxis />
@@ -184,6 +220,15 @@ function OrderSale() {
                                         formatter={(value) => [`${value.toLocaleString()}원`, '매출']}
                                     />
                                     <Legend />
+                                    <Area 
+                                        type="monotone" 
+                                        dataKey="매출" 
+                                        fill="#8884d8" 
+                                        fillOpacity={0.3}
+                                        stroke="none"
+                                        name="매출"
+                                        legendType="none"
+                                    />
                                     <Line 
                                         type="monotone" 
                                         dataKey="매출" 
@@ -191,8 +236,9 @@ function OrderSale() {
                                         strokeWidth={2}
                                         dot={{ r: 4 }}
                                         activeDot={{ r: 6 }}
+                                        name="매출"
                                     />
-                                </LineChart>
+                                </ComposedChart>
                             </ResponsiveContainer>
                         </div>
                     </div>
