@@ -274,7 +274,7 @@ function OrdDetail({
                                     value={orderDetail.infoDto.storeCall} />
                             </Col>
                             <Col>
-                                <Form.Label>발주자*</Form.Label>
+                                <Form.Label>발주자<span style={{ color: 'red' }}>*</span></Form.Label>
                                 <Form.Control required
                                     readOnly={orderDetail.infoDto.cdStatus === 'APP' || orderDetail.infoDto.cdStatus === 'APR'}
                                     value={orderDetail.infoDto.orderName}
@@ -296,7 +296,7 @@ function OrdDetail({
                                     <th className='col-2'>품목 코드</th>
                                     <th className='col-2'>품목명</th>
                                     <th className='col-2'>단가</th>
-                                    <th className='col-2'>수량*</th>
+                                    <th className='col-2'>수량<span style={{ color: 'red' }}>*</span></th>
                                     <th className='col-2'>금액</th>
                                     <th className='col-1'>삭제</th>
                                 </tr>
