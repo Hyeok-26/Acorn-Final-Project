@@ -300,7 +300,7 @@ function OrderDetail() {
                                     disabled
 
                                 >{
-                                            orderInfo.cdStatus === 'PEN' ? '대기중' :
+                                            orderInfo.cdStatus === 'PEN' ? '대기' :
                                                 orderInfo.cdStatus === 'APP' ? '승인' :
                                                     orderInfo.cdStatus === 'REJ' ? '반려' :
                                                         '미확인'
