@@ -194,13 +194,14 @@
         sc.class_id AS class_id,
         c.class_name AS class_name,
         TO_CHAR(c.start_date, 'YYYY-MM-DD') AS start_date,
-	      TO_CHAR(c.end_date, 'YYYY-MM-DD') AS end_date,
+	    TO_CHAR(c.end_date, 'YYYY-MM-DD') AS end_date,
         c.start_time AS start_time,
         c.end_time AS end_time,
         c.weekday
     FROM tb_student_class sc
     JOIN tb_class c ON sc.class_id = c.class_id
     WHERE sc.student_id = #{studentId}
+     AND c.cd_status IN ('BEFORE', 'READY', 'START')
     AND sc.class_id != #{classId}
 </select>
 
@@ -227,6 +228,7 @@
   	FROM tb_student_class sc
   	LEFT JOIN tb_student s ON s.student_id = sc.student_id
   	WHERE sc.class_id = #{classId}
+  	 AND s.cd_status = 'STUDY'
 	ORDER BY s.student_id ASC
   </select>
   
