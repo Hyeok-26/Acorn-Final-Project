@@ -9,12 +9,12 @@ import com.example.FinalProject.dto.EuOrderDetailDto;
 import com.example.FinalProject.dto.EuOrderListDto;
 import com.example.FinalProject.dto.EuProdcutListDto;
 import com.example.FinalProject.dto.EuProductDto;
-import com.example.FinalProject.mapper.EuOrderMapper;
+import com.example.FinalProject.mapper.AdminOrderMapper;
 
 @Service
-public class EuOrderServiceImpl implements EuOrderService{
+public class AdminOrderServiceImpl implements AdminOrderService{
 	
-	@Autowired private EuOrderMapper mapper;
+	@Autowired private AdminOrderMapper mapper;
 	
 
 	//한 페이지에 몇개씩 표시할 것인지
@@ -156,6 +156,12 @@ public class EuOrderServiceImpl implements EuOrderService{
 		mapper.deleteOrdC(ordId);
 		// 이후 부모 테이블 데이터 삭제
 		mapper.deleteOrdP(ordId);
+	}
+
+	// 사용자의 지점 전화번호 가져오기
+	@Override
+	public String getStoreCall(int userId) {
+		return mapper.getStoreCall(userId);
 	}
 
 	

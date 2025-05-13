@@ -7,7 +7,7 @@ import com.example.FinalProject.dto.EuOrderListDto;
 import com.example.FinalProject.dto.EuProdcutListDto;
 import com.example.FinalProject.dto.EuProductDto;
 
-public interface EuOrderService {
+public interface AdminOrderService {
 
 	// 발주 현황 리스트 조회
 	public EuOrderListDto getOrdList(int pNum, EuOrderListDto dto);
@@ -32,4 +32,7 @@ public interface EuOrderService {
 	
 	// 발주서 삭제
 	public void deletedOrd(int ordId);
+	
+	// 사용자의 지점 전화번호
+	public String getStoreCall(int userId);
 }

@@ -9,7 +9,7 @@ import com.example.FinalProject.dto.EuProdcutListDto;
 import com.example.FinalProject.dto.EuProductDto;
 
 @Mapper
-public interface EuOrderMapper {
+public interface AdminOrderMapper {
 
 	// 발주 현황 리스트 조회
 	List<EuOrderDto> getOrd(EuOrderListDto dto);
@@ -61,4 +61,8 @@ public interface EuOrderMapper {
 	void deleteOrdP(int pId);
 	// 발주서 삭제 (자식 테이블)	
 	void deleteOrdC(int pId);
+	
+	// 사용자의 지점 전화번호 가져오기
+	String getStoreCall(int uerId);
+	
 }

@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.FinalProject.dto.EuInventoryDetailDto;
 import com.example.FinalProject.dto.EuInventoryDetailListDto;
 import com.example.FinalProject.dto.EuInventoryListDto;
-import com.example.FinalProject.service.EuInventoryService;
+import com.example.FinalProject.service.InventoryService;
 
 @RestController
-public class EuInventoryController {
+public class InventoryController {
 
-	@Autowired private EuInventoryService service;
+	@Autowired private InventoryService service;
 	
 	@GetMapping("/inv/ping")
 	public String ping() {

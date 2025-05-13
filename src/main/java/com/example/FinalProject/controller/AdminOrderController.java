@@ -15,18 +15,25 @@ import com.example.FinalProject.dto.EuOrderDetailDto;
 import com.example.FinalProject.dto.EuOrderListDto;
 import com.example.FinalProject.dto.EuProdcutListDto;
 import com.example.FinalProject.dto.EuProductDto;
-import com.example.FinalProject.service.EuOrderService;
+import com.example.FinalProject.service.AdminOrderService;
 
 @RestController
-public class EuOrderController {
+public class AdminOrderController {
 
-	@Autowired private EuOrderService service;
+	@Autowired private AdminOrderService service;
 	
 	@GetMapping("/ord/ping")
 	public String ping() {
 		return "pong";
 	}
 	
+	// 사용자 지점 전화번호 가져오기
+	@GetMapping("/user/store-call/{userId}")
+	public String getStoreCall(@PathVariable(value="userId") int userId) {
+		System.out.println("전달받은 사용자 아이디:"+userId);
+		System.out.println(service.getStoreCall(userId));
+		return service.getStoreCall(userId);
+	}
 	
 	// 발주 현황 리스트 조회
 	@GetMapping("/ord/{pNum}")
