@@ -304,7 +304,7 @@ function SalesStatus(props) {
                     <div className="d-flex flex-wrap gap-2 justify-content-center">
                     {
                         selected==="salesByYear"?
-                        <LineChart width={1000} height={600} data={salesData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                        <LineChart width={1000} height={600} data={salesData} margin={{ top: 20, right: 30, left: 100, bottom: 5 }}>
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="sMonth"  type="category"  padding={{ left: 50 }} />
                             <Tooltip formatter={(value) => {
