@@ -186,7 +186,7 @@ function OrderDetail() {
 
 
             <Container>
-                <h1>발주 상세 페이지</h1>
+                <h1 className='my-3'>발주 상세 페이지</h1>
                 <Row>
                     {/* 죄측 : 지점 요청, 본사 피드백 */}
                     <Col md={3}>
