@@ -107,6 +107,18 @@ function Store() {
   return (
     <Container className="mt-4">
       <h2 className="mb-3">지점 관리</h2>
+      <style>
+        {
+          `
+            .pagination .page-item.active .page-link {
+            background-color: #28a745;   /* 초록색 */
+            border-color: #28a745;
+            color: white;
+          }
+
+          `
+        }
+      </style>
 
       <Row className="mb-3 align-items-center">
         <Col><Button onClick={openAdd}>지점 등록</Button></Col>
@@ -118,7 +130,7 @@ function Store() {
           </Form.Select>
         </Col>
         <Col><Form.Control name="keyword" placeholder="검색어" onChange={(e) => setSearchState({ ...searchState, keyword: e.target.value })} /></Col>
-        <Col md="auto"><Button onClick={() => move(1)}>검색</Button></Col>
+        <Col md="auto"><Button onClick={() => move(1)} variant="success">검색</Button></Col>
       </Row>
 
       <Table bordered hover className="text-center">

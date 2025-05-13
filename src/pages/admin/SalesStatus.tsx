@@ -282,7 +282,7 @@ function SalesStatus(props) {
         <div style={centerStyle}>
             <div className="mb-3"> 
                 <div className="d-flex align-items-center justify-content-center">
-                    <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>{storeName} 매출 통계</h1>
+                    <h2 className = "fw-bold" style={{ marginTop: '60px',marginBottom: '60px' }}>{storeName} 매출 통계</h2>
                 </div>
          
                 <div className="mb-3">
@@ -306,7 +306,7 @@ function SalesStatus(props) {
                         selected==="salesByYear"?
                         <LineChart width={1000} height={600} data={salesData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                             <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="sMonth" />
+                            <XAxis dataKey="sMonth"  type="category"  padding={{ left: 50 }} />
                             <Tooltip formatter={(value) => {
                                 if (typeof value === 'number') return `${value.toLocaleString()}원`;
                                 return value;

@@ -159,7 +159,7 @@ function ClassStatusModal(props) {
             </Modal.Body>
 
             <Modal.Footer>
-                <Button variant="success" onClick={handleSave} disabled={!isFormValid()}> 수정 </Button>			
+                <Button style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }} onClick={handleSave} disabled={!isFormValid()}> 수정 </Button>			
             </Modal.Footer>
         </Modal>
     );

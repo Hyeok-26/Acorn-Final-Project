@@ -24,18 +24,24 @@ function OrdDetail({
         return `${year}-${month}-${day}`;
     };
 
+    //로그인한 userId가져오기
+    const userStr = localStorage.getItem('user');
+    const user = userStr ? JSON.parse(userStr) : null;
+    const userId = user.userId;
+    const storeName = user.storeName;
+
     // 발주서 요청 정보
     const [orderDetail, setOrderDetail] = useState<orderDetail>({
         infoDto: {
             tmp: false,
             orderId: 0,
-            userId: 5,                 // 정보 얻어와 넣어야 함
+            userId: userId,                 
             totalPrice: 0,
             ordDate: getToday(),
             orderName: "",
             cdStatus: "",
-            storeName: "강남점",        // 정보 얻어와 넣어야 함
-            storeCall: "02-1234-5678",  // 정보 얻어와 넣어야 함
+            storeName: storeName,
+            storeCall: "",
             memoRequest: "",
             memoReply: ""
         },
@@ -44,6 +50,14 @@ function OrdDetail({
 
     // 활성화 될 때
     useEffect(() => {
+        // 사용자 정보의 지점 전화번호 가져오기
+        api.get("user/store-call/"+userId)
+        .then(res => {
+            console.log("데이터 가져옴",res.data);
+            setOrderDetail({...orderDetail, infoDto:{...orderDetail.infoDto, storeCall: res.data}});
+        })
+        .catch(err=>console.log("오류 발생", err))
+
         // 이미 있는 발주서를 보는 경우
         if (orderId! > 0) {
             console.log("이미 있는 발주서를 보는 경우")
@@ -71,35 +85,34 @@ function OrdDetail({
                     cdStatus: 'WAIT'
                 }
             };
-            // console.log(newOrderDetail);
-            
+
             // 이미 있던 발주서를 임시 저장 하는 경우
-            if(orderDetail.infoDto.cdStatus === 'WAIT'
-            ){
+            if (orderDetail.infoDto.cdStatus === 'WAIT'
+            ) {
                 api.patch("/ord/edit", newOrderDetail)
-                .then(() => {
-                    alert("임시저장 성공");
-                    // 발주 현황 목록 화면으로 돌아가기
-                    navigate("/admin/order-list");
-                })
-                .catch(err =>{ 
-                    console.log(err);
-                    alert("임시저장 실패");
-                });
-            // 새 발주서를 임시 저장 하는 경우
+                    .then(() => {
+                        alert("임시저장 성공");
+                        // 발주 현황 목록 화면으로 돌아가기
+                        navigate("/admin/order-list");
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        alert("임시저장 실패");
+                    });
+                // 새 발주서를 임시 저장 하는 경우
             } else {
                 api.post("/ord/add", newOrderDetail)
-                .then(() => {
-                    alert("임시저장 성공");
-                    // 발주 현황 목록 화면으로 돌아가기
-                    navigate("/admin/order-list");
-                })
-                .catch(err =>{ 
-                    console.log(err);
-                    alert("임시저장 실패");
-                });
+                    .then(() => {
+                        alert("임시저장 성공");
+                        // 발주 현황 목록 화면으로 돌아가기
+                        navigate("/admin/order-list");
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        alert("임시저장 실패");
+                    });
             }
-                        
+
         }
     }
 
@@ -108,15 +121,13 @@ function OrdDetail({
         if (confirm("정말로 작성된 내용을 모두 지우시겠습니까?"))
             setOrderDetail({
                 infoDto: {
+                    ...orderDetail.infoDto,
                     tmp: false,
                     orderId: 0,
-                    userId: 5,                 // 정보 얻어와 넣어야 함
                     totalPrice: 0,
                     ordDate: getToday(),
                     orderName: "",
                     cdStatus: "",
-                    storeName: "강남점",        // 정보 얻어와 넣어야 함
-                    storeCall: "02-1234-5678",  // 정보 얻어와 넣어야 함
                     memoRequest: "",
                     memoReply: ""
                 },
@@ -195,13 +206,13 @@ function OrdDetail({
         updated[index].quantity = value;
         // 수량과 금액 곱한 값 반영
         updated[index].calPrice = updated[index].price * value;
-        setOrderDetail({ 
+        setOrderDetail({
             itemList: updated,
             infoDto: {
                 ...orderDetail.infoDto,
                 totalPrice: updated.reduce((sum, item) => sum + item.quantity * item.price, 0)
             }
-         });
+        });
     };
 
     // 품목 삭제 핸들러
@@ -261,7 +272,7 @@ function OrdDetail({
                                     value={orderDetail.infoDto.storeCall} />
                             </Col>
                             <Col>
-                                <Form.Label>발주자*</Form.Label>
+                                <Form.Label>발주자<span style={{ color: 'red' }}>*</span></Form.Label>
                                 <Form.Control required
                                     readOnly={orderDetail.infoDto.cdStatus === 'APP' || orderDetail.infoDto.cdStatus === 'APR'}
                                     value={orderDetail.infoDto.orderName}
@@ -283,7 +294,7 @@ function OrdDetail({
                                     <th className='col-2'>품목 코드</th>
                                     <th className='col-2'>품목명</th>
                                     <th className='col-2'>단가</th>
-                                    <th className='col-2'>수량*</th>
+                                    <th className='col-2'>수량<span style={{ color: 'red' }}>*</span></th>
                                     <th className='col-2'>금액</th>
                                     <th className='col-1'>삭제</th>
                                 </tr>
@@ -358,7 +369,7 @@ function OrdDetail({
                             <Button variant="secondary"
                                 disabled={orderDetail.infoDto.cdStatus === 'APP' || orderDetail.infoDto.cdStatus === 'PEN'}
                                 onClick={saveBtnHandle}>임시저장</Button>
-                            <Button variant="success"
+                            <Button style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}
                                 disabled={orderDetail.infoDto.cdStatus === 'APP' || orderDetail.infoDto.cdStatus === 'PEN'}
                                 onClick={requestBtnHandle}>발주 요청</Button>
                         </div>

@@ -218,12 +218,12 @@ function Class(props) {
         <StudApplyStatModal show={showApplyStatModal} onHide={()=>{setShowApplyStatModal(false); refresh(searchState.pageNum);}} classId={selectedClassId} />
 
             <div className="d-flex align-items-center justify-content-center">    
-                <h1 style={{ marginTop: '60px',marginBottom: '60px' }}>  {storeName} 수업리스트  </h1>
+                <h2 className = "fw-bold" style={{ marginTop: '60px',marginBottom: '60px' }}>  {storeName} 수업리스트  </h2>
                 {/* <pre>{JSON.stringify(clist, null, 2)}</pre> */}
             </div>
 
             <div className="d-flex justify-content-between mb-3">
-                <div className="d-flex align-items-end">
+                <div className="d-flex align-items-center">
                     <Form.Label htmlFor="search" visuallyHidden>검색조건</Form.Label>
                     <Form.Select name="cdStatus" id="status" 
                         onChange={handleSearchChange}
@@ -245,11 +245,12 @@ function Class(props) {
                         value={searchState.keyword} className="me-2 w-auto"/>
                     <Button style={{ backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }} 
                     onClick={()=>move(1)} className="me-2 w-auto">검색</Button>
-                    { clist.keyword && <p> <strong>{clist.totalRow}</strong> 개의 글이 검색 되었습니다 </p>}
+                    { clist.keyword && <p className="mb-0 ms-2"> <strong>{clist.totalRow}</strong> 개의 글이 검색 되었습니다 </p>}
                 </div>
             
                 <div className="d-flex flex-column align-items-end">
-                    <Button variant="success" onClick={() => setshowClassAddModal(true)}>수업 개설</Button>
+                    <Button  style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}
+                    onClick={() => setshowClassAddModal(true)}>수업 개설</Button>
                 </div>
             </div>
         
@@ -306,13 +307,13 @@ function Class(props) {
                             </td>
                             <td>{item.applyStartDate} ~ {item.applyEndDate}</td>
                             <td>
-                                <Button variant="light"  
+                                <Button variant="outline-secondary"  
                                 onClick={()=>{
                                         setSelectedClassId(item.classId); 
                                         setShowApplyStatModal(true)}
                                 }>{item.currentStudent}/{item.maxStudent}</Button>
                             </td>
-                            <td><Button variant="light" 
+                            <td><Button variant="outline-secondary" 
                                 disabled={item.cdStatus === '종강' || item.cdStatus === '폐강'}
                                 onClick={()=>{
                                     setSelectedClassId(item.classId); 

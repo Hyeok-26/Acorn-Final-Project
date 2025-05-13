@@ -190,8 +190,10 @@ function InvModal({
         } else if(invModalDetail.qty<1){
             alert("❗올바른 수량을 입력하세요")   
         } else {
-            console.log("저장 버튼 클릭");
-            api.post("/inv/add", invModalDetail)
+            // 수정의 경우
+            if(invModalDetail.invId>0){
+                console.log("-----------수정 저장");
+                api.patch("/inv/edit/"+invModalDetail.invId, invModalDetail)
                 .then(res => {
                     console.log(res);
                     // 모달 창 닫기
@@ -205,6 +207,28 @@ function InvModal({
                     console.log(err);
                     alert("저장 실패");
                 });
+            // 새 추가의 경우
+            } else {
+                console.log("------------추가 저장");
+                api.post("/inv/add", invModalDetail)
+                .then(res => {
+                    console.log(res);
+                    // 모달 창 닫기
+                    handleClose();
+                    refreshDetail();
+                    refreshList();
+                    alert("저장 성공");
+    
+                })
+                .catch(err => {
+                    console.log(err);
+                    alert("저장 실패");
+                });
+            }
+
+
+            console.log("저장 버튼 클릭");
+            
         }
     };
 
@@ -212,11 +236,12 @@ function InvModal({
     // 모달 창 닫기 함수
     const handleClose = () => setInvModal({ ...invModal, isShow: false });
 
+
+    // <pre>{JSON.stringify(invModalDetail,null,4)}</pre>
     return (
         <>
             <Modal show={invModal.isShow} onHide={handleClose} size="lg" centered>
                 <Modal.Header closeButton>{invModal.invId > 0 ? '수정하기' : '추가하기'}</Modal.Header>
-                {/* <pre>{JSON.stringify(invModalDetail,null,4)}</pre> */}
                 <Modal.Body>
                     <Form>
                         <Form.Group className="mb-3">
@@ -272,7 +297,7 @@ function InvModal({
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={handleSubmit} variant="success">
+                    <Button onClick={handleSubmit} style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}>
                         저장
                     </Button>
                 </Modal.Footer>

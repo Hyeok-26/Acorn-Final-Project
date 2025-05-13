@@ -26,8 +26,8 @@ function AdminPostDetail() {
   if (!post) return <div>Loading...</div>;
 
   return (
-    <Container className="mt-5">
-      <h3 className="mb-4">{post.title}</h3>
+    <Container style={{ marginTop: '150px' }}>
+      <h3 className="mb-7">{post.title}</h3>
       <Row className="mb-3">
         <Col className="border p-2 rounded mx-2"><strong>공지 ID</strong> {post.postId}</Col>
         <Col className="border p-2 rounded mx-2"><strong>작성자</strong> {post.writer}</Col>
