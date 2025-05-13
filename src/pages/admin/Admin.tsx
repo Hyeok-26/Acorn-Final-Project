@@ -20,16 +20,16 @@ function Admin() {
 
     if (isLoading) return <div>로딩중...</div>;
     if (error) return <div>에러가 발생했습니다</div>;
-
+    
     return (
         <div className="flex flex-col gap-6 p-8 bg-gray-50 min-h-screen">
             <OverviewSection overview={overview ?? []} />
-            <div className="flex flex-col lg:flex-row gap-6">
+          <div className="flex flex-col lg:flex-row gap-6">
                 <SalesAnalyticsSection salesData={salesData ?? []} />
                 <PopularItemsSection items={popularItems ?? []} />
-            </div>
+          </div>
         </div>
-    );
+      );
 }
 
 export default Admin;
