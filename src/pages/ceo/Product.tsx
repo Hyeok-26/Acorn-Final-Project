@@ -181,7 +181,7 @@ function Product() {
           </Col>
         </Row>
 
-        <Table bordered hover>
+        <Table bordered hover className="text-center">
           <thead className="table-secondary text-center">
             <tr>
               <th>품목 코드</th>
