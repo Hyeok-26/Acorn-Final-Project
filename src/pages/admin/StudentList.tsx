@@ -156,7 +156,7 @@ function StudentList() {
       `}
     </style>            
             <div className="d-flex align-items-center justify-content-center">
-                <h1 className = "fw-bold" style={{ marginTop: '60px', marginBottom: '60px' }}>{storeName} 학생 리스트</h1>
+                <h2 className = "fw-bold" style={{ marginTop: '60px', marginBottom: '60px' }}>{storeName} 학생 리스트</h2>
             </div>
             
             <div className="d-flex justify-content-between mb-3">
