@@ -3,15 +3,18 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.css";
 import api from '../../api';
 
+interface Student {
+    studentId: number;
+    name: string;
+    phone: string;
+    cdStatus: string;
+    statusName: string;
+    storeName: string;
+    classNames: string;
+}
+
 interface UpdateModalProps {
-    student: {
-        studentId: number;
-        name: string;
-        phone: string;
-        cdStatus: string;
-        statusName: string;
-        storeName: string;
-    };
+    student: Student;
     show: boolean;
     onClose: () => void;
     onUpdate: () => void;
@@ -21,16 +24,12 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ student, show, onClose, onUpd
     const [phone, setPhone] = useState("");
     const [isInvalid, setIsInvalid] = useState<boolean | null>(null);
     const [form, setForm] = useState({ ...student });
+    const [isFormValid, setIsFormValid] = useState<boolean | null>(false); // 입력값 유효성 검사
     const studentId = student.studentId;
+    const [isActive, setIsActive] = useState<boolean | null>(false); // 수강 수업 있는지 여부
 
     // 전화번호 포맷 지정 
     const formatPhoneNumber = (value: string) => {
-        /*
-        const numbersOnly = value.replace(/\D/g, ''); // 숫자만 
-        if (numbersOnly.length < 4) return numbersOnly;
-        if (numbersOnly.length < 8) return `${numbersOnly.slice(0, 3)}-${numbersOnly.slice(3)}`;
-        return `${numbersOnly.slice(0, 3)}-${numbersOnly.slice(3, 7)}-${numbersOnly.slice(7, 11)}`; // 자동 하이픈 삽입
-        */
         let formatNum = '';
         const onlyNum = value.replace(/\D/g, ''); // 숫자만 
     
@@ -68,10 +67,27 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ student, show, onClose, onUpd
     if (formattedPhone.length > 13) return; // 최대 길이 13자리 제한 
     setPhone(formattedPhone);
     setForm(prev => ({ ...prev, phone: formattedPhone })); // form.phone 에 전화번호 업데이트
-    setIsInvalid(null); // 수정 시 중복 상태 초기화하여 isInvalid 상태값 실시간 반영
+    setIsInvalid(null); // 수정 시 중복 상태(isInvalid) 초기화
   };
 
-  // 디바운스 방식으로 중복 체크
+  // 입력 필드 값 변경
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  // 유효성 검사 (+ 전화번호 중복 체크까지)
+  useEffect(() => {
+    const isAllValid = 
+      form.name.trim() !== '' &&
+      form.phone.trim().length > 8 &&
+      form.cdStatus.trim() !== '' &&
+      isInvalid !== true;
+
+    setIsFormValid(isAllValid);
+  }, [form, isInvalid]);
+
+  // 전화번호 중복 체크
   useEffect(() => {
     const timeout = setTimeout(() => {
 
@@ -86,17 +102,25 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ student, show, onClose, onUpd
     return () => clearTimeout(timeout); // 타이머 초기화
   }, [phone]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setForm(prevForm => ({ ...prevForm, [name]: value }));
-    };
-
+  // student prop 변경 시 form 초기화
+  useEffect(() => {
+    setForm({ ...student });
+    setPhone(student.phone);
+    setIsInvalid(null);
+    setIsActive(!!student.classNames); // 수강 수업 있는 경우 true
+  }, [student]);
+  
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if(isInvalid === true || form.phone.length < 9) {
-            alert("전화번호를 확인해 주십시오");
+            alert("연락처를 확인해 주십시오");
             return;
         }
+    
+        const formData = new FormData(e.currentTarget);
+        const formObject = Object.fromEntries(formData.entries());
+        formObject.phone = form.phone;
+    
         api.patch(`/students/${studentId}`, form)
             .then((res) => {
                 console.log(res.data);
@@ -127,27 +151,32 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ student, show, onClose, onUpd
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <Form.Label>이름</Form.Label>
-                        <Form.Control name="name" value={form.name} onChange={handleChange} required />
+                        <Form.Label>학생명</Form.Label>
+                        <Form.Control name="name" value={form.name} onChange={handleChange} />
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <Form.Label>전화번호</Form.Label>
-                        <Form.Control name="phone" value={form.phone} onChange={handlePhoneChange} maxLength={13} required />
+                        <Form.Label>연락처 (예: 01012345678)</Form.Label>
+                        <Form.Control name="phone" value={form.phone} onChange={handlePhoneChange} maxLength={13} />
                         {isInvalid === true && <span style={{ color: "red" }}>이미 사용 중인 번호입니다.</span>}
                         {isInvalid === false && <span style={{ color: "green" }}>사용 가능한 번호입니다.</span>}
                     </Form.Group>
 
                     <Form.Group className="mb-3">
                         <Form.Label>재원 여부</Form.Label>
-                        <Form.Select name="cdStatus" value={form.cdStatus} onChange={handleChange} required>
+                        <Form.Select name="cdStatus" value={form.cdStatus} onChange={handleChange} >
                             <option value="STUDY">재원</option>
                             <option value="S_QUIT">퇴원</option>
                         </Form.Select>
+                        {isActive && (
+                          <span style={{ color: 'gray', fontSize: '0.9em' }}>
+                            현재 수강 수업이 있는 학생은 재원 상태를 변경할 수 없습니다.
+                          </span>
+                        )}
                     </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button type="submit" style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}>수정</Button>
+                    <Button type="submit" style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}  disabled={!isFormValid}>수정</Button>
                 </Modal.Footer>
             </Form>
         </Modal>

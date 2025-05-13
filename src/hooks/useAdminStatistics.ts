@@ -78,7 +78,15 @@ export const useAdminStatistics = () => {
     queryFn: async () => {
       const userId = getUserId();
       if (!userId) throw new Error('User ID not found');
-      return fetch(`api/admin/overview/lastyearsale?userId=${userId}`).then(res => res.json());
+      const response = await fetch(`api/admin/overview/lastyearsale/${userId}`);
+      const data = await response.json();
+      console.log('API 응답:', data);
+      // (0,0) 좌표 추가 + 필드명 변환
+      const salesData = data.map((item: { MONTH: string; TOTAL_PRICE: number }) => ({
+        month: `${Number(item.MONTH)}월`,
+        sales: item.TOTAL_PRICE
+      }));
+      return [{ month: "0월", sales: 0 }, ...salesData];
     }
   });
 
