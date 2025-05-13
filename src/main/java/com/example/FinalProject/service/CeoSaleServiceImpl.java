@@ -25,32 +25,44 @@ public class CeoSaleServiceImpl implements CeoSaleService{
 	}
 
 	@Override
-	public List<TWCeoSaleDto> getList(TWCeoSalePageDto dto) {
-		int pageNum = dto.getPageNum();
-		int totalRow = ceoSaleMapper.getTotalRow();
-		
-		 int rowPerPage = 10;
-	     int pageCountPerGroup = 5;
-	     int startRowNum = (pageNum - 1) * rowPerPage + 1;
-	     int endRowNum = pageNum * rowPerPage;
-	     int totalPageCount = (int) Math.ceil((double) totalRow / rowPerPage);
-	     int currentGroup = (int) Math.ceil((double) pageNum / pageCountPerGroup);
-	     int startPageNum = (currentGroup - 1) * pageCountPerGroup + 1;
-	     int endPageNum = Math.min(startPageNum + pageCountPerGroup - 1, totalPageCount);
-	     
-	     dto.setStartRowNum(startRowNum);
-	     dto.setEndRowNum(endRowNum);
-	     dto.setTotalRow(totalRow);
-	     dto.setTotalPageCount(totalPageCount);
-	     dto.setStartPageNum(startPageNum);
-	     dto.setEndPageNum(endPageNum);
-		
-		return ceoSaleMapper.getList(dto);
+	public TWCeoSalePageDto getList(TWCeoSalePageDto dto) {
+	    int pageNum = dto.getPageNum();
+	    int totalRow = ceoSaleMapper.getTotalRow();
+	    
+	    int rowPerPage = 10;
+	    int pageCountPerGroup = 5;
+	    int startRowNum = (pageNum - 1) * rowPerPage + 1;
+	    int endRowNum = pageNum * rowPerPage;
+	    int totalPageCount = (int) Math.ceil((double) totalRow / rowPerPage);
+	    int currentGroup = (int) Math.ceil((double) pageNum / pageCountPerGroup);
+	    int startPageNum = (currentGroup - 1) * pageCountPerGroup + 1;
+	    int endPageNum = Math.min(startPageNum + pageCountPerGroup - 1, totalPageCount);
+	    
+	    // 새로운 DTO 생성 및 페이지네이션 정보 설정
+	    TWCeoSalePageDto resultDto = new TWCeoSalePageDto();
+	    resultDto.setPageNum(pageNum);
+	    resultDto.setStartRowNum(startRowNum);
+	    resultDto.setEndRowNum(endRowNum);
+	    resultDto.setTotalRow(totalRow);
+	    resultDto.setTotalPageCount(totalPageCount);
+	    resultDto.setStartPageNum(startPageNum);
+	    resultDto.setEndPageNum(endPageNum);
+	    
+	    // 페이지네이션 정보가 설정된 DTO로 데이터 조회
+	    List<TWCeoSaleDto> content = ceoSaleMapper.getList(resultDto);
+	    resultDto.setContent(content);
+	    
+	    return resultDto;
 	}
 
 	@Override
 	public int update(TWCeoSaleDto ceoSaleDto) {
 		return ceoSaleMapper.update(ceoSaleDto);
+	}
+
+	@Override
+	public int getTotalRow() {
+		return ceoSaleMapper.getTotalRow();
 	}
 
 }

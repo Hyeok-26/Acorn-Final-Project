@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 import com.example.FinalProject.dto.EuInventoryDetailDto;
 import com.example.FinalProject.dto.EuInventoryDetailListDto;
 import com.example.FinalProject.dto.EuInventoryListDto;
-import com.example.FinalProject.mapper.EuInventoryMapper;
+import com.example.FinalProject.mapper.InventoryMapper;
 
 @Service
-public class EuInventoryServiceImpl implements EuInventoryService {
+public class InventoryServiceImpl implements InventoryService {
 
-	@Autowired private EuInventoryMapper mapper;
+	@Autowired private InventoryMapper mapper;
 	
 	// 재고 현황 리스트의 카테고리 목록
 	@Override

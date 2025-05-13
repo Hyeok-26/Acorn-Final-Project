@@ -9,5 +9,6 @@ public interface CeoSaleService {
 	int insertEtcProfit(TWCeoSaleDto ceoSaleDto);
 	int insertEtcProfitSelf(TWCeoSaleDto ceoSaleDto);
 	int update(TWCeoSaleDto ceoSaleDto);
-	List<TWCeoSaleDto> getList(TWCeoSalePageDto dto);
+	TWCeoSalePageDto getList(TWCeoSalePageDto dto);
+	int getTotalRow();
 }

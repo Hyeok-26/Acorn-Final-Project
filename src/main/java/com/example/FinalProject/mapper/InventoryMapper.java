@@ -9,7 +9,7 @@ import com.example.FinalProject.dto.EuInventoryDto;
 import com.example.FinalProject.dto.EuInventoryListDto;
 
 @Mapper
-public interface EuInventoryMapper {
+public interface InventoryMapper {
 
 	// 재고 현황 리스트의 카테고리 목록
 	List<String> getCategory();

@@ -6,7 +6,7 @@ import com.example.FinalProject.dto.EuInventoryDetailDto;
 import com.example.FinalProject.dto.EuInventoryDetailListDto;
 import com.example.FinalProject.dto.EuInventoryListDto;
 
-public interface EuInventoryService {
+public interface InventoryService {
 	
 	// 재고 현황 리스트의 카테고리 목록
 	public List<String> getCategory();
