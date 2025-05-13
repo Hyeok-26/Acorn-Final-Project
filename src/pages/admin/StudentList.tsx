@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Button, ButtonGroup, Form, Pagination, Table } from 'react-bootstrap';
+import { Button, Form, Pagination, Table } from 'react-bootstrap';
 import RegisterModal from '../../components/admin/sRegisterModal';
 import UpdateModal from '../../components/admin/sUpdateModal';
 import HistoryModal from '../../components/admin/sHistoryModal';
 import api from '../../api';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 // 학생 타입
 interface Student {
@@ -48,7 +48,7 @@ function StudentList() {
     const [showRegister, setShowRegister] = useState(false);
     const [editStudent, setEditStudent] = useState<Student | null>(null);
     const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
-    const navigate = useNavigate();
+
     const [params, setParams] = useSearchParams(); // URL 기준으로 상태 유지 및 변경
     const [pageArray, setPageArray] = useState<number[]>([]);
     

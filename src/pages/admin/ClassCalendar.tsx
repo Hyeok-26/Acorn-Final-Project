@@ -6,8 +6,8 @@
 // npm install react-datepicker
 
 // ClassCalendar.tsx
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Calendar, momentLocalizer, Event } from 'react-big-calendar';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import { Popover, Box, Button, Typography } from '@mui/material';
