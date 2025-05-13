@@ -121,15 +121,13 @@ function OrdDetail({
         if (confirm("정말로 작성된 내용을 모두 지우시겠습니까?"))
             setOrderDetail({
                 infoDto: {
+                    ...orderDetail.infoDto,
                     tmp: false,
                     orderId: 0,
-                    userId: 5,                 // 정보 얻어와 넣어야 함
                     totalPrice: 0,
                     ordDate: getToday(),
                     orderName: "",
                     cdStatus: "",
-                    storeName: "강남점",        // 정보 얻어와 넣어야 함
-                    storeCall: "02-1234-5678",  // 정보 얻어와 넣어야 함
                     memoRequest: "",
                     memoReply: ""
                 },
