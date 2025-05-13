@@ -3,6 +3,18 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.css";
 import api from '@/api';
 
+interface Teacher{
+    teacherId: number;
+	name: string;
+    birth: string;
+    phone: string;
+	userId: number;
+    storeName: string;
+    salary: number;
+    cdStatus: string;
+    statusName: string;
+    classNames: string; 
+}
 
 interface UpdateModalProps{
     teacher: {
@@ -14,6 +26,7 @@ interface UpdateModalProps{
         salary: number;
         cdStatus: string;
         statusName: string;
+        classNames: string;
     }
     show: boolean;
     onClose: () => void;
@@ -26,15 +39,11 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ teacher, show, onClose, onUpd
     const [salary, setSalary] = useState("");
     const [form, setForm] = useState({ ...teacher });
     const teacherId = teacher.teacherId;
+    const [isFormValid, setIsFormValid] = useState(false); // 입력값 유효성 검사
+    const [isActive, setIsActive] = useState(false); // 배정된 수업이 있는지 여부
 
-        // 전화번호 포맷 지정 
+    // 전화번호 포맷 지정 
     const formatPhoneNumber = (value: string) => {
-        /*
-        const numbersOnly = value.replace(/\D/g, ''); // 숫자만 
-        if (numbersOnly.length < 4) return numbersOnly;
-        if (numbersOnly.length < 8) return `${numbersOnly.slice(0, 3)}-${numbersOnly.slice(3)}`;
-        return `${numbersOnly.slice(0, 3)}-${numbersOnly.slice(3, 7)}-${numbersOnly.slice(7, 11)}`; // 자동 하이픈 삽입
-        */
         let formatNum = '';
         const onlyNum = value.replace(/\D/g, ''); // 숫자만 
     
@@ -72,13 +81,43 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ teacher, show, onClose, onUpd
     if (formattedPhone.length > 13) return; // 최대 길이 13자리 제한 
     setPhone(formattedPhone);
     setForm(prev => ({ ...prev, phone: formattedPhone })); // form.phone 에 전화번호 업데이트
-    setIsInvalid(null); // 수정 시 중복 상태 초기화하여 isInvalid 상태값 실시간 반영
+    setIsInvalid(null); // 수정 시 중복 상태 isInvalid 초기화
   };
 
-  // 디바운스 방식으로 중복 체크
+  // 급여 입력 포맷 (3자리마다 , 표시)
+  const formatSalary = (value: string): string => {
+    const onlyNum = value.replace(/[^0-9]/g, ''); // 입력값 중 숫자만
+    return onlyNum ? Number(onlyNum).toLocaleString() : '';
+  };
+
+  const handleSalaryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatSalary(e.target.value);
+    setSalary(formatted);
+    setForm(prev => ({ ...prev, salary: formatted }));
+  };
+
+    // 입력 필드 값 변경
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  // 유효성 검사 (+ 전화번호 중복 체크까지)
+  useEffect(() => {
+    const isAllValid = 
+      form.name.trim() !== '' &&
+      form.birth.trim() !== '' &&
+      form.phone.trim().length > 8 &&
+      form.cdStatus.trim() !== '' &&
+      salary.trim() !== '' &&
+      isInvalid !== true;
+
+    setIsFormValid(isAllValid);
+  }, [form, salary, isInvalid]);
+
+  // 전화번호 중복 체크
   useEffect(() => {
     const timeout = setTimeout(() => {
-
       if (phone === teacher.phone) return; // 자기 번호일 경우 중복 체크 생략
       if (phone.length > 8 && phone !== teacher.phone)  {
         api.get(`/teachers/phone-check?phone=${phone}`)
@@ -90,35 +129,44 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ teacher, show, onClose, onUpd
     return () => clearTimeout(timeout); // 타이머 초기화
   }, [phone]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setForm(prevForm => ({ ...prevForm, [name]: value }));
-    };
-/*
-    // 숫자 형식 포맷
-    const formatNumber = (num: string): string => {
-        const onlyNum = num.replace(/[^0-9]/g, ''); // 숫자만 추출
-        return Number(onlyNum).toLocaleString();
-    };
+  // teacher prop 변경 시 form 초기화
+  useEffect(() => {
+    setForm({ ...teacher });
+    setPhone(teacher.phone);
+    setSalary(teacher.salary.toLocaleString());
+    setIsInvalid(null);
+    setIsActive(!!teacher.classNames); // 수업에 배정된 경우 true
+  }, [teacher]);
 
-    const handleSalaryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const input = e.target.value;
-        const formatted = formatNumber(input);
-        setForm(prev => ({
-            ...prev,
-            salary: formatted
-        }));
-    };
-*/
+// cdStatus 변경 시 급여 자동 0 처리
+const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const value = e.target.value;
+  setForm(prev => ({ ...prev, cdStatus: value }));
+  if (value === "T_QUIT" && !isActive) {
+    setSalary("0");
+    setForm(prev => ({ ...prev, salary: 0 }));
+  }
+};
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if(isInvalid === true || form.phone.length < 9) {
-            alert("전화번호를 확인해 주십시오");
+            alert("연락처를 확인해 주십시오");
             return;
         }
+        /*
         const formData = new FormData(e.currentTarget);
         const formObject = Object.fromEntries(formData.entries());
-        //formObject.salary = salary.replace(/[^0-9]/g, '');
+        formObject.salary = parseInt(salary.replace(/[^0-9]/g, ''), 10);
+        formObject.phone = form.phone;
+        */
+        const formObject = {
+            name: form.name,
+            birth: form.birth,
+            phone: form.phone,
+            cdStatus: form.cdStatus,
+            salary: parseInt(salary.replace(/[^0-9]/g, ''), 10)
+        };
 
         api.patch(`/teachers/${teacherId}`, formObject)
             .then((res) => {
@@ -150,38 +198,48 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ teacher, show, onClose, onUpd
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <Form.Label>이름</Form.Label>
-                        <Form.Control name="name" value={form.name} onChange={handleChange} required/>
+                        <Form.Label>강사명</Form.Label>
+                        <Form.Control name="name" value={form.name} onChange={handleChange} />
                     </Form.Group>
 
                     <Form.Group className="mb-3">
                         <Form.Label>생년월일</Form.Label>
-                        <Form.Control name="birth" value={form.birth} type="date" onChange={handleChange} required />
+                        <Form.Control name="birth" value={form.birth} type="date" onChange={handleChange} />
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <Form.Label>전화번호</Form.Label>
-                        <Form.Control name="phone" value={form.phone} onChange={handlePhoneChange} maxLength={13} required />
+                        <Form.Label>연락처 (예: 01012345678)</Form.Label>
+                        <Form.Control name="phone" value={form.phone} onChange={handlePhoneChange} maxLength={13} />
                         {isInvalid === true && <span style={{ color: "red" }}>이미 사용 중인 번호입니다.</span>}
                         {isInvalid === false && <span style={{ color: "green" }}>사용 가능한 번호입니다.</span>}
                     </Form.Group>
                     
                     <Form.Group className="mb-3">
                         <Form.Label>재직 여부</Form.Label>
-                        <Form.Select name="cdStatus" value={form.cdStatus} onChange={handleChange} required>
+                        <Form.Select name="cdStatus" value={form.cdStatus} onChange={handleStatusChange} disabled={isActive}>
                             <option value="WORK">재직</option>
                             <option value="T_QUIT">퇴직</option>  
-                        </Form.Select>                        
+                        </Form.Select>
+                        {isActive && (
+                          <span style={{ color: 'gray', fontSize: '0.9em' }}>
+                            현재 담당 수업이 있는 강사는 재직 상태를 변경할 수 없습니다.
+                          </span>
+                        )}                        
                     </Form.Group>
 
                     <Form.Group className="mb-3">
                         <Form.Label>급여</Form.Label>
-                        <Form.Control name="salary" value={form.salary} onChange={handleChange} required />
+                        <Form.Control name="salary" value={salary} onChange={handleSalaryChange} readOnly={form.cdStatus === "T_QUIT"}/>
+                        {form.cdStatus === "T_QUIT" && (
+                        <span style={{ color: "gray", fontSize: "0.9em" }}>
+                          퇴직 처리된 강사의 급여는 자동 0원으로 설정됩니다.
+                        </span>
+                        )}          
                     </Form.Group>
 
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button type="submit" style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}>수정</Button>
+                    <Button type="submit" style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }} disabled={!isFormValid}>수정</Button>
                 </Modal.Footer>
             </Form>
         </Modal>

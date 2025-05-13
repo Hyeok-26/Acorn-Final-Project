@@ -116,12 +116,18 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ student, show, onClose, onUpd
             alert("연락처를 확인해 주십시오");
             return;
         }
-    
+    /*
         const formData = new FormData(e.currentTarget);
         const formObject = Object.fromEntries(formData.entries());
         formObject.phone = form.phone;
-    
-        api.patch(`/students/${studentId}`, form)
+    */    
+        const formObject = {
+            name: form.name,
+            phone: form.phone,
+            cdStatus: form.cdStatus,
+        };
+
+        api.patch(`/students/${studentId}`, formObject)
             .then((res) => {
                 console.log(res.data);
                 onUpdate();
@@ -164,7 +170,7 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ student, show, onClose, onUpd
 
                     <Form.Group className="mb-3">
                         <Form.Label>재원 여부</Form.Label>
-                        <Form.Select name="cdStatus" value={form.cdStatus} onChange={handleChange} >
+                        <Form.Select name="cdStatus" value={form.cdStatus} onChange={handleChange} disabled={isActive}>
                             <option value="STUDY">재원</option>
                             <option value="S_QUIT">퇴원</option>
                         </Form.Select>
@@ -176,7 +182,7 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ student, show, onClose, onUpd
                     </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button type="submit" style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }}  disabled={!isFormValid}>수정</Button>
+                    <Button type="submit" style={{backgroundColor: 'rgb(71, 95, 168)', borderColor: 'rgb(71, 95, 168)' }} disabled={!isFormValid}>수정</Button>
                 </Modal.Footer>
             </Form>
         </Modal>
