@@ -39,4 +39,20 @@
     	select count(*) from tb_ceo_sale
     </select>
     
+    <select id="getListGraph" parameterType="int" resultType="map">
+    	select
+    		TO_CHAR(cre_date, 'MM') as month,
+    		SUM(price) as total_price
+    	from tb_ceo_sale
+    	where TO_CHAR(cre_date, 'YYYY') = #{year}
+    	group by TO_CHAR(cre_date, 'MM')
+    	order by month
+    </select>
+    
+    <select id="getAvailableYears" resultType="int">
+    	SELECT DISTINCT TO_CHAR(cre_date, 'YYYY') AS year
+		FROM tb_ceo_sale
+		ORDER BY TO_CHAR(cre_date, 'YYYY') DESC
+    </select>
+    
 </mapper>

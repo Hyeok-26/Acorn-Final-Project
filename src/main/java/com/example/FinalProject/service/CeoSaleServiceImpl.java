@@ -1,6 +1,7 @@
 package com.example.FinalProject.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,6 +64,16 @@ public class CeoSaleServiceImpl implements CeoSaleService{
 	@Override
 	public int getTotalRow() {
 		return ceoSaleMapper.getTotalRow();
+	}
+
+	@Override
+	public List<Map<String, Object>> getListGraph(int year) {
+		return ceoSaleMapper.getListGraph(year);
+	}
+
+	@Override
+	public List<Integer> getAvailableYears() {
+		return ceoSaleMapper.getAvailableYears();
 	}
 
 }

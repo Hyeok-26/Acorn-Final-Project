@@ -1,9 +1,11 @@
 package com.example.FinalProject.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +22,16 @@ public class CeoSaleController {
 	@GetMapping("/ceosale")
 	public TWCeoSalePageDto getList(TWCeoSalePageDto dto) {
 		return ceoSaleService.getList(dto);
+	}
+	
+	@GetMapping("/ceosalegraph/{year}")
+	public List<Map<String, Object>> getListGraph(@PathVariable int year){
+		return ceoSaleService.getListGraph(year);
+	}
+	
+	@GetMapping("/ceosalegraph/years")
+	public List<Integer> getAvailableYears() {
+	    return ceoSaleService.getAvailableYears();
 	}
 	
 	@PostMapping("/ceosale") 

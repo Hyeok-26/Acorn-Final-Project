@@ -1,6 +1,7 @@
 package com.example.FinalProject.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -14,5 +15,7 @@ public interface CeoSaleMapper {
     int update(TWCeoSaleDto ceoSaleDto);
     List<TWCeoSaleDto> getList(TWCeoSalePageDto dto);
     int getTotalRow();
+    List<Map<String, Object>> getListGraph(int year);
+    List<Integer> getAvailableYears();
 }
 
