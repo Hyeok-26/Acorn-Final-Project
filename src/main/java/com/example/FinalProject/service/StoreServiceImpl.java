@@ -82,7 +82,8 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public boolean deleteStoreWithAdminCheck(int userId, String adminPwd) {
         // 관리자 비밀번호 검증 로직 주석 처리됨
-         String adminHash = mapper.getAdminPwdById("admin");
+         String adminHash = mapper.getAdminPwdById(9999);
+         System.out.println(adminHash);
          if (passwordEncoder.matches(adminPwd, adminHash)) {
              mapper.deleteStore(userId);
              return true;

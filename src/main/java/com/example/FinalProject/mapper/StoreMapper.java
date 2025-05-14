@@ -22,5 +22,5 @@ public interface StoreMapper {
 	//지점 삭제(상태값 변화로 인한 리스트 미출력)
 	public int deleteStore(@Param("userId") int userId);
 	//삭제처리 위한 본사 암호 입력
-	public String getAdminPwdById(@Param("id") String id);
+	public String getAdminPwdById(@Param("id") int id);
 }

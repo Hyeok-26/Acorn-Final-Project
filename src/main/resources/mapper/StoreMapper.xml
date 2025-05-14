@@ -97,7 +97,7 @@
     </update>
 
     <!--관리자 비밀번호 조회(지점 삭제 위한 기능) -->
-    <select id="getAdminPwdById" parameterType="string" resultType="string">
+    <select id="getAdminPwdById" parameterType="int" resultType="string">
         SELECT pwd
         FROM tb_user
         WHERE id = #{id}
