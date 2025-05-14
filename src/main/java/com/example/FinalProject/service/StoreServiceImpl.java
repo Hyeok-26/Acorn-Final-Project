@@ -59,8 +59,7 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public void insertStore(HCStoreDto dto) {
         // 비밀번호 암호화 처리 주석 처리됨
-         String encodedPwd = passwordEncoder.encode(dto.getPwd());
-         dto.setPwd(encodedPwd);
+         dto.setPwd(dto.getPwd());
         mapper.insertStore(dto);
     }
 
@@ -84,7 +83,8 @@ public class StoreServiceImpl implements StoreService {
         // 관리자 비밀번호 검증 로직 주석 처리됨
          String adminHash = mapper.getAdminPwdById(9999);
          System.out.println(adminHash);
-         if (passwordEncoder.matches(adminPwd, adminHash)) {
+         System.out.println(adminPwd);
+         if (adminPwd != null && adminPwd.equals(adminHash)) {
              mapper.deleteStore(userId);
              return true;
          }

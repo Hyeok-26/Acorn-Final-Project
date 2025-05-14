@@ -38,6 +38,7 @@
             ) result1
         )
         WHERE rnum BETWEEN #{startRowNum} AND #{endRowNum}
+        and cd_role = 'ADMIN'
     </select>
 
     <!-- 총 행 개수 -->
