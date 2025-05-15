@@ -171,7 +171,7 @@ function OrdDetail({
                             ordDate: getToday()
                         }
                     });
-                    api.patch("/ord/edit", orderDetail)
+                    api.patch("/ord/edit-order", orderDetail)
                         .then(() => {
                             alert("발주 요청 성공");
                             navigate("/admin/order-list")
