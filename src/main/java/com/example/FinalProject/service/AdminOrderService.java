@@ -27,6 +27,9 @@ public interface AdminOrderService {
 	// 기존 발주서 수정
 	public void editOrd(EuOrderDetailDto dto);
 	
+	// 임시 저장된 발주서를 요청
+	public void editToOrd(EuOrderDetailDto dto);
+	
 	// 임시저장된 발주서가 있는지 확인
 	public int getTmpOrdId();
 	

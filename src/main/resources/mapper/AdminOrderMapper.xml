@@ -128,6 +128,19 @@
 		VALUES (SEQ_ORDER_DETAIL_ID.NEXTVAL, #{orderId}, #{productId}, #{quantity}, #{price})
 	</insert>
 	
+	<!-- 기존 발주서 수정 (1) 발주서 정보 수정 - 근데 임시 저장을 발주상태로 변경 -->
+	<update id="editToOrdInfo"
+		parameterType="com.example.FinalProject.dto.EuOrderDto">
+		UPDATE TB_ORDER
+		SET EDIT_DATE = SYSDATE, 
+			ORD_DATE = SYSDATE, 
+			CD_STATUS = 'PEN', 
+			MEMO_REQUEST = #{memoRequest, jdbcType=VARCHAR}, 
+			TOTAL_PRICE = #{totalPrice},
+			ORDER_NAME = #{orderName}
+		WHERE ORDER_ID = #{orderId}
+	</update>
+	
 	<!-- 기존 발주서 수정 (1) 발주서 정보 수정 -->
 	<update id="editOrdInfo"
 		parameterType="com.example.FinalProject.dto.EuOrderDto">

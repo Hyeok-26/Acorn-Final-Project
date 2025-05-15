@@ -41,7 +41,8 @@ public interface AdminOrderMapper {
 	void addOrdItem(EuOrderItemDto dto);
 	
 	
-	
+	//
+	void editToOrdInfo(EuOrderDto dto);
 	
 	// 기존 발주서 수정 (1) 발주서 정보 수정
 	void editOrdInfo(EuOrderDto dto);

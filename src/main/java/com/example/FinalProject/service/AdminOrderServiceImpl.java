@@ -164,6 +164,34 @@ public class AdminOrderServiceImpl implements AdminOrderService{
 		return mapper.getStoreCall(userId);
 	}
 
+	// 임시 저장된 발주서를 요청
+	@Override
+	public void editToOrd(EuOrderDetailDto dto) {
+		System.out.println("기존 발주 수정 메소드 들어옴22");
+		
+		// (0) 사용될 시퀀스 번호 구하기 (값을 구해 저장한 후, 발주서 및 발주 품목 추가 시 활용)
+		int ordSeq = dto.getInfoDto().getOrderId();
+		System.out.println("111");
+		
+		// (1) 발주서 정보 수정 222
+		mapper.editToOrdInfo(dto.getInfoDto());
+		System.out.println("222");
+		
+		// (2) 발주 품목 다 지우기 (어떤 품목의 어디를 수정했는지 추적하기 복잡하기 때문에 모두 삭제 후 다시 집어넣습니다.)
+		mapper.deleteOrdItem(ordSeq);
+		System.out.println("333");
+		
+		// (3) 발주서의 품목 정보 *품목 개수 만큼 반복 실행
+		dto.getItemList().forEach(item -> {
+			item.setOrderId(ordSeq);
+			System.out.println("추가될 item : " +item);
+		    mapper.addOrdItem(item);
+		    System.out.println("item 하나 성공");
+		});
+		System.out.println("444");
+		
+	}
+
 	
 	
 }

@@ -84,6 +84,15 @@ public class AdminOrderController {
 		System.out.println("555");
 	}
 	
+	// 기존 발주서 수정	 (또는 임시 저장 발주서를 발주 요청)		
+	@PatchMapping("/ord/edit-order")	
+	public void editToOrder(@RequestBody EuOrderDetailDto dto) {
+		System.out.println("기존 발주 수정 메소드 들어옴");
+		System.out.println("전달 받은 dto: "+dto);
+		service.editToOrd(dto);
+		System.out.println("555");
+	}
+	
 	// 임시저장된 발주서가 있는지 확인 
 	@GetMapping("/ord/tmp")
 	public int getTemporaryOrderId() {

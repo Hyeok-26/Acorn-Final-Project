@@ -35,7 +35,7 @@ public class InventoryController {
 	// 품목 별 재고 현황 조회 
 	@GetMapping("/inv")
 	public EuInventoryListDto getInventory(EuInventoryListDto dto) {
-		System.out.println(dto);
+		System.out.println(dto);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 		return service.getInvList(dto);
 	}
 	
@@ -49,6 +49,7 @@ public class InventoryController {
 	// 입고 및 사용 내역 추가 (+,-)
 	@PostMapping("/inv/add")
 	public void addInventoryDetail(@RequestBody EuInventoryDetailDto dto) {
+		System.out.println("입고 및 사용 내역 추가 (+,-");
 		System.out.println(dto);
 		service.addInvDetail(dto);
 	}
