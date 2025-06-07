@@ -66,7 +66,7 @@
 
 ## 프로젝트 구조 & 문서
 
-- [발표 PDF](./docs/FianlProjectPDF.pdf)
+- [발표 PDF](./docs/FinalProjectPDF.pdf)
 - [ERD 설계](./docs/slide_18.jpg)
 - [API 리스트](./docs/slide_21.jpg)
 - [기능 명세서](./docs/slide_15.jpg)
