@@ -1,15 +1,23 @@
 # 학원 ERP 시스템
 
-> **프랜차이즈 학원 운영을 위한 통합 ERP 시스템**  
+> **프랜차이즈 학원 운영을 위한 통합 ERP 웹 애플리케이션**  
+> **본사와 지점 간 비효율적인 운영을 해결하고, 매출·발주·수업 등 다양한 기능을 통합 관리합니다.**
+ 
 
 ![slide1](./docs/slide_01.jpg)
 
 ---
-## 📄 발표 PDF 다운로드
-- [햣 나뭇가지](./docs/햣나뭇가지최종프로젝트PDF.pdf)
-  
----
+## 🎥 프로젝트 시연 영상  
+👉 [YouTube 시연 영상 보기 (16분)](https://www.youtube.com/watch?v=thHJxVCFyTI)
 
+| 기능 | 타임스탬프 |
+|------|-------------|
+| 본사 코드 관리 | 12:40 ~ 13:55 |
+| 지점 관리 | 13:55 ~ 14:22 |
+| 공지사항 작성 (에디터 + 파일업로드) | 14:23 ~  14:50 |
+| 품목 관리 | 14:50 ~ 15:20 |
+
+---
 ## 프로젝트 기간 및 수행 절차
 ![slide1](./docs/slide_12.jpg)
 
@@ -34,37 +42,39 @@
 
 ## 파트
 ![slide1](./docs/slide_10.jpg)
-#### 나의 역할
-- 전체 기획/ 
+
+### 나의 역할
+- 전체 기획 및 기능 흐름 설계
+- **본사 코드관리,지점 관리,품목 관리**, **본사 공지사항 작성** 기능 개발
+- DB 설계 및 MyBatis SQL Mapper 작성
+- SmartEditor2 연동, 파일 업로드 기능 구현
+- GitHub 기반 협업 및 코드 리뷰
+- 발표자료 제작 및 최종 산출물 정리 총괄
 ## 기술 스택
 ![slide1](./docs/slide_13.jpg)
 
-- **frontend** : React + TypeScript, BootStrap
-- **Backend** : JAVA, spring boot, MyBatis
-- **협업툴** : Github, Notion
-- **API 문서화** : Google Sheets
-- **ERD**: dbdiagram.io
-- **데이터 베이스** : ORACLE DB
+| 분야 | 기술 | 역할 |
+|------|------|------|
+| Frontend | React, TypeScript, BootStrap |컴포넌트 기반 화면 설계 및 스타일링|
+| Backend | Spring Boot, MyBatis, Java |REST API 구축, DB 연동|
+| DB | Oracle | 테이블 설계, 데이터 관리 | 테이블 설계, 데이터 관리 |
+| 협업 | GitHub, Notion | PR 기반 협업, 문서 관리 |
+| API 문서 | Google Sheets | 팀 내 API 명세 공유 |
+| ERD | dbdiagram.io | 데이터베이스 구조 시각화 |
 
-## 아키텍쳐
-![slide1](./docs/slide_14.jpg)
-## 기능 명세서
-![slide1](./docs/slide_15.jpg)
-## 화면 정의서
-![slide1](./docs/slide_16.jpg)
-## ERD
-![slide1](./docs/slide_18.jpg)
-## API 리스트
-![slide1](./docs/slide_21.jpg)
-## API 정의서
-![slide1](./docs/slide_22.jpg)
-## 페이지 흐름도 - 본사
-![slide1](./docs/slide_20.jpg)
-## 페이지 흐름도 - 지점
-![slide1](./docs/slide_19.jpg)
+---
+
+## 프로젝트 구조 & 문서
+
+- [발표 PDF](./docs/햣나뭇가지최종프로젝트PDF.pdf)
+- [ERD 설계](./docs/slide_18.jpg)
+- [API 리스트](./docs/slide_21.jpg)
+- [기능 명세서](./docs/slide_15.jpg)
+- [페이지 흐름도 (본사)](./docs/slide_20.jpg)
+- [페이지 흐름도 (지점)](./docs/slide_19.jpg)
 
 
-## ✍️ 회고 및 기술 블로그
+## 회고 및 기술 블로그
 
-개발 과정에서의 기술적 어려움과 협업 경험, 문제 해결 과정을 정리한 회고 블로그입니다.  
+개발 중 마주한 기술적 이슈, 협업 갈등 상황, 해결 전략 등을 자세히 정리한 블로그입니다. 
 👉 [벨로그 회고 보러가기](https://velog.io/@gurcjs0132/파이널-프로젝트-에이콘-아카데)
